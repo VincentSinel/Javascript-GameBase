@@ -14,6 +14,8 @@ class Lutin
         this.Visible = true;
         this.Time = 0;
         this.Teinte = new Color(0,0,0,0);
+        this.Parle = false
+        this.Bulle = new BulleDialogue("", 0,0)
     }
 
 
@@ -32,6 +34,12 @@ class Lutin
     {
         this.X = X;
         this.Y = Y;
+    }
+
+    Dire(Texte)
+    {
+        this.Bulle.ModifierTexte(Texte)
+        this.Parle = true
     }
 
     OrienterVers(X,Y)
@@ -101,6 +109,17 @@ class Lutin
 
             // Retourne à la position initiale du canvas
             Context.restore();  
+        }
+        if (this.Parle)
+        {
+            // Assignation de la position X de la bulle
+            this.Bulle.X = this.X;
+            // Assignation de la position Y de la bulle(Prend en compte la rotation de l'objet)
+            this.Bulle.Y = this.Y + 
+            Math.abs(this.Image.height * 0.5 * Math.cos((Camera.Direction + this.Direction) * Math.PI / 180) * Camera.AdapteZoom(this.Zoom)) +
+            Math.abs(this.Image.width  * 0.5 * Math.sin((Camera.Direction + this.Direction) * Math.PI / 180) * Camera.AdapteZoom(this.Zoom))
+            // Lance le dessin de la bulle
+            this.Bulle.Dessin(Context)
         }
     }
 }

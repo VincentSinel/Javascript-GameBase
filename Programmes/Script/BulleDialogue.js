@@ -6,15 +6,15 @@ class BulleDialogue extends NinePatch
     /**
      * Création d'une bulle de dialogue contenant un texte précis.
      * @param {string} Texte Texte à afficher
-     * @param {number} X Position X de l'origine de la bulle (cette valeur est ensuite adapté lorsque le calcul de taille est effectué)
-     * @param {number} Y Position Y de l'origine de la bulle (cette valeur est ensuite adapté lorsque le calcul de taille est effectué)
+     * @param {number} X Position X de l'origine de la bulle
+     * @param {number} Y Position Y de l'origine de la bulle
      */
     constructor(Texte, X, Y)
     {
         super("Images/Bulle.png",[45, 20, 20, 35])
         this.Texte = Texte
-        this.X = X - 33
-        this.BaseY = Y;
+        this.X = X;
+        this.Y = Y;
         this.Font = "Arial"
         this.FontSize = 12
         this.Lines = []
@@ -101,7 +101,6 @@ class BulleDialogue extends NinePatch
             this.Reajuster(Context.measureText(this.Texte).width + 16, this.FontSize + 34)
             this.Lines = [this.Texte];
         }
-        this.Y = this.BaseY - this.H;
         this.Rafraichir = false;
     }
 
@@ -116,14 +115,19 @@ class BulleDialogue extends NinePatch
         {
             this.CalculTailleBulle(Context)
         }
-
+        this.Y += this.H;
+        this.X -= 33;
         super.Dessin(Context)
 
         Context.font = this.FontSize + "px " + this.Font;
+        Context.fillStyle = "black"
         for (let line = 0; line < this.Lines.length; line++) {
             const element = this.Lines[line];
-            ctx.fillText(element, this.X + 9, this.Y + 5 + (line + 1) * (this.FontSize + 2));
+            ctx.fillText(element, Ecran_Largeur / 2 + Camera.AdapteX(this.X) + 9, Ecran_Hauteur / 2 + Camera.AdapteY(this.Y) + 5 + (line + 1) * (this.FontSize + 2));
         }
+
+        this.Y -= this.H;
+        this.X += 33;
     }
 
 }

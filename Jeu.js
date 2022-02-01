@@ -15,17 +15,17 @@ function InitObjets()
 {
     // Ajouter ici les objets à creer
     //lutin = new Lutin(0,0,["Images/Chat.png"])
-    for (let index = 0; index < 300; index++) 
+    for (let index = 0; index < 10; index++) 
     {
         lutin.push(new ExempleLutin());
+        lutin[index].Dire(lutin[index].X + ";" + lutin[index].Y)
     }
 
-    patch = new BulleDialogue("A string or regular expression to", 250,250)
-
+    patch = new BulleDialogue("A string or regular expression to Ajouter ici la mise a jour des calculs d'objets", 0,0)
 }
 
 /**
- * Mise a jour des calculs (Position, collision, etc ...)
+ * Mise a jour des calculs (Position, collision, etc ...) 
  */
 function Calcul()
 {
@@ -35,8 +35,34 @@ function Calcul()
     {
         lutin[index].Calcul();
     }
-    patch.X += 1
-    patch.Y += 1
+
+    if (Clavier.ToucheBasse("q"))
+    {
+        Camera.X -= 1;
+    }
+    if (Clavier.ToucheBasse("z"))
+    {
+        Camera.Y += 1;
+    }
+    if (Clavier.ToucheBasse("d"))
+    {
+        Camera.X += 1;
+    }
+    if (Clavier.ToucheBasse("s"))
+    {
+        Camera.Y -= 1;
+    }
+    
+    if (Clavier.ToucheJusteBasse("a"))
+    {
+        GridSize *= 2;
+    }
+
+    if (Clavier.ToucheJusteBasse("e"))
+    {
+        GridSize /= 2;
+        GridSize = Math.max(GridSize, 1)
+    }
 }
 
 
@@ -45,6 +71,7 @@ function Calcul()
  */
 function Dessin()
 {
+    Debug.Dessin(ctx)
     // Ajouter ici la mise a jour des dessin d'objets
     //lutin.Dessin(ctx);
     for (let index = 0; index < lutin.length; index++) 
@@ -91,6 +118,8 @@ var TotalFrame = 0;
     ctx.fillStyle = "black"
     ctx.fillRect(0,0,Ecran_Largeur, Ecran_Hauteur);
     Dessin();
+    Clavier.Update();
+    Souris.Update();
  }
 
 //============================================================================================

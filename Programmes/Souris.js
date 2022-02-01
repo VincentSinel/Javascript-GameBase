@@ -7,6 +7,9 @@ class Souris
     static JusteBas =   [false, false, false, false, false];
     static JusteHaut =  [false, false, false, false, false];
 
+    static #SourisX = 0;
+    static #SourisY = 0;
+
     /**
      * Renvoie si bouton de la souris est enfoncé
      * @param {*} index Numéro du bouton (0 droit; 1 centre; 2 gauche; 3 retour arrière; 4 retour avant)
@@ -48,8 +51,8 @@ class Souris
     }
     static MouseMove(e)
     {
-        this.X = e.offsetX
-        this.Y = e.offsetY
+        this.#SourisX = e.offsetX
+        this.#SourisY = e.offsetY
 
         this.EtatBouton[0] = e.buttons % 2 == 1;
         this.EtatBouton[1] = e.buttons % 8 >= 4;
@@ -61,6 +64,8 @@ class Souris
 
     static Update()
     {
+        this.X = Camera.X + this.#SourisX - Ecran_Largeur / 2
+        this.Y = Camera.AdapteY(this.#SourisY - Ecran_Hauteur / 2)
         this.JusteBas =  [false, false, false, false, false];
         this.JusteHaut = [false, false, false, false, false];
     }
