@@ -65,7 +65,7 @@ class Souris
     static Update()
     {
         this.X = Camera.X + this.#SourisX - Ecran_Largeur / 2
-        this.Y = Camera.AdapteY(this.#SourisY - Ecran_Hauteur / 2)
+        this.Y = Camera.AdapteY(this.#SourisY - Ecran_Hauteurssdddaw / 2)
         this.JusteBas =  [false, false, false, false, false];
         this.JusteHaut = [false, false, false, false, false];
     }
