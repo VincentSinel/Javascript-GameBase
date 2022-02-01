@@ -9,6 +9,7 @@ class Debug
         var textes = [];
         textes.push("Camera X : " + Camera.X)
         textes.push("Camera Y : " + Camera.Y)
+        textes.push("Camera O : " + Camera.Direction)
         textes.push("Souris X : " + Souris.X)
         textes.push("Souris Y : " + Souris.Y)
         textes.push("Grid Siz : " + Math.floor(GridSize))
@@ -48,11 +49,16 @@ class Debug
      */
     static Grid(Context, Size)
     {
-        let BorderX = Camera.AdapteX(Ecran_Largeur / 2);
-        let BorderY = Camera.AdapteY(- Ecran_Hauteur / 2);
+        Context.save();
+        Context.translate(Ecran_Largeur / 2, Ecran_Hauteur / 2);
+        Context.rotate(Camera.Direction * Math.PI / 180);
+
+        let maxsize = Math.sqrt(Ecran_Largeur * Ecran_Largeur + Ecran_Hauteur * Ecran_Hauteur)
+        let BorderX = Camera.AdapteX(maxsize / 2);
+        let BorderY = Camera.AdapteY(- maxsize / 2);
         let startX = BorderX % Size
         let startY = BorderY % Size
-        while(startX < Ecran_Largeur)
+        while(startX < maxsize)
         {
             Context.strokeStyle = "Gray"
             if (BorderX - startX == 0)
@@ -60,12 +66,12 @@ class Debug
                 Context.strokeStyle = "Cyan"
             }
             Context.beginPath();
-            Context.moveTo(startX,0);
-            Context.lineTo(startX, Ecran_Hauteur);
+            Context.moveTo(startX - maxsize / 2, - maxsize / 2);
+            Context.lineTo(startX - maxsize / 2, maxsize / 2);
             Context.stroke();
             startX += Size;
         }
-        while(startY < Ecran_Hauteur)
+        while(startY < maxsize)
         {
             Context.strokeStyle = "Gray"
             if (BorderY - startY == 0)
@@ -73,11 +79,13 @@ class Debug
                 Context.strokeStyle = "Cyan"
             }
             Context.beginPath();
-            Context.moveTo(0,startY);
-            Context.lineTo(Ecran_Largeur, startY);
+            Context.moveTo( - maxsize / 2,startY  - maxsize / 2);
+            Context.lineTo(maxsize / 2, startY - maxsize / 2);
             Context.stroke();
             startY += Size;
         }
+
+        Context.restore();  
     }
 
 

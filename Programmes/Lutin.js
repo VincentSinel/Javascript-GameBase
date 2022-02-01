@@ -1,5 +1,11 @@
 class Lutin
 {
+    /**
+     * Création d'un lutin manipulable avec des fonction simple
+     * @param {number} X Position X du lutin
+     * @param {number} Y Position Y du lutin
+     * @param {Array<string>} Costumes Liste des costumes du lutin
+     */
     constructor(X,Y, Costumes)
     {
         this.X = X;
@@ -18,6 +24,12 @@ class Lutin
         this.Bulle = new BulleDialogue("", 0,0)
     }
 
+    ToucheSouris()
+    {
+        let X = 
+
+        PointInRectangle(X, Y, Z, W, new Vecteur2(Souris.X, Souris.Y))
+    }
 
     Avancer(distance)
     {
@@ -112,12 +124,15 @@ class Lutin
         }
         if (this.Parle)
         {
+            let angle = Camera.Direction * Math.PI / 180;
             // Assignation de la position X de la bulle
-            this.Bulle.X = this.X;
+            this.Bulle.X = Camera.X + (this.X - Camera.X) * Math.cos(angle) + (this.Y - Camera.Y) * Math.sin(angle);
+
+            let posY = this.Y + Math.abs(this.Image.height * 0.5 * Math.cos(this.Direction * Math.PI / 180) * Camera.AdapteZoom(this.Zoom)) +
+            Math.abs(this.Image.width  * 0.5 * Math.sin(this.Direction * Math.PI / 180) * Camera.AdapteZoom(this.Zoom))
             // Assignation de la position Y de la bulle(Prend en compte la rotation de l'objet)
-            this.Bulle.Y = this.Y + 
-            Math.abs(this.Image.height * 0.5 * Math.cos((Camera.Direction + this.Direction) * Math.PI / 180) * Camera.AdapteZoom(this.Zoom)) +
-            Math.abs(this.Image.width  * 0.5 * Math.sin((Camera.Direction + this.Direction) * Math.PI / 180) * Camera.AdapteZoom(this.Zoom))
+            this.Bulle.Y = Camera.Y - (this.X - Camera.X) * Math.sin(angle) + (+ posY - Camera.Y) * Math.cos(angle);
+            
             // Lance le dessin de la bulle
             this.Bulle.Dessin(Context)
         }

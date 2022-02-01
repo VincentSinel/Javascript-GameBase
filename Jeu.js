@@ -57,11 +57,23 @@ function Calcul()
     {
         GridSize *= 2;
     }
-
     if (Clavier.ToucheJusteBasse("e"))
     {
         GridSize /= 2;
         GridSize = Math.max(GridSize, 1)
+    }
+
+    
+    if (Clavier.ToucheBasse("w"))
+    {
+        Camera.Direction += 1
+        Camera.Direction = Camera.Direction % 360
+    }
+
+    if (Clavier.ToucheBasse("x"))
+    {
+        Camera.Direction -= 1
+        Camera.Direction = Camera.Direction % 360
     }
 }
 

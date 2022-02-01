@@ -1,6 +1,6 @@
 class ExempleLutin extends Lutin 
 {
-    //Je peut changer les paramètre de ce lutin et générer son contenue ensuite
+    //Je peut changer les paramètre de ce lutin et générer son contenu ensuite
     constructor() 
     {
         var X = EntierAleat(-Ecran_Largeur / 2, Ecran_Largeur / 2) // Position X au hasard sur l'écran
@@ -14,6 +14,7 @@ class ExempleLutin extends Lutin
             "Images/Brique5.png"
         ]
         //Cette fonction appel le constructeur de la class Lutin
+        // Le "super" de manière général permet d'appeler des élèments de la class parents
         super(X,Y, Costumes);
 
         this.BasculerCostume(EntierAleat(5))
@@ -31,6 +32,8 @@ class ExempleLutin extends Lutin
     {
         super.Calcul(); // Appel la fonction calcul de la class parente
 
+        // Il est possible de faire des actions ici comme les script sur scratch
+        // Quelque exemple :
         //this.Avancer(this.Vitesse)
         //this.Tourner(Math.cos(this.Time / 20) * 2)
 
