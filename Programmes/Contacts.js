@@ -37,15 +37,15 @@ class Contacts
      * Test si un point est à l'intérieur d'un rectangle (avec rotation)
      * 
      * @param {Vecteur2} X Angle Haut Gauche du rectangle
-     * @param {Vecteur2} Y Angle Bas Gauche du rectangle
+     * @param {Vecteur2} Y Angle Haut Droit du rectangle
      * @param {Vecteur2} Z Angle Bas Droit du rectangle
-     * @param {Vecteur2} W Angle Haut Droit du rectangle
+     * @param {Vecteur2} W Angle Bas Gauche du rectangle
      * @param {Vecteur2} P Point à tester
      * @returns Vrai si le point est dans le rectangle, faux sinon
      */
     static PointDansRectangle(X, Y, Z, W, P)
     {
-        return (P.AGauche(X,Y) >= 0 && P.AGauche(Y, Z) >= 0 && P.AGauche(Z,W) >= 0 && P.AGauche(W,X) >= 0);
+        return (P.AGauche(X, Y) <= 0 && P.AGauche(Y, Z) <= 0 && P.AGauche(Z, W) <= 0 && P.AGauche(W, X) <= 0);
     }
 
     /**
@@ -130,4 +130,61 @@ class Contacts
         }
         return true;
     };
+
+
+    static CercleContreRectangle(X,Y,Z,W, P, Radius)
+    {
+        let a = Vecteur2.AVersB(X,Y).Normaliser(Radius);
+        let b = Vecteur2.AVersB(X,W).Normaliser(Radius);
+        let NX = new Vecteur2(X.X - a.X - b.X, X.Y - a.Y - b.Y);
+        let NY = new Vecteur2(Y.X + a.X - b.X, Y.Y + a.Y - b.Y);
+        let NZ = new Vecteur2(Z.X + a.X + b.X, Z.Y + a.Y + b.Y);
+        let NW = new Vecteur2(W.X - a.X + b.X, W.Y - a.Y + b.Y);
+        //return;
+        //console.log(Contacts.PointDansRectangle(NX, NY, NZ, NW, Souris.Position()))
+        if (Contacts.PointDansRectangle(NX, NY, NZ, NW, P))
+        {
+            if ((P.AGauche(X,Y) > 0) && (P.AGauche(W,X) > 0))           //0
+            {
+                console.log("0")
+                return new Vecteur2(NX.X - X.X, NX.Y - X.Y)
+            }
+            else if (P.AGauche(X,Y) > 0 && P.AGauche(Y,Z) > 0)      //1
+            {
+                console.log("1")
+                return new Vecteur2(NY.X - Y.X, NY.Y - Y.Y)
+            }
+            else if (P.AGauche(X,Y) > 0)                            //2
+            {
+                console.log("2")
+                return new Vecteur2((NY.X + NX.X - Y.X - X.X) / 2, (NY.Y + NX.Y - Y.Y - X.Y) / 2)
+            }
+            else if (P.AGauche(W,X) > 0 && P.AGauche(Z,W) > 0)      //3
+            {
+                console.log("3")
+                return new Vecteur2(NW.X - W.X, NW.Y - W.Y)
+            }
+            else if (P.AGauche(W,X) > 0)                            //4
+            {
+                console.log("4")
+                return new Vecteur2((NW.X + NX.X - W.X - X.X) / 2, (NW.Y + NX.Y - W.Y - X.Y) / 2)
+            }
+            else if (P.AGauche(Y,Z) > 0 && P.AGauche(Z,W) > 0)      //5
+            {
+                console.log("5")
+                return new Vecteur2(NZ.X - Z.X, NZ.Y - Z.Y)
+            }
+            else if (P.AGauche(Z,W) > 0)                            //6
+            {
+                console.log("6")
+                return new Vecteur2((NW.X + NZ.X - W.X - Z.X) / 2, (NW.Y + NZ.Y - W.Y - Z.Y) / 2)
+            }
+            else if (P.AGauche(Y, Z) > 0)                           //7
+            {
+                console.log("7")
+                return new Vecteur2((NY.X + NZ.X - Y.X - Z.X) / 2, (NY.Y + NZ.Y - Y.Y - Z.Y) / 2)
+            }
+        }
+        return 0;
+    }
 }

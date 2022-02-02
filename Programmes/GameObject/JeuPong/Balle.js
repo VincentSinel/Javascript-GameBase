@@ -16,7 +16,9 @@ class Balle extends Lutin
         this.BasculerCostume(EntierAleat(5))
 
         this.Vitesse = 5;
-        this.Direction = EntierAleat(20,160)
+        this.Direction = 90//EntierAleat(20,160)
+
+        this.Radius = 10;
     }
 
     // Redéfinition de la fonction calcul

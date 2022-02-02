@@ -38,6 +38,11 @@ class Lutin
         return ar;
     }
 
+    VecteurDirection()
+    {
+        return new Vecteur2(Math.cos(this.Direction * Math.PI / 180), Math.sin(this.Direction * Math.PI / 180));
+    }
+
     ToucheSouris()
     {
         let a = this.Rectangle()

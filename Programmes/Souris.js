@@ -10,6 +10,11 @@ class Souris
     static #SourisX = 0;
     static #SourisY = 0;
 
+    static Position()
+    {
+        return new Vecteur2(Souris.X, Souris.Y)
+    }
+
     /**
      * Renvoie si bouton de la souris est enfoncé
      * @param {*} index Numéro du bouton (0 droit; 1 centre; 2 gauche; 3 retour arrière; 4 retour avant)

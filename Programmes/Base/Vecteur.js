@@ -39,7 +39,7 @@ class Vecteur2
      */
     Longueur()
     {
-        return Math.sqrt(LongueurCarre());
+        return Math.sqrt(this.LongueurCarre());
     }
 
     /**
@@ -48,17 +48,26 @@ class Vecteur2
      */
     LongueurCarre()
     {
-        return this.X*this.X + this.Y*this.Y
+        return this.X * this.X + this.Y * this.Y
     }
 
     /**
      * Determine la position relative d'un point vis à vis d'un segment orienté.
      * @param {Vecteur2} LigneDeb Point de début de segment
      * @param {Vecteur2} LigneFin Point de fin du segment
-     * @returns Nombre < 0 si à droite du segment; Nombre > 0 si à gauche du segment; 0 si sur le segment
+     * @returns Nombre > 0 si à gauche du segment; Nombre < 0 si à droite du segment; 0 si sur le segment
      */
     AGauche(LigneDeb,LigneFin)
     {
         return (LigneFin.X - LigneDeb.X) * (this.Y - LigneDeb.Y) - (this.X - LigneDeb.X) * (LigneFin.Y - LigneDeb.Y);
     }
+
+
+    Normaliser(NouvelleLongueur = 1)
+    {
+        let l = this.Longueur();
+        return new Vecteur2(this.X / l * NouvelleLongueur, this.Y / l * NouvelleLongueur);
+    }
+
+    
 }

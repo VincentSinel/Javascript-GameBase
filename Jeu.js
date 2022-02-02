@@ -80,10 +80,10 @@ function Calcul()
  */
 function Dessin()
 {
-    Debug.Dessin(ctx)
     // Ajouter ici la mise a jour des dessin d'objets
     
     pong.Dessin(ctx);
+    Debug.Dessin(ctx)
 }
 
 //============================================================================================
