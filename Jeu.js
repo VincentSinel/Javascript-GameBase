@@ -21,7 +21,7 @@ function InitObjets()
         lutin[index].Dire(lutin[index].X + ";" + lutin[index].Y)
     }
 
-    patch = new BulleDialogue("A string or regular expression to Ajouter ici la mise a jour des calculs d'objets", 0,0)
+    //patch = new BulleDialogue("A string or regular expression to Ajouter ici la mise a jour des calculs d'objets", 0,0)
 }
 
 /**
@@ -31,11 +31,15 @@ function Calcul()
 {
     // Ajouter ici la mise a jour des calculs d'objets
     //lutin.Calcul();
+    lutin[0].X = Camera.X;
+    lutin[0].Y = Camera.Y;
+
     for (let index = 0; index < lutin.length; index++) 
     {
         lutin[index].Calcul();
     }
 
+    
     if (Clavier.ToucheBasse("q"))
     {
         Camera.X -= 1;
@@ -64,16 +68,24 @@ function Calcul()
     }
 
     
-    if (Clavier.ToucheBasse("w"))
+    if (Clavier.ToucheBasse("j"))
     {
         Camera.Direction += 1
         Camera.Direction = Camera.Direction % 360
     }
-
-    if (Clavier.ToucheBasse("x"))
+    if (Clavier.ToucheBasse("l"))
     {
         Camera.Direction -= 1
         Camera.Direction = Camera.Direction % 360
+    }
+    if (Clavier.ToucheBasse("i"))
+    {
+        Camera.Zoom += 1
+    }
+    if (Clavier.ToucheBasse("k"))
+    {
+        Camera.Zoom -= 1
+        Camera.Zoom = Math.max(Camera.Zoom, 0)
     }
 }
 
@@ -91,7 +103,7 @@ function Dessin()
         lutin[index].Dessin(ctx);
     }
 
-    patch.Dessin(ctx)
+    //patch.Dessin(ctx)
 }
 
 //============================================================================================

@@ -7,11 +7,14 @@ class Debug
         this.Grid(Context, Math.floor(GridSize))
 
         var textes = [];
+        let vec = Camera.CameraVersEcran(new Vecteur2(Camera.AdapteX(0), Camera.AdapteY(0)))
         textes.push("Camera X : " + Camera.X)
         textes.push("Camera Y : " + Camera.Y)
         textes.push("Camera O : " + Camera.Direction)
         textes.push("Souris X : " + Souris.X)
         textes.push("Souris Y : " + Souris.Y)
+        textes.push("Center X : " + vec.X)
+        textes.push("Center Y : " + vec.Y)
         textes.push("Grid Siz : " + Math.floor(GridSize))
 
         this.DessinInfo(Context, textes)
@@ -50,10 +53,9 @@ class Debug
     static Grid(Context, Size)
     {
         Context.save();
-        Context.translate(Ecran_Largeur / 2, Ecran_Hauteur / 2);
-        Context.rotate(Camera.Direction * Math.PI / 180);
+        Camera.DeplacerCanvas(Context)
 
-        let maxsize = Math.sqrt(Ecran_Largeur * Ecran_Largeur + Ecran_Hauteur * Ecran_Hauteur)
+        let maxsize = Math.sqrt(Ecran_Largeur * Ecran_Largeur + Ecran_Hauteur * Ecran_Hauteur) / (Camera.Zoom / 100.0)
         let BorderX = Camera.AdapteX(maxsize / 2);
         let BorderY = Camera.AdapteY(- maxsize / 2);
         let startX = BorderX % Size

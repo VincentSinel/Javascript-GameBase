@@ -64,8 +64,10 @@ class Souris
 
     static Update()
     {
-        this.X = Camera.X + this.#SourisX - Ecran_Largeur / 2
-        this.Y = Camera.AdapteY(this.#SourisY - Ecran_Hauteur / 2)
+        let vec = new Vecteur2(this.#SourisX, this.#SourisY);
+        let vec2 = Camera.EcranVersCamera(vec);
+        this.X = vec2.X
+        this.Y = vec2.Y
         this.JusteBas =  [false, false, false, false, false];
         this.JusteHaut = [false, false, false, false, false];
     }

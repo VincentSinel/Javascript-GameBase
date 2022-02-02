@@ -3,8 +3,8 @@ class ExempleLutin extends Lutin
     //Je peut changer les paramètre de ce lutin et générer son contenu ensuite
     constructor() 
     {
-        var X = EntierAleat(-Ecran_Largeur / 2, Ecran_Largeur / 2) // Position X au hasard sur l'écran
-        var Y = EntierAleat(-Ecran_Hauteur / 2, Ecran_Hauteur / 2) // Position Y au hasard sur l'écran
+        var X = 0//EntierAleat(-Ecran_Largeur / 2, Ecran_Largeur / 2) // Position X au hasard sur l'écran
+        var Y = 0//EntierAleat(-Ecran_Hauteur / 2, Ecran_Hauteur / 2) // Position Y au hasard sur l'écran
 
         var Costumes = [
             "Images/Brique1.png",

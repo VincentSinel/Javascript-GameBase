@@ -47,14 +47,14 @@ class NinePatch
     
     Dessin(Context)
     {
-        let x1 = Ecran_Largeur / 2 + Camera.AdapteX(this.X)
+        let x1 = this.X
         let w1 = this.Parametre[0]
         let x2 = x1 + w1
         let w3 = this.Parametre[1]
         let x3 = x1 + this.W - w3
         let w2 = this.W - w1 - w3
 
-        let y1 = Ecran_Hauteur / 2 + Camera.AdapteY(this.Y)
+        let y1 = this.Y
         let h1 = this.Parametre[2]
         let y2 = y1 + h1
         let h3 = this.Parametre[3]

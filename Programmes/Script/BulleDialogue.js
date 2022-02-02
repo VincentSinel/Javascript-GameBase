@@ -115,7 +115,7 @@ class BulleDialogue extends NinePatch
         {
             this.CalculTailleBulle(Context)
         }
-        this.Y += this.H;
+        this.Y -= this.H;
         this.X -= 33;
         super.Dessin(Context)
 
@@ -123,10 +123,10 @@ class BulleDialogue extends NinePatch
         Context.fillStyle = "black"
         for (let line = 0; line < this.Lines.length; line++) {
             const element = this.Lines[line];
-            ctx.fillText(element, Ecran_Largeur / 2 + Camera.AdapteX(this.X) + 9, Ecran_Hauteur / 2 + Camera.AdapteY(this.Y) + 5 + (line + 1) * (this.FontSize + 2));
+            ctx.fillText(element, this.X + 9, this.Y + 5 + (line + 1) * (this.FontSize + 2));
         }
 
-        this.Y -= this.H;
+        this.Y += this.H;
         this.X += 33;
     }
 

@@ -26,7 +26,10 @@ class Lutin
 
     ToucheSouris()
     {
-        let X = 
+        let X = new Vecteur2(this.X - this.Zoom / 100.0 * this.Image.width, this.Y - this.Zoom / 100.0 * this.Image.height)
+        let Y = new Vecteur2(this.X - this.Zoom / 100.0 * this.Image.width, this.Y + this.Zoom / 100.0 * this.Image.height)
+        let Z = new Vecteur2(this.X + this.Zoom / 100.0 * this.Image.width, this.Y + this.Zoom / 100.0 * this.Image.height)
+        let W = new Vecteur2(this.X + this.Zoom / 100.0 * this.Image.width, this.Y - this.Zoom / 100.0 * this.Image.height)
 
         PointInRectangle(X, Y, Z, W, new Vecteur2(Souris.X, Souris.Y))
     }
@@ -97,17 +100,15 @@ class Lutin
         if (this.Visible)
         {
             // Sauvegarde la position actuel du canvas 
-            Context.save();  
-            // Translate le canvas au centre de l'écran
-            Context.translate(Ecran_Largeur / 2, Ecran_Hauteur / 2); 
-            // Tourne le canvas de l'angle pour la camera
-            Context.rotate(Camera.Direction * Math.PI / 180);  
+            Context.save();
+            // Adapte la position à celle de la camera
+            Camera.DeplacerCanvas(Context)
             // Translate le canvas au centre de notre lutin 
             Context.translate(Camera.AdapteX(this.X), Camera.AdapteY(this.Y));  
             // Tourne le canvas de l'angle souhaité
             Context.rotate(this.Direction * Math.PI / 180);  
             // Agrandis le canvas suivant la taille de notre objet
-            Context.scale(Camera.AdapteZoom(this.Zoom), Camera.AdapteZoom(this.Zoom))
+            Context.scale(this.Zoom / 100.0, this.Zoom / 100.0)
             // Déplace le canvas à l'angle haut droit de l'image
             Context.translate(-this.Image.width * 0.5, -this.Image.height * 0.5);  
             // Dessine le lutin
@@ -118,23 +119,18 @@ class Lutin
             Context.fillStyle = this.Teinte.RGBA(); // Définit la couleur de remplissage
             Context.fillRect(0,0,this.Image.width, this.Image.height) // Dessine un rectangle de couleur par dessus la figure
             Context.globalCompositeOperation = "source-over"; // Retour à la position initiale du style d'ajout de couleur
-
             // Retourne à la position initiale du canvas
-            Context.restore();  
+            Context.restore(); 
         }
         if (this.Parle)
         {
-            let angle = Camera.Direction * Math.PI / 180;
-            // Assignation de la position X de la bulle
-            this.Bulle.X = Camera.X + (this.X - Camera.X) * Math.cos(angle) + (this.Y - Camera.Y) * Math.sin(angle);
-
-            let posY = this.Y + Math.abs(this.Image.height * 0.5 * Math.cos(this.Direction * Math.PI / 180) * Camera.AdapteZoom(this.Zoom)) +
-            Math.abs(this.Image.width  * 0.5 * Math.sin(this.Direction * Math.PI / 180) * Camera.AdapteZoom(this.Zoom))
-            // Assignation de la position Y de la bulle(Prend en compte la rotation de l'objet)
-            this.Bulle.Y = Camera.Y - (this.X - Camera.X) * Math.sin(angle) + (+ posY - Camera.Y) * Math.cos(angle);
+            let pos = Camera.CameraVersEcran(new Vecteur2(Camera.AdapteX(this.X) , Camera.AdapteY(this.Y + this.Image.height * 0.5)))
+            this.Bulle.X = pos.X;
+            this.Bulle.Y = pos.Y;
             
             // Lance le dessin de la bulle
             this.Bulle.Dessin(Context)
         }
+
     }
 }
