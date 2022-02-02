@@ -1,9 +1,7 @@
 //============================================================================================
 // Ajouter ici les variables à créer
 
-var lutin = [];
-
-var patch;
+var pong
 
 //============================================================================================
 
@@ -14,14 +12,7 @@ var patch;
 function InitObjets()
 {
     // Ajouter ici les objets à creer
-    //lutin = new Lutin(0,0,["Images/Chat.png"])
-    for (let index = 0; index < 10; index++) 
-    {
-        lutin.push(new ExempleLutin());
-        lutin[index].Dire(lutin[index].X + ";" + lutin[index].Y)
-    }
-
-    //patch = new BulleDialogue("A string or regular expression to Ajouter ici la mise a jour des calculs d'objets", 0,0)
+    pong = new JeuPong();
 }
 
 /**
@@ -30,14 +21,8 @@ function InitObjets()
 function Calcul()
 {
     // Ajouter ici la mise a jour des calculs d'objets
-    //lutin.Calcul();
-    lutin[0].X = Camera.X;
-    lutin[0].Y = Camera.Y;
 
-    for (let index = 0; index < lutin.length; index++) 
-    {
-        lutin[index].Calcul();
-    }
+    pong.Calcul();
 
     
     if (Clavier.ToucheBasse("q"))
@@ -97,13 +82,8 @@ function Dessin()
 {
     Debug.Dessin(ctx)
     // Ajouter ici la mise a jour des dessin d'objets
-    //lutin.Dessin(ctx);
-    for (let index = 0; index < lutin.length; index++) 
-    {
-        lutin[index].Dessin(ctx);
-    }
-
-    //patch.Dessin(ctx)
+    
+    pong.Dessin(ctx);
 }
 
 //============================================================================================
