@@ -146,42 +146,34 @@ class Contacts
         {
             if ((P.AGauche(X,Y) > 0) && (P.AGauche(W,X) > 0))           //0
             {
-                console.log("0")
                 return new Vecteur2(NX.X - X.X, NX.Y - X.Y)
             }
             else if (P.AGauche(X,Y) > 0 && P.AGauche(Y,Z) > 0)      //1
             {
-                console.log("1")
                 return new Vecteur2(NY.X - Y.X, NY.Y - Y.Y)
             }
             else if (P.AGauche(X,Y) > 0)                            //2
             {
-                console.log("2")
                 return new Vecteur2((NY.X + NX.X - Y.X - X.X) / 2, (NY.Y + NX.Y - Y.Y - X.Y) / 2)
             }
             else if (P.AGauche(W,X) > 0 && P.AGauche(Z,W) > 0)      //3
             {
-                console.log("3")
                 return new Vecteur2(NW.X - W.X, NW.Y - W.Y)
             }
             else if (P.AGauche(W,X) > 0)                            //4
             {
-                console.log("4")
                 return new Vecteur2((NW.X + NX.X - W.X - X.X) / 2, (NW.Y + NX.Y - W.Y - X.Y) / 2)
             }
             else if (P.AGauche(Y,Z) > 0 && P.AGauche(Z,W) > 0)      //5
             {
-                console.log("5")
                 return new Vecteur2(NZ.X - Z.X, NZ.Y - Z.Y)
             }
             else if (P.AGauche(Z,W) > 0)                            //6
             {
-                console.log("6")
                 return new Vecteur2((NW.X + NZ.X - W.X - Z.X) / 2, (NW.Y + NZ.Y - W.Y - Z.Y) / 2)
             }
             else if (P.AGauche(Y, Z) > 0)                           //7
             {
-                console.log("7")
                 return new Vecteur2((NY.X + NZ.X - Y.X - Z.X) / 2, (NY.Y + NZ.Y - Y.Y - Z.Y) / 2)
             }
         }

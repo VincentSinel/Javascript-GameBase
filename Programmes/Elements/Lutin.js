@@ -28,7 +28,7 @@ class Lutin
      * Calcul et renvoie un tableau contenant la position relative à la camera des angles de notre lutin avec le costume actuel.
      * @returns Liste des points définissant le rectangle de l'image
      */
-    Rectangle()
+    Rectangle() //TODO  Ajouter la prise en compte de la rotation du lutin
     {
         let ar = [];
         ar.push(new Vecteur2(this.X - this.Zoom / 100.0 * this.Image.width / 2, this.Y + this.Zoom / 100.0 * this.Image.height / 2));
