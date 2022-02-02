@@ -15,7 +15,7 @@ class Balle extends Lutin
 
         this.BasculerCostume(EntierAleat(5))
 
-        this.Vitesse = ;
+        this.Vitesse = 5;
         this.Direction = EntierAleat(20,160)
     }
 
