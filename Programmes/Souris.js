@@ -35,7 +35,7 @@ class Souris
     }
     /**
      * Renvoie si bouton de la souris viens juste d'être relaché
-     * @param {*} index Numéro du bouton (0 droit; 1 centre; 2 gauche; 3 retour arrière; 4 retour avant)
+     * @param {*} index Numéro du bouton (0 gauche; 1 centre; 2 droite; 3 retour arrière; 4 retour avant)
      * @returns boolean (Vrai-Faux) indiquant si le bouton a été relaché
      */
     static BoutonJustDeclic(index)

@@ -1,24 +1,17 @@
 class Balle extends Lutin
 {
-    constructor(X,Y) 
+    constructor() 
     {
-        var Costumes = [
-            "Images/Brique1.png",
-            "Images/Brique2.png",
-            "Images/Brique3.png",
-            "Images/Brique4.png",
-            "Images/Brique5.png"
-        ]
+        var Costumes = ["Images/Balle.png"]
         //Cette fonction appel le constructeur de la class Lutin
         // Le "super" de manière général permet d'appeler des élèments de la class parents
-        super(X,Y, Costumes);
-
-        this.BasculerCostume(EntierAleat(5))
+        super(JeuPong.JeuLargeur / 2, JeuPong.JeuHauteur / 4, Costumes);
 
         this.Vitesse = 5;
-        this.Direction = 90//EntierAleat(20,160)
+        this.Direction = EntierAleat(20,160)
 
         this.Radius = 10;
+        this.BalleAttente = 60;
     }
 
     // Redéfinition de la fonction calcul
@@ -26,28 +19,40 @@ class Balle extends Lutin
     {
         super.Calcul();
 
-        this.Vitesse += 0.001
-        if (this.X >= JeuPong.JeuLargeur)
+
+        if (this.BalleAttente == 0)
         {
-            this.X = JeuPong.JeuLargeur
-            this.Direction = 180 - this.Direction;
+            this.Vitesse += 0.001
+            if (this.X >= JeuPong.JeuLargeur - this.Radius)
+            {
+                this.X = JeuPong.JeuLargeur - this.Radius
+                this.Direction = 180 - this.Direction;
+            }
+            if (this.X <=  this.Radius)
+            {
+                this.X = this.Radius;
+                this.Direction = 180 - this.Direction;
+            }
+            if (this.Y >= JeuPong.JeuHauteur - this.Radius)
+            {
+                this.Y = JeuPong.JeuHauteur - this.Radius
+                this.Direction = - this.Direction;
+            }
+            if (this.Y <= -this.Radius)
+            {
+                this.X = JeuPong.JeuLargeur / 2;
+                this.Y = JeuPong.JeuHauteur / 4;
+                this.Direction = EntierAleat(20,160);
+                this.BalleAttente = 60;
+            }
+
+            this.Avancer(this.Vitesse)
         }
-        if (this.X <= 0)
+        else
         {
-            this.X = 0;
-            this.Direction = 180 - this.Direction;
-        }
-        if (this.Y >= JeuPong.JeuHauteur)
-        {
-            this.Y = JeuPong.JeuHauteur
-            this.Direction = - this.Direction;
-        }
-        if (this.Y <= 0)
-        {
-            this.Y = 0;
-            this.Direction = - this.Direction;
+            this.BalleAttente -= 1;
         }
 
-        this.Avancer(this.Vitesse)
+        
     }
 }

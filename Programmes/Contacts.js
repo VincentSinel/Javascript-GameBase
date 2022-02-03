@@ -140,8 +140,6 @@ class Contacts
         let NY = new Vecteur2(Y.X + a.X - b.X, Y.Y + a.Y - b.Y);
         let NZ = new Vecteur2(Z.X + a.X + b.X, Z.Y + a.Y + b.Y);
         let NW = new Vecteur2(W.X - a.X + b.X, W.Y - a.Y + b.Y);
-        //return;
-        //console.log(Contacts.PointDansRectangle(NX, NY, NZ, NW, Souris.Position()))
         if (Contacts.PointDansRectangle(NX, NY, NZ, NW, P))
         {
             if ((P.AGauche(X,Y) > 0) && (P.AGauche(W,X) > 0))           //0
@@ -179,4 +177,14 @@ class Contacts
         }
         return 0;
     }
+
+
+    static AngleRebond(Normal, Direction)
+    {
+        let v = Vecteur2.AngleVersVecteur(Direction)
+        let u = Normal.Normaliser(Vecteur2.Dot(v, Normal))
+        let w = Vecteur2.AVersB(u,v);
+        return Math.atan2(w.Y - u.Y,w.X - u.X) * 180 / Math.PI
+    }
+
 }

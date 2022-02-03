@@ -23,55 +23,6 @@ function Calcul()
     // Ajouter ici la mise a jour des calculs d'objets
 
     pong.Calcul();
-
-    
-    if (Clavier.ToucheBasse("q"))
-    {
-        Camera.X -= 1;
-    }
-    if (Clavier.ToucheBasse("z"))
-    {
-        Camera.Y += 1;
-    }
-    if (Clavier.ToucheBasse("d"))
-    {
-        Camera.X += 1;
-    }
-    if (Clavier.ToucheBasse("s"))
-    {
-        Camera.Y -= 1;
-    }
-    
-    if (Clavier.ToucheJusteBasse("a"))
-    {
-        GridSize *= 2;
-    }
-    if (Clavier.ToucheJusteBasse("e"))
-    {
-        GridSize /= 2;
-        GridSize = Math.max(GridSize, 1)
-    }
-
-    
-    if (Clavier.ToucheBasse("j"))
-    {
-        Camera.Direction += 1
-        Camera.Direction = Camera.Direction % 360
-    }
-    if (Clavier.ToucheBasse("l"))
-    {
-        Camera.Direction -= 1
-        Camera.Direction = Camera.Direction % 360
-    }
-    if (Clavier.ToucheBasse("i"))
-    {
-        Camera.Zoom += 1
-    }
-    if (Clavier.ToucheBasse("k"))
-    {
-        Camera.Zoom -= 1
-        Camera.Zoom = Math.max(Camera.Zoom, 0)
-    }
 }
 
 
@@ -83,7 +34,6 @@ function Dessin()
     // Ajouter ici la mise a jour des dessin d'objets
     
     pong.Dessin(ctx);
-    Debug.Dessin(ctx)
 }
 
 //============================================================================================
@@ -124,6 +74,7 @@ var TotalFrame = 0;
     Dessin();
     Clavier.Update();
     Souris.Update();
+    Debug.Dessin(ctx);
  }
 
 //============================================================================================

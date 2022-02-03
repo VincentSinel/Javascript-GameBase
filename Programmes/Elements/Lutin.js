@@ -10,7 +10,7 @@ class Lutin
     {
         this.X = X;
         this.Y = Y;
-        this.Z = 0;
+        this.Z = 0; //TODO Ajouter la prise en compte du Z
         this.Direction = 0;
         this.Zoom = 100;
         this.Image = new Image();
@@ -28,13 +28,17 @@ class Lutin
      * Calcul et renvoie un tableau contenant la position relative à la camera des angles de notre lutin avec le costume actuel.
      * @returns Liste des points définissant le rectangle de l'image
      */
-    Rectangle() //TODO  Ajouter la prise en compte de la rotation du lutin
+    Rectangle()
     {
         let ar = [];
-        ar.push(new Vecteur2(this.X - this.Zoom / 100.0 * this.Image.width / 2, this.Y + this.Zoom / 100.0 * this.Image.height / 2));
-        ar.push(new Vecteur2(this.X + this.Zoom / 100.0 * this.Image.width / 2, this.Y + this.Zoom / 100.0 * this.Image.height / 2));
-        ar.push(new Vecteur2(this.X + this.Zoom / 100.0 * this.Image.width / 2, this.Y - this.Zoom / 100.0 * this.Image.height / 2));
-        ar.push(new Vecteur2(this.X - this.Zoom / 100.0 * this.Image.width / 2, this.Y - this.Zoom / 100.0 * this.Image.height / 2));
+        let offw = this.Zoom / 100.0 * this.Image.width / 2;
+        let offh = this.Zoom / 100.0 * this.Image.height / 2;
+        let cos = Math.cos(this.Direction * Math.PI / 180);
+        let sin = Math.sin(this.Direction * Math.PI / 180);
+        ar.push(new Vecteur2(this.X + (-offw * cos - offh * sin), this.Y + (-offw * sin + offh * cos)));
+        ar.push(new Vecteur2(this.X + (+offw * cos - offh * sin), this.Y + (+offw * sin + offh * cos)));
+        ar.push(new Vecteur2(this.X + (+offw * cos + offh * sin), this.Y + (+offw * sin - offh * cos)));
+        ar.push(new Vecteur2(this.X + (-offw * cos + offh * sin), this.Y + (-offw * sin - offh * cos)));
         return ar;
     }
 
@@ -81,7 +85,7 @@ class Lutin
 
     OrienterVers(X,Y)
     {
-        this.Direction = Math.atan2(X, Y);
+        this.Direction = Math.atan2(Y - this.Y, X - this.X) * 180 / Math.PI;
     }
 
     CostumeSuivant()

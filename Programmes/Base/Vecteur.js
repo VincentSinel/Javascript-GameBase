@@ -23,6 +23,16 @@ class Vecteur2
     }
 
     /**
+     * Projette un angle sur les axe X et Y
+     * @param {number} Direction Angle en degré
+     * @returns Vecteur2 représentant les deux projection de cette angle
+     */
+    static AngleVersVecteur(Direction)
+    {
+        return new Vecteur2(Math.cos(Direction * Math.PI / 180), Math.sin(Direction * Math.PI / 180));
+    }
+
+    /**
      * Créer un vecteur représentant la position d'un point
      * @param {number} X Position X
      * @param {number} Y Position Y
@@ -69,5 +79,9 @@ class Vecteur2
         return new Vecteur2(this.X / l * NouvelleLongueur, this.Y / l * NouvelleLongueur);
     }
 
-    
+    Multiplier(valeur)
+    {
+        return new Vecteur2(this.X * valeur, this.Y * valeur)
+    }
+
 }

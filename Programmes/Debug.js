@@ -1,24 +1,128 @@
-var GridSize = 40
 class Debug
 {
+    static GridSize = 40;
+    static Textes = [];
+    static Vecteurs = []; // Les vecteur sont des vecteurs 4
+    static Parametre = {Grille: false, Info: true, Cible: false, Vecteur: true, Camera: true}
     static Dessin(Context)
     {
-        //this.Cible(Context)
-        this.Grid(Context, Math.floor(GridSize))
+        if (Debug.Parametre.Grille)
+        {
+            this.Grid(Context, Math.floor(Debug.GridSize))
+        }
 
-        var textes = [];
-        let vec = Camera.CameraVersEcran(new Vecteur2(Camera.AdapteX(0), Camera.AdapteY(0)))
-        textes.push("Camera X : " + Camera.X)
-        textes.push("Camera Y : " + Camera.Y)
-        textes.push("Camera O : " + Camera.Direction)
-        textes.push("Souris X : " + Souris.X)
-        textes.push("Souris Y : " + Souris.Y)
-        textes.push("Center X : " + vec.X)
-        textes.push("Center Y : " + vec.Y)
-        textes.push("Grid Siz : " + Math.floor(GridSize))
+        if (Debug.Parametre.Info)
+        {
+            Debug.Textes.push("Camera X : " + Camera.X)
+            Debug.Textes.push("Camera Y : " + Camera.Y)
+            Debug.Textes.push("Camera O : " + Camera.Direction)
+            Debug.Textes.push("Camera Z : " + Camera.Zoom)
+            Debug.Textes.push("Souris X : " + Souris.X)
+            Debug.Textes.push("Souris Y : " + Souris.Y)
+            Debug.Textes.push("Grid Siz : " + Math.floor(Debug.GridSize))
+            this.DessinInfo(Context, Debug.Textes)
+            Debug.Textes = [];
+        }
 
-        this.DessinInfo(Context, textes)
+        if (Debug.Parametre.Cible)
+        {
+            this.Cible(Context)
+        }
+
+        if (Debug.Parametre.Vecteur)
+        {
+            for (let v = 0; v < Debug.Vecteurs.length; v++) 
+            {
+                Debug.Vecteur(Context, Debug.Vecteurs[v]);
+            }
+            Debug.Vecteurs = []
+        }
+
+        if (Debug.Parametre.Camera)
+        {
+            Debug.DeplaceCamera()
+        }
     }
+
+
+    static DeplaceCamera()
+    {
+        if (Clavier.ToucheBasse("j"))
+        {
+            Camera.Direction += 1
+            Camera.Direction = Camera.Direction % 360
+        }
+        if (Clavier.ToucheBasse("l"))
+        {
+            Camera.Direction -= 1
+            Camera.Direction = Camera.Direction % 360
+        }
+        if (Clavier.ToucheBasse("i"))
+        {
+            Camera.Zoom += 1
+        }
+        if (Clavier.ToucheBasse("k"))
+        {
+            Camera.Zoom -= 1
+            //Camera.Zoom = Math.max(Camera.Zoom, 0)
+        }
+
+        if (Clavier.ToucheBasse("q"))
+        {
+            Camera.X -= 1;
+        }
+        if (Clavier.ToucheBasse("z"))
+        {
+            Camera.Y += 1;
+        }
+        if (Clavier.ToucheBasse("d"))
+        {
+            Camera.X += 1;
+        }
+        if (Clavier.ToucheBasse("s"))
+        {
+            Camera.Y -= 1;
+        }
+
+        if (Clavier.ToucheJusteBasse("a"))
+        {
+            Debug.GridSize *= 2;
+        }
+        if (Clavier.ToucheJusteBasse("e"))
+        {
+            Debug.GridSize /= 2;
+            Debug.GridSize = Math.max(Debug.GridSize, 1)
+        }
+    }
+
+    static AjoutVecteur(centre,direction)
+    {
+        Debug.Vecteurs.push(
+            {
+                x0: centre.X, 
+                y0: centre.Y, 
+                x1: centre.X + direction.X, 
+                y1: centre.Y - direction.Y
+            })
+    }
+
+    static Vecteur(Context, vec)
+    {
+        Context.save();
+        Camera.DeplacerCanvas(Context)
+
+        Context.strokeStyle = "green"
+
+        Context.beginPath();
+        Context.moveTo(vec.x0, vec.y0);
+        Context.lineTo(vec.x1, vec.y1);
+        Context.stroke();
+
+        Context.strokeRect(vec.x1 - 1, vec.y1 - 1, 2, 2)
+
+        Context.restore();
+    }
+
 
     /**
      * Créer une cible au centre de l'écran
@@ -90,7 +194,6 @@ class Debug
         Context.restore();  
     }
 
-
     /**
      * Ecris dans l'angle de l'écran la position de la camera
      * @param {context} Context Context de dessin
@@ -107,4 +210,12 @@ class Debug
         }
     }
 
+    /**
+     * Ajoute un texte dans la zone info (Haut gauche de l'écran)
+     * @param {string} Texte Texte à afficher
+     */
+    static AjoutInfo(Texte)
+    {
+        Debug.Textes.push(Texte)
+    }
 }
