@@ -125,6 +125,7 @@ class Lutin
     {
         if (this.Visible)
         {
+
             // Sauvegarde la position actuel du canvas 
             Context.save();
             // Adapte la position à celle de la camera
@@ -137,14 +138,25 @@ class Lutin
             Context.scale(this.Zoom / 100.0, this.Zoom / 100.0)
             // Déplace le canvas à l'angle haut droit de l'image
             Context.translate(-this.Image.width * 0.5, -this.Image.height * 0.5);  
-            // Dessine le lutin
-            Context.drawImage(this.Image, 0, 0);  
 
-            // Applique une teinte au lutin
-            Context.globalCompositeOperation = "source-atop"; // Modifie le style d'ajout des couleurs
-            Context.fillStyle = this.Teinte.RGBA(); // Définit la couleur de remplissage
-            Context.fillRect(0,0,this.Image.width, this.Image.height) // Dessine un rectangle de couleur par dessus la figure
-            Context.globalCompositeOperation = "source-over"; // Retour à la position initiale du style d'ajout de couleur
+            if (this.Teinte.A != 0)
+            {
+                // Applique une teinte au lutin
+                let imageCtx = document.createElement("canvas").getContext("2d"); // Création d'un canvas temporaire
+                imageCtx.canvas.width = this.Image.width; // Modification taille
+                imageCtx.canvas.height = this.Image.height; // Modification taille
+
+                imageCtx.fillStyle = this.Teinte.RGBA();// Définit la couleur de remplissage
+                imageCtx.fillRect(0, 0, this.Image.width, this.Image.height);// Dessine un rectangle de couleur par dessus la figure
+                imageCtx.globalCompositeOperation = "destination-atop";// Modifie le style d'ajout des couleurs
+                imageCtx.drawImage(this.Image,0,0); // Dessin de l'image sur le canvas temporaire
+                Context.drawImage(imageCtx.canvas, 0, 0); // Dessin du canvas temporaire dans le canvas original
+            }
+            else
+            {
+                // Dessine le lutin
+                Context.drawImage(this.Image, 0, 0);  
+            }
             // Retourne à la position initiale du canvas
             Context.restore(); 
         }

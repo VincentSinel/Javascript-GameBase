@@ -4,44 +4,51 @@ class Debug
     static Textes = [];
     static Vecteurs = []; // Les vecteur sont des vecteurs 4
     static Parametre = {Grille: false, Info: true, Cible: false, Vecteur: true, Camera: true}
-    static Dessin(Context)
+    static Dessin(Context, etape)
     {
-        if (Debug.Parametre.Grille)
+        if (etape == "Pre")
         {
-            this.Grid(Context, Math.floor(Debug.GridSize))
-        }
-
-        if (Debug.Parametre.Info)
-        {
-            Debug.Textes.push("Camera X : " + Camera.X)
-            Debug.Textes.push("Camera Y : " + Camera.Y)
-            Debug.Textes.push("Camera O : " + Camera.Direction)
-            Debug.Textes.push("Camera Z : " + Camera.Zoom)
-            Debug.Textes.push("Souris X : " + Souris.X)
-            Debug.Textes.push("Souris Y : " + Souris.Y)
-            Debug.Textes.push("Grid Siz : " + Math.floor(Debug.GridSize))
-            this.DessinInfo(Context, Debug.Textes)
-            Debug.Textes = [];
-        }
-
-        if (Debug.Parametre.Cible)
-        {
-            this.Cible(Context)
-        }
-
-        if (Debug.Parametre.Vecteur)
-        {
-            for (let v = 0; v < Debug.Vecteurs.length; v++) 
+            if (Debug.Parametre.Grille)
             {
-                Debug.Vecteur(Context, Debug.Vecteurs[v]);
+                this.Grid(Context, Math.floor(Debug.GridSize))
             }
-            Debug.Vecteurs = []
+
+            if (Debug.Parametre.Camera)
+            {
+                Debug.DeplaceCamera()
+            }
+        }
+        else
+        {
+            if (Debug.Parametre.Info)
+            {
+                Debug.Textes.push("Camera X : " + Camera.X)
+                Debug.Textes.push("Camera Y : " + Camera.Y)
+                Debug.Textes.push("Camera O : " + Camera.Direction)
+                Debug.Textes.push("Camera Z : " + Camera.Zoom)
+                Debug.Textes.push("Souris X : " + Souris.X)
+                Debug.Textes.push("Souris Y : " + Souris.Y)
+                Debug.Textes.push("Grid Siz : " + Math.floor(Debug.GridSize))
+                this.DessinInfo(Context, Debug.Textes)
+                Debug.Textes = [];
+            }
+    
+            if (Debug.Parametre.Cible)
+            {
+                this.Cible(Context)
+            }
+    
+            if (Debug.Parametre.Vecteur)
+            {
+                for (let v = 0; v < Debug.Vecteurs.length; v++) 
+                {
+                    Debug.Vecteur(Context, Debug.Vecteurs[v]);
+                }
+                Debug.Vecteurs = []
+            }
         }
 
-        if (Debug.Parametre.Camera)
-        {
-            Debug.DeplaceCamera()
-        }
+        
     }
 
 
@@ -59,29 +66,29 @@ class Debug
         }
         if (Clavier.ToucheBasse("i"))
         {
-            Camera.Zoom += 1
+            Camera.Zoom += 3 * Camera.Zoom / 100
         }
         if (Clavier.ToucheBasse("k"))
         {
-            Camera.Zoom -= 1
+            Camera.Zoom -= 3 * Camera.Zoom / 100
             //Camera.Zoom = Math.max(Camera.Zoom, 0)
         }
 
         if (Clavier.ToucheBasse("q"))
         {
-            Camera.X -= 1;
+            Camera.X -= 300 / Camera.Zoom;
         }
         if (Clavier.ToucheBasse("z"))
         {
-            Camera.Y += 1;
+            Camera.Y += 300 / Camera.Zoom;
         }
         if (Clavier.ToucheBasse("d"))
         {
-            Camera.X += 1;
+            Camera.X += 300 / Camera.Zoom;
         }
         if (Clavier.ToucheBasse("s"))
         {
-            Camera.Y -= 1;
+            Camera.Y -= 300 / Camera.Zoom;
         }
 
         if (Clavier.ToucheJusteBasse("a"))
@@ -202,7 +209,6 @@ class Debug
     static DessinInfo(Context,Texte)
     {
         Context.fillStyle = "white"
-        Context.strokeStyle = "Black"
         Context.font = "12px Arial";
         for (let index = 0; index < Texte.length; index++) 
         {

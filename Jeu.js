@@ -1,7 +1,8 @@
 //============================================================================================
 // Ajouter ici les variables à créer
 
-var pong
+var lutin
+var UI
 
 //============================================================================================
 
@@ -12,7 +13,11 @@ var pong
 function InitObjets()
 {
     // Ajouter ici les objets à creer
-    pong = new JeuPong();
+    Debug.Parametre.Grille = false;
+    lutin = new ExempleLutin()
+
+    UI = new Toggle(Ecran_Largeur - 60,0,60,25, "Grille");
+    UI.ClicAction = function(){ Debug.Parametre.Grille = !Debug.Parametre.Grille }
 }
 
 /**
@@ -21,8 +26,9 @@ function InitObjets()
 function Calcul()
 {
     // Ajouter ici la mise a jour des calculs d'objets
+    lutin.Calcul()
 
-    pong.Calcul();
+    UI.Calcul();
 }
 
 
@@ -32,8 +38,9 @@ function Calcul()
 function Dessin()
 {
     // Ajouter ici la mise a jour des dessin d'objets
-    
-    pong.Dessin(ctx);
+    lutin.Dessin(ctx)
+
+    UI.Dessin(ctx);
 }
 
 //============================================================================================
@@ -71,10 +78,11 @@ var TotalFrame = 0;
     Calcul();
     ctx.fillStyle = "black"
     ctx.fillRect(0,0,Ecran_Largeur, Ecran_Hauteur);
+    Debug.Dessin(ctx, "Pre");
     Dessin();
     Clavier.Update();
     Souris.Update();
-    Debug.Dessin(ctx);
+    Debug.Dessin(ctx, "Post");
  }
 
 //============================================================================================

@@ -2,13 +2,13 @@ class Souris
 {
     static X = 0;
     static Y = 0;
+
+    static CX = 0;
+    static CY = 0;
     //                   Droit Centre Gauche Arriere Avant
     static EtatBouton = [false, false, false, false, false];
     static JusteBas =   [false, false, false, false, false];
     static JusteHaut =  [false, false, false, false, false];
-
-    static #SourisX = 0;
-    static #SourisY = 0;
 
     static Position()
     {
@@ -56,8 +56,8 @@ class Souris
     }
     static MouseMove(e)
     {
-        this.#SourisX = e.offsetX
-        this.#SourisY = e.offsetY
+        this.CX = e.offsetX
+        this.CY = e.offsetY
 
         this.EtatBouton[0] = e.buttons % 2 == 1;
         this.EtatBouton[1] = e.buttons % 8 >= 4;
@@ -69,7 +69,7 @@ class Souris
 
     static Update()
     {
-        let vec = new Vecteur2(this.#SourisX, this.#SourisY);
+        let vec = new Vecteur2(this.CX, this.CY);
         let vec2 = Camera.EcranVersCamera(vec);
         this.X = vec2.X
         this.Y = vec2.Y

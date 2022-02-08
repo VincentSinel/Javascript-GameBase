@@ -1,42 +1,26 @@
 class ExempleLutin extends Lutin 
 {
-    //Je peut changer les paramètre de ce lutin et générer son contenu ensuite
-    constructor() 
+    constructor()
     {
-        var X = 0//EntierAleat(-Ecran_Largeur / 2, Ecran_Largeur / 2) // Position X au hasard sur l'écran
-        var Y = 0//EntierAleat(-Ecran_Hauteur / 2, Ecran_Hauteur / 2) // Position Y au hasard sur l'écran
+        super(0,0,["Images/Chat.png"])
 
-        var Costumes = [
-            "Images/Brique1.png",
-            "Images/Brique2.png",
-            "Images/Brique3.png",
-            "Images/Brique4.png",
-            "Images/Brique5.png"
-        ]
-        //Cette fonction appel le constructeur de la class Lutin
-        // Le "super" de manière général permet d'appeler des élèments de la class parents
-        super(X,Y, Costumes);
+        this.Vitesse = 1;
+        this.Acceleration = 1.1;
 
-        this.BasculerCostume(EntierAleat(5))
-        this.Time = EntierAleat(255) // Temps de génération aléatoire
-        //this.Direction = NombreAleat(360); // Prend une direction aléatoire
-        // Création d'un nouveau paramètre vitesse
-        //this.Vitesse =NombreAleat(5);
-
-        //EntierAleat(255);
+        this.VitesseMax = 10;
     }
 
 
-    // Redéfinition de la fonction calcul
-    Calcul() 
+    Calcul()
     {
-        super.Calcul(); // Appel la fonction calcul de la class parente
+        super.Calcul()
 
-        // Il est possible de faire des actions ici comme les script sur scratch
-        // Quelque exemple :
-        //this.Avancer(this.Vitesse)
-        //this.Tourner(Math.cos(this.Time / 20) * 2)
+        this.X += this.Vitesse
+        this.Dire(this.X)
 
+        this.Vitesse *= this.Acceleration;
+        this.Vitesse = Math.min(this.VitesseMax, this.Vitesse)
+
+        //Camera.X = this.X
     }
-
 }
