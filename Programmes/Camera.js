@@ -5,6 +5,8 @@ class Camera
     static Zoom = 100;
     static Direction = 0;
 
+    static #FullScreen = false;
+
     /**
      * Adapte une position X à celle de la camera
      * @param {number} posX 
@@ -82,5 +84,36 @@ class Camera
         let y = this.Y + disX * sin + disY * cos;
  
          return new Vecteur2(x,y)
+     }
+
+
+     static PleinEcran()
+     {
+         if (Camera.#FullScreen)
+         {
+            if(document.webkitCancelFullScreen) 
+            {
+                document.webkitCancelFullScreen(); //Chrome
+                Camera.#FullScreen = false;
+            }
+            else
+            {
+                document.mozCancelFullScreen();
+                Camera.#FullScreen = false;
+            }
+         }
+         else
+         {
+            if(canvas.webkitRequestFullScreen) 
+            {
+                document.body.webkitRequestFullScreen();
+                Camera.#FullScreen = true;
+            }
+            else 
+            {
+                document.body.mozRequestFullScreen();
+                Camera.#FullScreen = true;
+            } 
+         }
      }
 }
