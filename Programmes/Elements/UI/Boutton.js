@@ -1,12 +1,22 @@
 class Boutton extends UIElement
 {
-    constructor(X,Y,Largeur,Hauteur,Texte, Parent = undefined)
+    /**
+     * Créer un boutton pour interface utilisateur.
+     * Utiliser la variable Boutton.ClicAction pour définir l'action du boutton.
+     * @param {Number} X Position X relative à l'objet parent
+     * @param {Number} Y Position Y relative à l'objet parent
+     * @param {Number} W Largeur du boutton
+     * @param {Number} H Hauteur du boutton
+     * @param {String} Texte Texte affiché sur le boutton
+     * @param {UIElement} Parent Objet Parent (facultatif)
+     */
+    constructor(X,Y,W,H,Texte, Parent = undefined)
     {
-        super(X,Y,Largeur,Hauteur, Parent)
+        super(X,Y,W,H, Parent)
         this.Texte = Texte;
 
         this.Etat = "Base"
-        this.ClicAction = undefined;
+        this.ClicAction = undefined; // Action a effectuer lorsque le boutton est pressé
         this.Couleur = UIElement.BaseCouleur;
     }
 

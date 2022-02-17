@@ -1,4 +1,4 @@
-class Lutin
+class TileMap
 {
     /**
      * Création d'un lutin manipulable avec des fonction simple
@@ -6,7 +6,7 @@ class Lutin
      * @param {number} Y Position Y du lutin
      * @param {Array<string>} Costumes Liste des costumes du lutin
      */
-    constructor(X,Y, Costumes)
+    constructor(X,Y, W, H, Texture,Decoupages)
     {
         this.X = X;
         this.Y = Y;
@@ -15,96 +15,11 @@ class Lutin
         this.Zoom = 100;
         this.Image = new Image();
         this.Image.src = Costumes[0];
-        this.Costumes = Costumes;
-        this.CostumeActuel = 0;
+        this.Decoupages = Decoupages
+        this.Texture = Texture;
         this.Visible = true;
         this.Time = 0;
         this.Teinte = new Color(0,0,0,0);
-        this.Parle = false
-        this.Bulle = new BulleDialogue("", 0,0)
-        this.CentreRotation = new Vecteur2(0.5,0.5)
-    }
-
-    /**
-     * Calcul et renvoie un tableau contenant la position relative à la camera des angles de notre lutin avec le costume actuel.
-     * @returns Liste des points définissant le rectangle de l'image
-     */
-    Rectangle()
-    {
-        let ar = [];
-        let offw = this.Zoom / 100.0 * this.Image.width / 2;
-        let offh = this.Zoom / 100.0 * this.Image.height / 2;
-        let cos = Math.cos(this.Direction * Math.PI / 180);
-        let sin = Math.sin(this.Direction * Math.PI / 180);
-        ar.push(new Vecteur2(this.X + (-offw * cos - offh * sin), this.Y + (-offw * sin + offh * cos)));
-        ar.push(new Vecteur2(this.X + (+offw * cos - offh * sin), this.Y + (+offw * sin + offh * cos)));
-        ar.push(new Vecteur2(this.X + (+offw * cos + offh * sin), this.Y + (+offw * sin - offh * cos)));
-        ar.push(new Vecteur2(this.X + (-offw * cos + offh * sin), this.Y + (-offw * sin - offh * cos)));
-        return ar;
-    }
-
-    VecteurDirection()
-    {
-        return new Vecteur2(Math.cos(this.Direction * Math.PI / 180), Math.sin(this.Direction * Math.PI / 180));
-    }
-
-    ToucheSouris()
-    {
-        let a = this.Rectangle()
-        return Contacts.PointDansRectangle(a[0], a[1], a[2], a[3], new Vecteur2(Souris.X, Souris.Y))
-    }
-
-    ToucheLutin(lutin)
-    {
-        let a = this.Rectangle()
-        let b = lutin.Rectangle();
-        return Contacts.PolygonesIntersection(a,b);
-    }
-
-    Avancer(distance)
-    {
-        this.X += distance * Math.cos(this.Direction * Math.PI / 180);
-        this.Y += distance * Math.sin(this.Direction * Math.PI / 180);
-    }
-
-    Tourner(Angle)
-    {
-        this.Direction += Angle
-    }
-
-    AllerA(X,Y)
-    {
-        this.X = X;
-        this.Y = Y;
-    }
-
-    Dire(Texte)
-    {
-        this.Bulle.ModifierTexte(Texte)
-        this.Parle = true
-    }
-
-    OrienterVers(X,Y)
-    {
-        this.Direction = Math.atan2(Y - this.Y, X - this.X) * 180 / Math.PI;
-    }
-
-    CostumeSuivant()
-    {
-        this.CostumeActuel = (this.CostumeActuel + 1) % this.Costumes.length
-        this.Image.src = this.Costumes[this.CostumeActuel]
-    }
-
-    CostumePrecedent()
-    {
-        this.CostumeActuel = (this.CostumeActuel + this.Costumes.length - 1) % this.Costumes.length
-        this.Image.src = this.Costumes[this.CostumeActuel]
-    }
-
-    BasculerCostume(index)
-    {
-        this.CostumeActuel = index % this.Costumes.length
-        this.Image.src = this.Costumes[this.CostumeActuel]
     }
 
     Montrer()
@@ -138,7 +53,7 @@ class Lutin
             // Agrandis le canvas suivant la taille de notre objet
             Context.scale(this.Zoom / 100.0, this.Zoom / 100.0)
             // Déplace le canvas à l'angle haut droit de l'image
-            Context.translate(-this.Image.width * this.CentreRotation.X, -this.Image.height * this.CentreRotation.Y);  
+            Context.translate(-this.Image.width * 0.5, -this.Image.height * 0.5);  
 
             if (this.Teinte.A != 0)
             {

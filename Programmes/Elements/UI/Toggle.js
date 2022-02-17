@@ -1,8 +1,19 @@
 class Toggle extends UIElement
 {
-    constructor(X,Y,Largeur,Hauteur,Texte, Parent = undefined)
+    /**
+     * Créer un interrupteur pour interface utilisateur. Il différe du boutton car il reste à sa position actif ou inactif
+     * Utiliser la variable Boutton.ClicAction pour définir l'action de l'interrupteur.
+     * Utiliser la variable Boutton.Toggle pour connaitre sont état actuel (true enfoncé / false relaché)
+     * @param {Number} X Position X relative à l'objet parent
+     * @param {Number} Y Position Y relative à l'objet parent
+     * @param {Number} W Largeur de l'interrupteur
+     * @param {Number} H Hauteur de l'interrupteur
+     * @param {String} Texte Texte affiché sur l'interrupteur
+     * @param {UIElement} Parent Objet Parent (facultatif)
+     */
+    constructor(X,Y,W,H,Texte, Parent = undefined)
     {
-        super(X,Y,Largeur,Hauteur, Parent)
+        super(X,Y,W,H, Parent)
         this.Texte = Texte;
 
         this.Etat = "Base"

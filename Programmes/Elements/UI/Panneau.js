@@ -1,8 +1,16 @@
 class Panneau extends UIElement
 {
-    constructor(X,Y,Largeur,Hauteur, Parent = undefined)
+    /**
+     * Créer un panneau pour interface utilisateur. Il permet de regrouper plusieurs objet.
+     * @param {Number} X Position X relative à l'objet parent
+     * @param {Number} Y Position Y relative à l'objet parent
+     * @param {Number} W Largeur du panneau
+     * @param {Number} H Hauteur du panneau
+     * @param {UIElement} Parent Objet Parent (facultatif)
+     */
+    constructor(X,Y,W,H, Parent = undefined)
     {
-        super(X,Y,Largeur,Hauteur, Parent)
+        super(X,Y,W,H, Parent)
 
         this.Couleur = UIElement.BaseCouleur;
     }

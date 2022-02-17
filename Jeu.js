@@ -12,14 +12,16 @@ var UI
  */
 function InitObjets()
 {
-    // Ajouter ici les objets à creer
-    Debug.Parametre.Grille = true;
-    lutin = new JeuPong()//new ExempleLutin()
+    lutin = new JeuMoto();
 
+    // Ajouter ici les objets à creer
+    Debug.Parametre.Grille = false;
+    //UI = new TextBlock(100,100,200, 200,"I would like to print a status message to my German users, which contains umlauts (ä/ü/ö). I also would like them be in the source file rather than having to download and parse some extra file just for the messages.");
     UI = new Toggle(Ecran_Largeur - 60,0,60,25, "Grille");
-    //UI.ClicAction = function(){ Debug.Parametre.Grille = !Debug.Parametre.Grille }
-    UI.ClicAction = function(){ Camera.PleinEcran() }
-    UI.Toggle = true;
+    UI.ClicAction = function(){ Debug.Parametre.Grille = !Debug.Parametre.Grille }
+    UI.Toggle = Debug.Parametre.Grille;
+
+
 }
 
 /**

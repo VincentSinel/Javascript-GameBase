@@ -123,7 +123,7 @@ class BulleDialogue extends NinePatch
         Context.fillStyle = "black"
         for (let line = 0; line < this.Lines.length; line++) {
             const element = this.Lines[line];
-            ctx.fillText(element, this.X + 9, this.Y + 5 + (line + 1) * (this.FontSize + 2));
+            Context.fillText(element, this.X + 9, this.Y + 5 + (line + 1) * (this.FontSize + 2));
         }
 
         this.Y += this.H;
