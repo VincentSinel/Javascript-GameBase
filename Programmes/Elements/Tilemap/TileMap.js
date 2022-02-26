@@ -97,6 +97,47 @@ class TileMap
         }
     }
 
+    /**
+     * Test si un contact est présent entre un lutin non tourné et le tilemap;
+     * @param {Lutin} Lutin Lutin a tester
+     * @returns Boolean représentant si il y a contact ou non
+     */
+    Contact_AABB(Lutin)
+    {
+        let dec = 2; // Cette valeur est arbitraire, le contact se fait en découpant le rectangle du lutin en 9 point de test.
+        let ar = Lutin.RectangleWH();
+        let dx = Math.floor(ar[1] / this.TailleTile * dec);
+        let dy = Math.floor(ar[2] / this.TailleTile * dec);
+        for (let x = 0; x <= dx; x++) {
+            for (let y = 0; y <= dy; y++) {
+                let ox = Math.min(ar[0].X + x * ar[1] / dx, ar[0].X + ar[1]);
+                let oy = Math.max(ar[0].Y - y * ar[2] / dy, ar[0].Y - ar[2]);
+                // Montre le découpage du lutin
+                //Debug.AjoutVecteur(new Vecteur2(Camera.AdapteX(ox),Camera.AdapteY(oy)), new Vecteur2(0,0))
+                let t = this.PositionIndex(ox, oy);
+                if (t.X >= 0 && t.X < this.W)
+                {
+                    if (t.Y >= 0 && t.Y < this.H)
+                    {
+                        let id = this.Contenue[t.X + t.Y * this.W];
+                        if (this.Tiles[id].Contact)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+
+    PositionIndex(X,Y)
+    {
+        let x = Math.floor((X - this.X) / this.TailleTile);
+        let y = Math.floor((Y - this.Y) / this.TailleTile);
+        return new Vecteur2(x, y);
+    }
 
 
     ChangerTile(X,Y,Tile)
@@ -158,7 +199,23 @@ class TileMap
         let size = Math.max(5,Math.floor((Diagonal / (this.TailleTile * 2) + Math.sqrt(2)) * 100 / Camera.Zoom + 1));
         this.RectDraw = [dx - size, dy - size, dx + size, dy + size, size]
 
-        
+        /* DEBUG CONTACT fort impact sur les FPS
+        for (let y = 0; y < this.H; y++) 
+        {     
+            for (let x = 0; x < this.W; x++) 
+            {       
+                let id = this.Contenue[x + y * this.W]
+                if (this.Tiles[id].Contact)
+                {
+                    Debug.AjoutRectangle(
+                        [Camera.AdapteX(this.X) + this.TailleTile * x,
+                        Camera.AdapteY(this.Y) - this.TailleTile * (1 + y),
+                         this.TailleTile,
+                         this.TailleTile])
+                }
+            }
+        }
+        */
     }
 
     Dessin(Context)

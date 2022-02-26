@@ -28,6 +28,7 @@ class Lutin
         this.Parle = false
         this.Bulle = new BulleDialogue("", 0,0)
         this.CentreRotation = new Vecteur2(0.5,0.5)
+        this.Velocite = new Vecteur2(0, 0);
     }
 
     /**
@@ -37,8 +38,8 @@ class Lutin
     Rectangle()
     {
         let ar = [];
-        let offw = this.Zoom / 100.0 * this.Image.width / 2;
-        let offh = this.Zoom / 100.0 * this.Image.height / 2;
+        let offw = this.Zoom / 100.0 * this.Image.width * this.CentreRotation.X;
+        let offh = this.Zoom / 100.0 * this.Image.height * this.CentreRotation.Y;
         let cos = Math.cos(this.Direction * Math.PI / 180);
         let sin = Math.sin(this.Direction * Math.PI / 180);
         ar.push(new Vecteur2(this.X + (-offw * cos - offh * sin), this.Y + (-offw * sin + offh * cos)));
@@ -47,6 +48,22 @@ class Lutin
         ar.push(new Vecteur2(this.X + (-offw * cos + offh * sin), this.Y + (-offw * sin - offh * cos)));
         return ar;
     }
+
+    RectangleWH()
+    {
+        let ar = [];
+        let offw = this.Zoom / 100.0 * this.Image.width * this.CentreRotation.X;
+        let offh = this.Zoom / 100.0 * this.Image.height * this.CentreRotation.Y;
+        let cos = Math.cos(this.Direction * Math.PI / 180);
+        let sin = Math.sin(this.Direction * Math.PI / 180);
+        ar.push(new Vecteur2(this.X + (-offw * cos - offh * sin), this.Y + (-offw * sin + offh * cos)));
+        ar.push(this.Image.width * this.Zoom / 100.0);
+        ar.push(this.Image.height * this.Zoom / 100.0);
+        ar.push(this.Direction);
+        return ar;
+    }
+
+    
 
     VecteurDirection()
     {
@@ -125,6 +142,9 @@ class Lutin
     Calcul(Delta)
     {
         this.Time += Delta;
+
+        this.X += this.Velocite.X;
+        this.Y += this.Velocite.Y;
     }
 
     Dessin(Context)
@@ -168,7 +188,7 @@ class Lutin
         }
         if (this.Parle)
         {
-            let pos = Camera.CameraVersEcran(new Vecteur2(Camera.AdapteX(this.X) , Camera.AdapteY(this.Y + this.Image.height * 0.5)))
+            let pos = Camera.CameraVersEcran(new Vecteur2(Camera.AdapteX(this.X) , Camera.AdapteY(this.Y + this.Image.height * this.CentreRotation.Y * this.Zoom / 100)))
             this.Bulle.X = pos.X;
             this.Bulle.Y = pos.Y;
             

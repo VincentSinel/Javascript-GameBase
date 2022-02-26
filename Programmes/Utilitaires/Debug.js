@@ -4,7 +4,8 @@ class Debug
     static GridSize = 40;
     static Textes = [];
     static Vecteurs = []; // Les vecteur sont des vecteurs 4
-    static Parametre = {Grille: false, Info: true, Cible: false, Vecteur: true, Camera: true}
+    static Rectangles = [] // Les rectangles sont un tableau [X, Y, W, H]
+    static Parametre = {Grille: false, Info: true, Cible: false, Vecteur: true, Camera: true, Rectangle: true}
     static UPDATE(Context, etape, Delta)
     {
         if (etape == "PreCalcul")
@@ -51,9 +52,16 @@ class Debug
                 }
                 Debug.Vecteurs = []
             }
-        }
 
-        
+            if (Debug.Parametre.Rectangle)
+            {
+                for (let v = 0; v < Debug.Rectangles.length; v++) 
+                {
+                    Debug.DessinRectangle(Context, Debug.Rectangles[v]);
+                }
+                Debug.Rectangles = []
+            }
+        }   
     }
 
 
@@ -131,6 +139,17 @@ class Debug
         Context.stroke();
 
         Context.strokeRect(vec.x1 - 1, vec.y1 - 1, 2, 2)
+
+        Context.restore();
+    }
+
+    static DessinRectangle(Context, rect)
+    {
+        Context.save();
+        Camera.DeplacerCanvas(Context)
+
+        Context.fillStyle = Color.Couleur(255,0,0,0.2)
+        Context.fillRect(rect[0], rect[1], rect[2], rect[3])
 
         Context.restore();
     }
@@ -228,5 +247,11 @@ class Debug
     static AjoutInfo(Texte)
     {
         Debug.Textes.push(Texte)
+    }
+
+
+    static AjoutRectangle(rect)
+    {
+        Debug.Rectangles.push(rect);
     }
 }

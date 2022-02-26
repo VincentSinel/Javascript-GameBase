@@ -26,8 +26,8 @@ class Lutin_SC extends Lutin
      Rectangle()
      {
          let ar = [];
-         let offw = this.Zoom / 100.0 * this.Decoupage[0] / 2;
-         let offh = this.Zoom / 100.0 * this.Decoupage[1] / 2;
+         let offw = this.Zoom / 100.0 * this.Decoupage[0] * this.CentreRotation.X;
+         let offh = this.Zoom / 100.0 * this.Decoupage[1] * this.CentreRotation.Y;
          let cos = Math.cos(this.Direction * Math.PI / 180);
          let sin = Math.sin(this.Direction * Math.PI / 180);
          ar.push(new Vecteur2(this.X + (-offw * cos - offh * sin), this.Y + (-offw * sin + offh * cos)));
@@ -36,6 +36,20 @@ class Lutin_SC extends Lutin
          ar.push(new Vecteur2(this.X + (-offw * cos + offh * sin), this.Y + (-offw * sin - offh * cos)));
          return ar;
      }
+
+     RectangleWH()
+    {
+        let ar = [];
+        let offw = this.Zoom / 100.0 * this.Decoupage[0] * this.CentreRotation.X;
+        let offh = this.Zoom / 100.0 * this.Decoupage[1] * this.CentreRotation.Y;
+        let cos = Math.cos(this.Direction * Math.PI / 180);
+        let sin = Math.sin(this.Direction * Math.PI / 180);
+        ar.push(new Vecteur2(this.X + (-offw * cos - offh * sin), this.Y + (-offw * sin + offh * cos)));
+        ar.push(this.Decoupage[0] * this.Zoom / 100.0);
+        ar.push(this.Decoupage[1] * this.Zoom / 100.0);
+        ar.push(this.Direction);
+        return ar;
+    }
 
 
     CostumeSuivant()
@@ -101,7 +115,7 @@ class Lutin_SC extends Lutin
         }
         if (this.Parle)
         {
-            let pos = Camera.CameraVersEcran(new Vecteur2(Camera.AdapteX(this.X) , Camera.AdapteY(this.Y + this.Image.height * 0.5)))
+            let pos = Camera.CameraVersEcran(new Vecteur2(Camera.AdapteX(this.X) , Camera.AdapteY(this.Y + this.Decoupage[1] * this.CentreRotation.Y * this.Zoom / 100)))
             this.Bulle.X = pos.X;
             this.Bulle.Y = pos.Y;
             

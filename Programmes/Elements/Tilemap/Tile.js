@@ -1,12 +1,13 @@
 class Tile
 {
-    constructor(Texture)
+    constructor(Texture, Contact = false)
     {
         this.TileMap = undefined;
         this.Texture = Texture;
         this.Image = new Image();
         this.Image.src = Texture;
         this.DI = 0;
+        this.Contact = Contact;
     }
 
     SetTileMap(Tilemap)

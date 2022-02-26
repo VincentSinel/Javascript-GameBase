@@ -14,13 +14,13 @@ class Niveau2 extends Scene
         Tiles.push(new Tile("Images/Tilemap/Sand1.png"))
         Tiles.push(new Tile("Images/Tilemap/Snow1.png"))
         Tiles.push(new Tile("Images/Tilemap/Stone1.png"))
-        Tiles.push(new Tile("Images/Tilemap/Water1.png"))
+        Tiles.push(new Tile("Images/Tilemap/Water1.png", true))
         this.Tilemap = new TileMap(0,0,200,200,Tiles)
         this.Tilemap.Edit = false;
         this.Tilemap.Charger("Fichier/TileMapData.txt")
 
         this.PNJ = new PNJ(200,200,["Images/Joueur/B_1.png"])
-        
+
         this.ZObject.push(Niveau2.Joueur);
         this.ZObject.push(this.PNJ)
     }
@@ -37,6 +37,8 @@ class Niveau2 extends Scene
 
         this.PNJ.Z = -this.PNJ.Y;
         Niveau2.Joueur.Z = -Niveau2.Joueur.Y
+
+        this.Tilemap.Contact_AABB(Niveau2.Joueur);
     }
 
     Dessin(Context)
