@@ -1,4 +1,4 @@
-class Joueur extends Lutin
+class Joueur extends Lutin_SC
 {
     constructor(X,Y)
     {
@@ -17,14 +17,15 @@ class Joueur extends Lutin
             "Images/Joueur/H_2.png"
         ]
 
-        super(X,Y,Costumes)
+        super(X,Y, "Images/Perso.png", [32,32], 1); //Costumes)
         this.Vue = 0
+        this.CentreRotation = new Vecteur2(0.5,1) //#####################
     }
 
 
-    Calcul()
+    Calcul(Delta)
     {
-        super.Calcul()
+        super.Calcul(Delta)
         let deplacementx = 0;
         let deplacementy = 0;
 
@@ -37,19 +38,21 @@ class Joueur extends Lutin
         if (Clavier.ToucheBasse("d"))
             deplacementx += 1
 
-        this.X += deplacementx * 2
-        this.Y += deplacementy * 2
+        this.X += deplacementx * 2 * Delta
+        this.Y += deplacementy * 2 * Delta
 
         if (deplacementx > 0 && deplacementy == 0)
-            this.Vue = 1
-        if (deplacementx < 0 && deplacementy == 0)
             this.Vue = 2
+        if (deplacementx < 0 && deplacementy == 0)
+            this.Vue = 1
         if (deplacementy > 0 && deplacementx == 0)
             this.Vue = 3
         if (deplacementy < 0 && deplacementx == 0)
             this.Vue = 0
+
+        let id = 3 + this.Vue * 12 + 1 + ((-2 + Math.floor(this.Time / 12) % 4) % 2)
         
-        this.BasculerCostume(this.Vue * 3 + Math.floor(this.Time / 12) % 3)
+        this.BasculerCostume(id)//this.Vue * 3 + Math.floor(this.Time / 12) % 3)
     }
 
 

@@ -16,9 +16,9 @@ class Panneau extends UIElement
     }
 
 
-    Calcul()
+    Calcul(Delta)
     {
-        super.Calcul();
+        super.Calcul(Delta);
 
 
         

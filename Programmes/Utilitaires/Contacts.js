@@ -178,6 +178,62 @@ class Contacts
         return 0;
     }
 
+    static RectContreRect(X1,Y1,W1,X2,Y2,W2)
+    {
+        let w1 = Math.sqrt((X1.X-Y1.X) * (X1.X-Y1.X) + (X1.Y-Y1.Y) * (X1.Y-Y1.Y))
+        let h1 = Math.sqrt((X1.X-W1.X) * (X1.X-W1.X) + (X1.Y-W1.Y) * (X1.Y-W1.Y))
+        let a1 = Math.atan2((X1.X-Y1.X), (X1.Y-Y1.Y))
+        let w2 = Math.sqrt((X2.X-Y2.X) * (X2.X-Y2.X) + (X2.Y-Y2.Y) * (X2.Y-Y2.Y))
+        let h2 = Math.sqrt((X2.X-W2.X) * (X2.X-W2.X) + (X2.Y-W2.Y) * (X2.Y-W2.Y))
+        let a2 = Math.atan2((X2.X-Y2.X), (X2.Y-Y2.Y))
+        return rotatedRectanglesCollide(X1.X, X1.Y, w1, h1, a1, X2.X, X2.Y, w2, h2, a2)
+    }
+
+    static rotatedRectanglesCollide(r1X, r1Y, r1W, r1H, r1A, r2X, r2Y, r2W, r2H, r2A) {
+        let r1HW = r1W / 2;
+        let r1HH = r1H / 2;
+        let r2HW = r2W / 2;
+        let r2HH = r2H / 2;
+      
+        let r1CX = r1X + r1HW;
+        let r1CY = r1Y + r1HH;
+        let r2CX = r2X + r2HW;
+        let r2CY = r2Y + r2HH;
+      
+        let cosR1A = Math.cos(r1A);
+        let sinR1A = Math.sin(r1A);
+        let cosR2A = Math.cos(r2A);
+        let sinR2A = Math.sin(r2A);
+      
+        let r1RX =  cosR2A * (r1CX - r2CX) + sinR2A * (r1CY - r2CY) + r2CX - r1HW;
+        let r1RY = -sinR2A * (r1CX - r2CX) + cosR2A * (r1CY - r2CY) + r2CY - r1HH;
+        let r2RX =  cosR1A * (r2CX - r1CX) + sinR1A * (r2CY - r1CY) + r1CX - r2HW;
+        let r2RY = -sinR1A * (r2CX - r1CX) + cosR1A * (r2CY - r1CY) + r1CY - r2HH;
+      
+        let cosR1AR2A = Math.abs(cosR1A * cosR2A + sinR1A * sinR2A);
+        let sinR1AR2A = Math.abs(sinR1A * cosR2A - cosR1A * sinR2A);
+        let cosR2AR1A = Math.abs(cosR2A * cosR1A + sinR2A * sinR1A);
+        let sinR2AR1A = Math.abs(sinR2A * cosR1A - cosR2A * sinR1A);
+      
+        let r1BBH = r1W * sinR1AR2A + r1H * cosR1AR2A;
+        let r1BBW = r1W * cosR1AR2A + r1H * sinR1AR2A;
+        let r1BBX = r1RX + r1HW - r1BBW / 2;
+        let r1BBY = r1RY + r1HH - r1BBH / 2;
+      
+        let r2BBH = r2W * sinR2AR1A + r2H * cosR2AR1A;
+        let r2BBW = r2W * cosR2AR1A + r2H * sinR2AR1A;
+        let r2BBX = r2RX + r2HW - r2BBW / 2;
+        let r2BBY = r2RY + r2HH - r2BBH / 2;
+      
+        return r1X < r2BBX + r2BBW && r1X + r1W > r2BBX && r1Y < r2BBY + r2BBH && r1Y + r1H > r2BBY &&
+               r2X < r1BBX + r1BBW && r2X + r2W > r1BBX && r2Y < r1BBY + r1BBH && r2Y + r2H > r1BBY;
+      }
+
+    static AABB(r1X, r1Y, r1W, r1H, r2X, r2Y, r2W, r2H)
+    {
+        return X1.X < Y2.X && Y1.X > X2.X && X1.Y < Z2.Y && Z1.Y > X2.Y;
+    }
+
 
     static AngleRebond(Normal, Direction)
     {

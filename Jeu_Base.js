@@ -1,28 +1,35 @@
 //============================================================================================
-//  Ne rien modifier après cette limite
+//  Gestion principal de la boucle de jeu.
+//  Ici ce trouve les parametre d'écran et de FPS.
 //============================================================================================
 
 
 // Variable définissant la taille de la fenêtre du jeu
 const Ecran_Largeur = 16 * 64;
 const Ecran_Hauteur = 9 * 64;
-// Définition du nombre de FPS
+const Diagonal = Math.sqrt(Ecran_Largeur * Ecran_Largeur + Ecran_Hauteur * Ecran_Hauteur)
+// Définition du nombre de FPS souhaité (Pour le calcul du temps nombre frame écoulé)
 const FPS = 60;
+const MAXFrameJump = 2;
 // Variable lié au canvas;
 var canvas, ctx;
 var TotalFrame = 0;
+// Vraible lié au temps;
 let dpi = window.devicePixelRatio;
+var TempsPrecedent = Date.now();
 
 /**
  * Initialisation du programme
  */
  function Initialisation()
  {
+    console.clear();
     CreationCanvas();
     InitEvenements();
     InitObjets();
  
-    setInterval(BouclePrincipale, 1000 / FPS);
+    //setInterval(BouclePrincipale, 1000 / FPS);
+    window.requestAnimationFrame(BouclePrincipale);
  }
  
 /**
@@ -30,16 +37,52 @@ let dpi = window.devicePixelRatio;
  */
  function BouclePrincipale()
  {
+    // Ajoute 1 au total des frames
     TotalFrame += 1;
-    Calcul();
+    // Calcul du nombre de frame écoulé depuis la dernière mise a jour (vis à vis des FPS définit)
+    // EX: 
+    // dt = 1 si le jeu tourne au nombre de FPS convenue
+    // dt = 0.5 si le jeu tourne deux fois plus vite que le nombre de FPS convenue (120 FPS au lieu de 60 par exemple)
+    // dt = 2 si le jeu tourne deux fois moins vite que le nombre de FPS convenue (30 FPS au lieu de 60 par exemple)
+    // dt ne peut pas depasser la variable MAXFrameJump pour eviter les problèmes de colission (a ajuster et tester)
+    let now = Date.now();
+    let dt = Math.min((now - TempsPrecedent) * FPS / 1000.0, MAXFrameJump);
+
+    // Action du DEBUGGEUR avant calcul général (Déplacement camera par exemple)
+    Debug.UPDATE(ctx, "PreCalcul", dt);
+
+    // Lancement de la boucle de calcul;
+    Calcul(dt);
+    UIElement.Calcul(dt);
+
+    // Fix pour la résolution d'écran (voir plus bas)
     fix_dpi()
+
+    //Efface l'écran
     ctx.fillStyle = "black"
     ctx.fillRect(0,0,Ecran_Largeur, Ecran_Hauteur);
-    Debug.Dessin(ctx, "Pre");
-    Dessin();
+
+    // Action du DEBUGGEUR avant Dessin général (Dessin de la grille par exemple)
+    Debug.UPDATE(ctx, "Pre", dt);
+
+    
+    ctx.imageSmoothingEnabled = false;
+    // Lancement de la boucle de dessin;
+    Dessin(ctx);
+    UIElement.Dessin(ctx);
+
+    // Mise a jour de l'appuie des touches
     Clavier.Update();
     Souris.Update();
-    Debug.Dessin(ctx, "Post");
+
+    // Action du DEBUGGEUR après Dessin général (Ecriture des informations par exemple)
+    Debug.UPDATE(ctx, "Post", dt);
+
+    // Enregistrement du temps
+    TempsPrecedent = now;
+
+    // Relance de cette fonction
+    window.requestAnimationFrame(BouclePrincipale);
  }
 
 //============================================================================================
@@ -55,6 +98,10 @@ function CreationCanvas()
     // Modification des dimensions
     canvas.width = Ecran_Largeur; // la largeur
     canvas.height = Ecran_Hauteur; // la hauteur
+
+    // Desactive le clic droit sur le canvas
+    canvas.oncontextmenu = () => false;
+
     // Récupération du context de dessin
     ctx = canvas.getContext("2d");
     ctx.imageSmoothingEnabled = false;
@@ -91,6 +138,9 @@ var mouseup = function (e) {
 var mousemove = function(e){
     Souris.MouseMove(e);
 }
+var mousescroll = function(e){
+    Souris.MouseScroll(e);
+}
 //=====================================================
 /**
  * Ajoute les différents test d'événement
@@ -98,9 +148,12 @@ var mousemove = function(e){
 function InitEvenements(){
     window.addEventListener('keydown', keydown);
     window.addEventListener('keyup', keyup);
-    
+
     canvas.addEventListener('mousedown', mousedown);
     canvas.addEventListener('mouseup', mouseup);
     canvas.addEventListener('mousemove', mousemove);
+    canvas.addEventListener("mousewheel", mousescroll);
+    canvas.addEventListener("DOMMouseScroll", mousescroll);
+    
 }
 //=====================================================

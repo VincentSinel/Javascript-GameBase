@@ -15,7 +15,12 @@ class Lutin
         this.Zoom = 100;
         this.Image = new Image();
         this.Image.src = Costumes[0];
-        this.Costumes = Costumes;
+        this.Costumes = [];
+        for (let c = 0; c < Costumes.length; c++) {
+            let i = new Image();
+            i.src = Costumes[c];
+            this.Costumes.push(i);
+        }
         this.CostumeActuel = 0;
         this.Visible = true;
         this.Time = 0;
@@ -92,19 +97,19 @@ class Lutin
     CostumeSuivant()
     {
         this.CostumeActuel = (this.CostumeActuel + 1) % this.Costumes.length
-        this.Image.src = this.Costumes[this.CostumeActuel]
+        this.Image = this.Costumes[this.CostumeActuel]
     }
 
     CostumePrecedent()
     {
         this.CostumeActuel = (this.CostumeActuel + this.Costumes.length - 1) % this.Costumes.length
-        this.Image.src = this.Costumes[this.CostumeActuel]
+        this.Image = this.Costumes[this.CostumeActuel]
     }
 
     BasculerCostume(index)
     {
-        this.CostumeActuel = index % this.Costumes.length
-        this.Image.src = this.Costumes[this.CostumeActuel]
+        this.CostumeActuel = Math.round(index) % this.Costumes.length
+        this.Image = this.Costumes[this.CostumeActuel]
     }
 
     Montrer()
@@ -117,9 +122,9 @@ class Lutin
         this.Visible = false;
     }
 
-    Calcul()
+    Calcul(Delta)
     {
-        this.Time += 1;
+        this.Time += Delta;
     }
 
     Dessin(Context)

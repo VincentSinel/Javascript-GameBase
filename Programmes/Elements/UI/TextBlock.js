@@ -29,9 +29,9 @@ class TextBlock extends UIElement
          this.Rafraichir = true;
      }
 
-    Calcul()
+    Calcul(Delta)
     {
-        super.Calcul();
+        super.Calcul(Delta);
     }
 
     /**
@@ -125,10 +125,10 @@ class TextBlock extends UIElement
         
         for (let line = 0; line < this.Lines.length; line++) {
             const element = this.Lines[line];
-            let pos = this.Y - 2 + (line + 1) * (this.FontTaille + 2)
-            if (pos < this.Y + this.H)
+            let pos = this.GY() - 2 + (line + 1) * (this.FontTaille + 2)
+            if (pos < this.GY() + this.H)
             {
-                Context.fillText(element, this.X, pos);
+                Context.fillText(element, this.GX(), pos);
             }
         }
 

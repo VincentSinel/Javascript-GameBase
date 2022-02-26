@@ -1,10 +1,11 @@
-class Niveau1
+class Niveau2 extends Scene
 {
     static Joueur;
 
     constructor()
     {
-        Niveau1.Joueur = new Joueur(0,0)
+        super();
+        Niveau2.Joueur = new Joueur(0,0)
 
         let Tiles = [];
         Tiles.push(new Tile("Images/Tilemap/Dirt1.png"))
@@ -19,23 +20,28 @@ class Niveau1
         this.Tilemap.Charger("Fichier/TileMapData.txt")
 
         this.PNJ = new PNJ(200,200,["Images/Joueur/B_1.png"])
+        
+        this.ZObject.push(Niveau2.Joueur);
+        this.ZObject.push(this.PNJ)
     }
 
     Calcul(Delta)
     {
+        super.Calcul(Delta)
         this.Tilemap.Calcul(Delta);
-        Niveau1.Joueur.Calcul(Delta);
+        Niveau2.Joueur.Calcul(Delta);
         this.PNJ.Calcul(Delta);
 
-        Camera.X = Niveau1.Joueur.X;
-        Camera.Y = Niveau1.Joueur.Y;
+        Camera.X = Niveau2.Joueur.X;
+        Camera.Y = Niveau2.Joueur.Y;
 
+        this.PNJ.Z = -this.PNJ.Y;
+        Niveau2.Joueur.Z = -Niveau2.Joueur.Y
     }
 
     Dessin(Context)
     {
         this.Tilemap.Dessin(Context);
-        Niveau1.Joueur.Dessin(Context);
-        this.PNJ.Dessin(Context);
+        super.Dessin(Context);
     }
 }

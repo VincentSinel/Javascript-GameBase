@@ -5,14 +5,15 @@ class PNJ extends Lutin
         super(X,Y,Costumes)
 
         this.Texte = "Bonjour, quelle belle journée !"
+        this.CentreRotation = new Vecteur2(0.5,1) //#####################
     }
 
-    Calcul()
+    Calcul(Delta)
     {
-        super.Calcul()
+        super.Calcul(Delta)
 
-        let x = Niveau1.Joueur.X - this.X;
-        let y = Niveau1.Joueur.Y - this.Y;
+        let x = Niveau2.Joueur.X - this.X;
+        let y = Niveau2.Joueur.Y - this.Y;
         let distance = Math.sqrt(x*x + y*y)
 
 

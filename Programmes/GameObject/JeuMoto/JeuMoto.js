@@ -7,9 +7,9 @@ class JeuMoto
         this.Moto = new Moto();
     }
 
-    Calcul()
+    Calcul(Delta)
     {
-        this.Moto.Calcul();
+        this.Moto.Calcul(Delta);
     }
 
     Dessin(Context)

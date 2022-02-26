@@ -2,7 +2,7 @@ class Balle extends Lutin
 {
     constructor() 
     {
-        var Costumes = ["Images/Balle.png"]
+        var Costumes = ["Images/CasseBrique/Balle.png"]
         //Cette fonction appel le constructeur de la class Lutin
         // Le "super" de manière général permet d'appeler des élèments de la class parents
         super(JeuPong.JeuLargeur / 2, JeuPong.JeuHauteur / 4, Costumes);
@@ -15,9 +15,9 @@ class Balle extends Lutin
     }
 
     // Redéfinition de la fonction calcul
-    Calcul() 
+    Calcul(Delta) 
     {
-        super.Calcul();
+        super.Calcul(Delta);
 
 
         if (this.BalleAttente == 0)
@@ -46,7 +46,7 @@ class Balle extends Lutin
                 this.BalleAttente = 60;
             }
 
-            this.Avancer(this.Vitesse)
+            this.Avancer(this.Vitesse * Delta)
         }
         else
         {

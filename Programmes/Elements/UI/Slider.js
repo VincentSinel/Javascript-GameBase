@@ -24,27 +24,28 @@ class Slider extends UIElement
         this.Pas = 0;
 
         this.SliderW = 15;
+        this.SourisCapture = true;
     }
 
-    Calcul()
+    Calcul(Delta)
     {
-        super.Calcul();
+        super.Calcul(Delta);
         
-        if (Souris.CX >= this.GX() && Souris.CX <= this.GX() + this.W && Souris.CY >= this.GY() && Souris.CY <= this.GY() + this.H)
+        if (this.IsTop)
         {
             this.Couleur = this.SelectionCouleur
             if (Souris.BoutonClic(0))
             {
                 if(this.Pas > 0)
                 {
-                    let pos = (Souris.CX - (this.GX() + this.SliderW / 2)) / (this.W - this.SliderW);
+                    let pos = (Souris.CX - (this.GX(true) + this.SliderW / 2)) / (this.W - this.SliderW);
                     let cran = (this.Max - this.Min) / this.Pas;
                     let newpos = Math.round(pos * cran);
                     this.Valeur = Math.min(this.Max,Math.max(this.Min,this.Min + newpos * this.Pas))
                 }
                 else
                 {
-                    let pos = (Souris.CX - (this.GX() + this.SliderW / 2)) / (this.W - this.SliderW);
+                    let pos = (Souris.CX - (this.GX(true) + this.SliderW / 2)) / (this.W - this.SliderW);
                     let cran = (this.Max - this.Min);
                     this.Valeur = Math.min(this.Max,Math.max(this.Min,this.Min + pos * cran))
                 }

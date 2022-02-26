@@ -10,6 +10,13 @@
             "name": "Launch Chrome against localhost",
             "url": "${workspaceFolder}/index.html",
             "webRoot": "${workspaceFolder}"
+        },
+        {
+            "type": "firefox",
+            "request": "launch",
+            "reAttach": true,
+            "name": "Launch index.html",
+            "file": "${workspaceFolder}/index.html"
         }
     ]
 }

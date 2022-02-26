@@ -13,6 +13,7 @@ class UIElement
     // Taille de base du texte (en pixel)
     static BaseFontTaille = 12;
 
+    static Menus = [];
 
     /**
      * Créer un UIElement. Classe mère des objets de création d'interface utilisateur.
@@ -33,6 +34,7 @@ class UIElement
 
         this.X = X;
         this.Y = Y;
+        this.Z = 0;
         this.W = W;
         this.H = H;
         this.Parent = Parent;
@@ -41,19 +43,60 @@ class UIElement
         {
             Parent.Enfants.push(this);
         }
+        else
+        {
+            UIElement.Menus.push(this);
+        }
 
         // Cette variable permet d'activer ou desactiver un objet UI
-        this.Actif = true; 
+        this.Actif = true;
+        this.SourisCapture = false;
+        this.IsTop = false;
+    }
+
+    Hover()
+    {
+        if (this.Actif && this.SourisCapture)
+        {
+            if (Souris.CX >= this.GX(true) && Souris.CX <= this.GX(true) + this.W && Souris.CY >= this.GY(true) && Souris.CY <= this.GY(true) + this.H)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    Supprimer()
+    {
+        if (Parent != undefined)
+        {
+            this.Parent.Enfants.splice(this.Parent.Enfants.indexOf(this), 1);
+        }
+        else
+        {
+            UIElement.Menus.splice(UIElement.Menus.indexOf(this), 1);
+        }
+    }
+
+
+
+    AssignerParent(Parent)
+    {
+        this.Parent = Parent;
+        if (Parent != undefined)
+        {
+            Parent.Enfants.push(this);
+        }
     }
 
     /**
      * Calcul la position X de cette objet vis à vis de son parent
      * @returns Position X relative au parent
      */
-    GX()
+    GX(souris = false)
     {
         if (this.Parent)
-            return this.X + this.Parent.CX();
+            return this.X + this.Parent.CX(souris);
         else
             return this.X;
     }
@@ -62,48 +105,80 @@ class UIElement
      * Calcul la position Y de cette objet vis à vis de son parent
      * @returns Position Y relative au parent
      */
-    GY()
+    GY(souris = false)
     {
         if (this.Parent)
-            return this.Y + this.Parent.CY();
+            return this.Y + this.Parent.CY(souris);
         else
             return this.Y;
+    }
+
+    GZ(souris = false)
+    {
+        if (this.Parent)
+            return this.Z + this.Parent.Z;
+        else
+            return this.Z;
     }
 
     /**
      * Calcul la position X de point de départ d'un contenue d'objet (padding)
      * @returns Position X relative au parent
      */
-    CX()
+    CX(souris = false)
     {
         if (this.Parent)
-            return this.GX() + 3;
+            return this.GX(souris) + 3;
         else
-            return this.GX();
+            return this.GX(souris);
     }
 
     /**
      * Calcul la position Y de point de départ d'un contenue d'objet (padding)
      * @returns Position Y relative au parent
      */
-    CY()
+    CY(souris = false)
     {
         if (this.Parent)
-            return this.GY() + 3;
+            return this.GY(souris) + 3;
         else
-            return this.GY();
+            return this.GY(souris);
     }
 
-    Calcul()
+    Calcul(Delta)
     {
+        
+        // For performance reasons, we will first map to a temp array, sort and map the temp array to the objects array.
+        var map = this.Enfants.map(function (el, index) {
+            return { index : index, value : el.ZG() };
+        });
+        
+        // Now we need to sort the array by z index.
+        map.sort(function (a, b) {
+            return a.value - b.value;
+        });
+        
+        let objects = this.Enfants;
+        // We finaly rebuilt our sorted objects array.
+        this.Enfants = map.map(function (el) {
+            return objects[el.index];
+        });
+
+        let top = false;
         for (let e = 0; e < this.Enfants.length; e++) {
-            this.Enfants[e].Calcul();
+            this.Enfants[e].IsTop = false;
+            if (this.IsTop && !top && this.Enfants[e].Hover())
+            {
+                menu.IsTop = true;
+                this.IsTop = false;
+            }
+            this.Enfants[e].Calcul(Delta);
         }
     }
 
     Dessin(Context)
     {
-        for (let e = 0; e < this.Enfants.length; e++) {
+        for (let e = this.Enfants.length - 1; e >= 0; e--) {
             this.Enfants[e].Dessin(Context);
         }
     }
@@ -243,6 +318,43 @@ class UIElement
         }
         if (stroke) {
             ctx.stroke();
+        }
+    }
+
+    static Calcul(Delta)
+    {
+        // For performance reasons, we will first map to a temp array, sort and map the temp array to the objects array.
+        var map = UIElement.Menus.map(function (el, index) {
+            return { index : index, value : el.GZ() };
+        });
+        
+        // Now we need to sort the array by z index.
+        map.sort(function (a, b) {
+            return b.value - a.value;
+        });
+        
+        let objects = UIElement.Menus;
+        // We finaly rebuilt our sorted objects array.
+        UIElement.Menus = map.map(function (el) {
+            return objects[el.index];
+        });
+
+        let top = false;
+        UIElement.Menus.forEach(menu => {
+            
+            menu.IsTop = false;
+            if (!top && menu.Hover())
+            {
+                menu.IsTop = true;
+            }
+            menu.Calcul(Delta)
+        });
+    }
+
+    static Dessin(Context)
+    {
+        for (let o = (UIElement.Menus.length - 1); o >= 0; o--) {
+            UIElement.Menus[o].Dessin(Context)
         }
     }
 }

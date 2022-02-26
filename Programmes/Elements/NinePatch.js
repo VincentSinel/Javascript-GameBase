@@ -53,102 +53,61 @@ class NinePatch
     
     Dessin(Context)
     {
+        let w1 = this.Parametre[0]
+        let x2 = w1
+        let w3 = this.Parametre[1]
+        let x3 = this.W - w3
+        let w2 = this.W - w1 - w3
+
+        let h1 = this.Parametre[2]
+        let y2 = h1
+        let h3 = this.Parametre[3]
+        let y3 = this.H - h3
+        let h2 = this.H - h1 - h3
+
+        let w = w1 + w3;
+        let h = h1 + h3;
+
+        // Applique une teinte au lutin
+        let imageCtx = document.createElement("canvas").getContext("2d"); // Création d'un canvas temporaire
+        imageCtx.canvas.width = this.W; // Modification taille
+        imageCtx.canvas.height = this.H; // Modification taille
 
         if (this.Teinte.A != 0)
         {
-            let w1 = this.Parametre[0]
-            let x2 = w1
-            let w3 = this.Parametre[1]
-            let x3 = this.W - w3
-            let w2 = this.W - w1 - w3
-    
-            let h1 = this.Parametre[2]
-            let y2 = h1
-            let h3 = this.Parametre[3]
-            let y3 = this.H - h3
-            let h2 = this.H - h1 - h3
-    
-            let w = w1 + w3;
-            let h = h1 + h3;
 
-            // Applique une teinte au lutin
-            let imageCtx = document.createElement("canvas").getContext("2d"); // Création d'un canvas temporaire
-            imageCtx.canvas.width = this.W; // Modification taille
-            imageCtx.canvas.height = this.H; // Modification taille
 
             imageCtx.fillStyle = this.Teinte.RGBA();// Définit la couleur de remplissage
             imageCtx.fillRect(0, 0, this.Image.width, this.Image.height);// Dessine un rectangle de couleur par dessus la figure
             imageCtx.globalCompositeOperation = "destination-atop";// Modifie le style d'ajout des couleurs
 
-            // Coins
-            imageCtx.drawImage(this.Image, 0, 0, this.Parametre[0], this.Parametre[2],
-                0, 0, w1, h1);
-            imageCtx.drawImage(this.Image, this.Image.width - this.Parametre[1], 0, this.Parametre[1], this.Parametre[2],
-                x3, 0, w3, h1);
-            imageCtx.drawImage(this.Image, 0, this.Image.height - this.Parametre[3], this.Parametre[0], this.Parametre[3],
-                0, y3, w1, h3);
-            imageCtx.drawImage(this.Image, this.Image.width - this.Parametre[1], this.Image.height - this.Parametre[3], this.Parametre[1], this.Parametre[3],
-                x3, y3, w3, h3);
-
-            // Bords
-            imageCtx.drawImage(this.Image, this.Parametre[0], 0, this.Image.width - w, this.Parametre[2],
-                x2, 0, w2, h1);
-            imageCtx.drawImage(this.Image, this.Parametre[0], this.Image.height - this.Parametre[3], this.Image.width - w, this.Parametre[3],
-                x2, y3, w2, h3);
-            imageCtx.drawImage(this.Image, 0, this.Parametre[2], this.Parametre[0], this.Image.height - h,
-                0, y2, w1, h2);
-            imageCtx.drawImage(this.Image, this.Image.width - this.Parametre[1], this.Parametre[2], this.Parametre[1], this.Image.height - h,
-                x3, y2, w3, h2);
-
-            // Centre
-            imageCtx.drawImage(this.Image, this.Parametre[0], this.Parametre[2], this.Image.width - w, this.Image.height - h,
-                x2, y2, w2, h2);
-
-            Context.drawImage(imageCtx.canvas, this.X, this.Y); // Dessin du canvas temporaire dans le canvas original
         }
-        else
-        {
-            let x1 = this.X
-            let w1 = this.Parametre[0]
-            let x2 = x1 + w1
-            let w3 = this.Parametre[1]
-            let x3 = x1 + this.W - w3
-            let w2 = this.W - w1 - w3
-    
-            let y1 = this.Y
-            let h1 = this.Parametre[2]
-            let y2 = y1 + h1
-            let h3 = this.Parametre[3]
-            let y3 = y1 + this.H - h3
-            let h2 = this.H - h1 - h3
-    
-            let w = w1 + w3;
-            let h = h1 + h3;
 
-            // Coins
-            Context.drawImage(this.Image, 0, 0, this.Parametre[0], this.Parametre[2],
-                x1, y1, w1, h1);
-            Context.drawImage(this.Image, this.Image.width - this.Parametre[1], 0, this.Parametre[1], this.Parametre[2],
-                x3, y1, w3, h1);
-            Context.drawImage(this.Image, 0, this.Image.height - this.Parametre[3], this.Parametre[0], this.Parametre[3],
-                x1, y3, w1, h3);
-            Context.drawImage(this.Image, this.Image.width - this.Parametre[1], this.Image.height - this.Parametre[3], this.Parametre[1], this.Parametre[3],
-                x3, y3, w3, h3);
-            
-            // Bords
-            Context.drawImage(this.Image, this.Parametre[0], 0, this.Image.width - w, this.Parametre[2],
-                x2, y1, w2, h1);
-            Context.drawImage(this.Image, this.Parametre[0], this.Image.height - this.Parametre[3], this.Image.width - w, this.Parametre[3],
-                x2, y3, w2, h3);
-            Context.drawImage(this.Image, 0, this.Parametre[2], this.Parametre[0], this.Image.height - h,
-                x1, y2, w1, h2);
-            Context.drawImage(this.Image, this.Image.width - this.Parametre[1], this.Parametre[2], this.Parametre[1], this.Image.height - h,
-                x3, y2, w3, h2);
-            
-            // Centre
-            Context.drawImage(this.Image, this.Parametre[0], this.Parametre[2], this.Image.width - w, this.Image.height - h,
-                x2, y2, w2, h2);
-        }
+        // Coins
+        imageCtx.drawImage(this.Image, 0, 0, this.Parametre[0], this.Parametre[2],
+            0, 0, w1, h1);
+        imageCtx.drawImage(this.Image, this.Image.width - this.Parametre[1], 0, this.Parametre[1], this.Parametre[2],
+            x3, 0, w3, h1);
+        imageCtx.drawImage(this.Image, 0, this.Image.height - this.Parametre[3], this.Parametre[0], this.Parametre[3],
+            0, y3, w1, h3);
+        imageCtx.drawImage(this.Image, this.Image.width - this.Parametre[1], this.Image.height - this.Parametre[3], this.Parametre[1], this.Parametre[3],
+            x3, y3, w3, h3);
+
+        // Bords
+        imageCtx.drawImage(this.Image, this.Parametre[0], 0, this.Image.width - w, this.Parametre[2],
+            x2, 0, w2, h1);
+        imageCtx.drawImage(this.Image, this.Parametre[0], this.Image.height - this.Parametre[3], this.Image.width - w, this.Parametre[3],
+            x2, y3, w2, h3);
+        imageCtx.drawImage(this.Image, 0, this.Parametre[2], this.Parametre[0], this.Image.height - h,
+            0, y2, w1, h2);
+        imageCtx.drawImage(this.Image, this.Image.width - this.Parametre[1], this.Parametre[2], this.Parametre[1], this.Image.height - h,
+            x3, y2, w3, h2);
+
+        // Centre
+        imageCtx.drawImage(this.Image, this.Parametre[0], this.Parametre[2], this.Image.width - w, this.Image.height - h,
+            x2, y2, w2, h2);
+
+        Context.drawImage(imageCtx.canvas, this.X, this.Y); // Dessin du canvas temporaire dans le canvas original
 
         
     }

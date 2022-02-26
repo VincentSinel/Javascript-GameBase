@@ -18,16 +18,17 @@ class Boutton extends UIElement
         this.Etat = "Base"
         this.ClicAction = undefined; // Action a effectuer lorsque le boutton est pressé
         this.Couleur = UIElement.BaseCouleur;
+        this.SourisCapture = true;
     }
 
 
-    Calcul()
+    Calcul(Delta)
     {
-        super.Calcul()
+        super.Calcul(Delta)
 
         if (this.Actif)
         {
-            if (Souris.CX >= this.GX() && Souris.CX <= this.GX() + this.W && Souris.CY >= this.GY() && Souris.CY <= this.GY() + this.H)
+            if (this.IsTop)
             {
                 this.Couleur = this.SelectionCouleur
                 if (Souris.BoutonClic(0))

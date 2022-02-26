@@ -4,11 +4,11 @@ class Brique extends Lutin
     constructor(X,Y) 
     {
         var Costumes = [
-            "Images/Brique1.png",
-            "Images/Brique2.png",
-            "Images/Brique3.png",
-            "Images/Brique4.png",
-            "Images/Brique5.png"
+            "Images/CasseBrique/Brique1.png",
+            "Images/CasseBrique/Brique2.png",
+            "Images/CasseBrique/Brique3.png",
+            "Images/CasseBrique/Brique4.png",
+            "Images/CasseBrique/Brique5.png"
         ]
         //Cette fonction appel le constructeur de la class Lutin
         // Le "super" de manière général permet d'appeler des élèments de la class parents
@@ -19,9 +19,9 @@ class Brique extends Lutin
 
 
     // Redéfinition de la fonction calcul
-    Calcul() 
+    Calcul(Delta) 
     {
-        super.Calcul();
+        super.Calcul(Delta);
 
     }
 }

@@ -18,6 +18,7 @@ class CheckBox extends UIElement
         this.W = this.FontTaille;
         this.Check = true;
         this.RafraichirTaille = true;
+        this.SourisCapture = true;
     }
 
     ModifierTexte(Texte)
@@ -26,11 +27,11 @@ class CheckBox extends UIElement
         this.RafraichirTaille = true;
     }
 
-    Calcul()
+    Calcul(Delta)
     {
-        super.Calcul();
+        super.Calcul(Delta);
         
-        if (Souris.CX >= this.GX() && Souris.CX <= this.GX() + this.W && Souris.CY >= this.GY() && Souris.CY <= this.GY() + this.H)
+        if (this.IsTop)
         {
             this.Couleur = this.SelectionCouleur
             if (Souris.BoutonJustDeclic(0))

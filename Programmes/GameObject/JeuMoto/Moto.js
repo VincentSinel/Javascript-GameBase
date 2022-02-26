@@ -12,13 +12,13 @@ class Moto extends Lutin
         this.OldX = 100;
         this.OldY = 0;
 
-        //this.CentreRotation = new Vecteur2(24/155, 67.5/93)
+        this.CentreRotation = new Vecteur2(24/155, 67.5/93)
     }
 
 
-    Calcul()
+    Calcul(Delta)
     {
-        super.Calcul()
+        super.Calcul(Delta)
 
         this.X = this.OldX;
         this.Y = this.OldY;
@@ -48,8 +48,8 @@ class Moto extends Lutin
             this.Y = Math.max(this.Y, -200)
         }
 
-        //let coef = Math.max(this.Vitesse / this.VitesseMax * 100 - 20, 0) / 80 * 45
-        //this.Direction = coef;
+        let coef = Math.max(this.Vitesse / this.VitesseMax * 100 - 20, 0) / 80 * 45
+        this.Direction = coef;
 
 
         Camera.X = Math.max(this.X, Ecran_Largeur / 2);

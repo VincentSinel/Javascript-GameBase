@@ -30,26 +30,26 @@ class JeuPong
         Camera.X = Ecran_Largeur / 2 - this.BordL;
         Camera.Y = Ecran_Hauteur / 2;
 
-        this.Background = new Lutin(Camera.X,Camera.Y, ["Images/Background.png"])
+        this.Background = new Lutin(Camera.X,Camera.Y, ["Images/CasseBrique/Background.png"])
         this.Balle = new Balle()
         this.Paddle = new Paddle(JeuPong.JeuLargeur / 2, 60)
     }
 
 
-    Calcul()
+    Calcul(Delta)
     {
-        this.Balle.Calcul();
-        this.Paddle.Calcul();
+        this.Balle.Calcul(Delta);
+        this.Paddle.Calcul(Delta);
         for (let b = 0; b < this.Briques.length; b++) 
         {
-            this.Briques[b].Calcul();
+            this.Briques[b].Calcul(Delta);
         }
 
-        this.Balle.Avancer(-this.Balle.Vitesse)
-        for (let step = 0; step < this.Balle.Vitesse; step++) 
+        this.Balle.Avancer(-this.Balle.Vitesse * Delta)
+        for (let step = 0; step < (this.Balle.Vitesse * Delta); step++) 
         {
-            if (step == Math.floor(this.Balle.Vitesse))
-                this.Balle.Avancer(this.Balle.Vitesse % 1)
+            if (step == Math.floor(this.Balle.Vitesse * Delta))
+                this.Balle.Avancer((this.Balle.Vitesse * Delta) % 1)
             else
                 this.Balle.Avancer(1)
             let balpos = new Vecteur2(this.Balle.X, this.Balle.Y)

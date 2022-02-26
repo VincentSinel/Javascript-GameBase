@@ -27,12 +27,13 @@ class TextBox extends UIElement
         this.Couleur = UIElement.BaseCouleur;
         this.CursorPosition = Texte.length;
         this.Attente = 0;
+        this.SourisCapture = true;
     }
 
 
-    Calcul()
+    Calcul(Delta)
     {
-        super.Calcul()
+        super.Calcul(Delta)
 
         if (this.Attente > 0)
             this.Attente -=1
@@ -40,7 +41,7 @@ class TextBox extends UIElement
         this.H = this.FontTaille + 6
         if (this.Actif)
         {
-            if (Souris.CX >= this.GX() && Souris.CX <= this.GX() + this.W && Souris.CY >= this.GY() && Souris.CY <= this.GY() + this.H)
+            if (this.IsTop)
             {
                 this.Couleur = this.SelectionCouleur
                 if (Souris.BoutonJustDeclic(0))
