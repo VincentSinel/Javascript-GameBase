@@ -18,7 +18,10 @@ class TileMap
         this.Zoom = 100;
         this.Tiles = Tiles;
         this.TailleTile = 32;
-        Tiles.forEach(tile => {
+        this.TilesLength = 0;
+        this.TilesNumber = [];
+        let j = 0;
+        this.Tiles.forEach(tile => {
             tile.SetTileMap(this);
         });
         this.Visible = true;
@@ -29,7 +32,7 @@ class TileMap
         {     
             for (let x = 0; x < W; x++) 
             {       
-                this.Contenue.push(0)//x % this.Tiles.length);
+                this.Contenue.push(-1)//x % this.Tiles.length);
             }
         }
 
@@ -37,30 +40,46 @@ class TileMap
         this.Teinte = new Color(0,0,0,0);
         this.RectDraw = [0,0,this.W, this.H]
 
-        this.Edit_SelectedTile = 0;
+        this.Edit_SelectedTile = -1;
+        this.RecalculTileLength();
+    }
+
+    RecalculTileLength()
+    {
+        this.TilesLength = 0;
+        this.TilesNumber = [];
+        let j = 0;
+        this.Tiles.forEach(tile => {
+            tile.OffSet = this.TilesLength;
+            this.TilesLength += tile.Nombre;
+            for (let i = 0; i < tile.Nombre; i++) 
+            {     
+                this.TilesNumber.push(j);  
+            }
+            j++;
+        });
+    }
+
+    TileDepuisIndex(id)
+    {
+        return this.Tiles[this.TilesNumber[id]];
     }
 
     /**
-     * Charge le contenue d'un fichier pour définir le tilemap
-     * @param {String} Fichier Chemin d'accès du fichier
+     * Charge le contenue de la base de donnée pour définir le tilemap
+     * @param {String} Nom Nom du Tilemap
      */
-    Charger(Fichier)
+    Charger(Nom)
     {
-        var result = null;
-        var xmlhttp = new XMLHttpRequest();
-        xmlhttp.open("GET", Fichier, false);
-        xmlhttp.send();
-        if (xmlhttp.status==200) {
-            result = xmlhttp.responseText;
-        }
-        this.#Charge(result)
+        let data = Datas.DataTileMap(Nom)
+        this.#Charge(data)
     }
 
     #Charge(data)
     {
-        let datas = data.split(",");
-        this.W = parseInt(datas.shift())
-        this.H = parseInt(datas.shift())
+        this.W = data.Largeur;
+        this.H = data.Hauteur;
+        let datas = data.Data.split(",");
         this.Contenue = [];
         datas.forEach(s => {
             this.Contenue.push(parseInt(s))
@@ -72,29 +91,14 @@ class TileMap
      */
     Sauvegarder()
     {
-        let data = this.W.toString() + "," + this.H.toString()
-        for(let i = 0; i < this.Contenue.length; i++)
+        let data = this.Contenue[0].toString();
+        for(let i = 1; i < this.Contenue.length; i++)
         {
             data += "," + this.Contenue[i].toString();
         }
 
-        let filename = "TilemapData.txt"
-        let type = ".txt"
-        var file = new Blob([data], {type: type});
-        if (window.navigator.msSaveOrOpenBlob) // IE10+
-            window.navigator.msSaveOrOpenBlob(file, filename);
-        else { // Others
-            var a = document.createElement("a"),
-                    url = URL.createObjectURL(file);
-            a.href = url;
-            a.download = filename;
-            document.body.appendChild(a);
-            a.click();
-            setTimeout(function() {
-                document.body.removeChild(a);
-                window.URL.revokeObjectURL(url);  
-            }, 0); 
-        }
+        Datas.AjoutTilemapData(prompt("Donner un nom à ce tilemap.\nAttention ce nom doit être unique, si un tilemap du même nom existe, il sera supprimé.\nLe fichier téléchargé ne doit lui pas changer de nom est vient remplacer celui présent dans le dossier Fichier du site Web", "Maison1"), this.W, this.H, data)
+        Datas.SauvegarderData();
     }
 
     /**
@@ -120,7 +124,7 @@ class TileMap
                     if (t.Y >= 0 && t.Y < this.H)
                     {
                         let id = this.Contenue[t.X + t.Y * this.W];
-                        if (this.Tiles[id].Contact)
+                        if (id == -1 || this.TileDepuisIndex(id).Contact)
                         {
                             return true;
                         }
@@ -168,10 +172,9 @@ class TileMap
 
             if (Souris.Scroll != 0)
             {
-                this.Edit_SelectedTile = (this.Edit_SelectedTile + Souris.Scroll + this.Tiles.length) % this.Tiles.length;
+                this.Edit_SelectedTile = ((this.Edit_SelectedTile + Souris.Scroll + this.TilesLength + 1) % (this.TilesLength + 1) - 1);
                 console.log(this.Edit_SelectedTile)
             }
-
             if (Souris.BoutonClic(0))
             {
                 let x = Math.floor((Souris.X - this.X) / this.TailleTile);
@@ -205,7 +208,7 @@ class TileMap
             for (let x = 0; x < this.W; x++) 
             {       
                 let id = this.Contenue[x + y * this.W]
-                if (this.Tiles[id].Contact)
+                if (this.TileDepuisIndex(id).Contact)
                 {
                     Debug.AjoutRectangle(
                         [Camera.AdapteX(this.X) + this.TailleTile * x,
@@ -257,11 +260,11 @@ class TileMap
                 Context.drawImage(can, x, y)
             }
 
-            if (this.Edit)
+            if (this.Edit && this.Edit_SelectedTile >= 0)
             {
                 x = Math.floor((Souris.X - this.X) / this.TailleTile);
                 y = Math.floor((Souris.Y - this.Y) / this.TailleTile + 1 );
-                this.Tiles[this.Edit_SelectedTile].Dessin(Context, x * this.TailleTile, -y * this.TailleTile)
+                this.TileDepuisIndex(this.Edit_SelectedTile).Dessin(Context, x * this.TailleTile, -y * this.TailleTile, this.Edit_SelectedTile)
             }
 
             // Retourne à la position initiale du canvas
@@ -285,10 +288,10 @@ class TileMap
             for (let x = this.RectDraw[0]; x < this.RectDraw[2]; x++) 
             {       
                 let id = this.Contenue[x + y * this.W];
-                if (x >= 0 && y >= 0 && x < this.W && y < this.H)
+                if (id >= 0 && x >= 0 && y >= 0 && x < this.W && y < this.H)
                 {
-                    if (this.Tiles[id].InCamera(x * this.TailleTile, - (1 + y) * this.TailleTile))
-                        this.Tiles[id].Dessin(imageCtx, (x - this.RectDraw[0]) * this.TailleTile, (this.RectDraw[4] * 2 - y + this.RectDraw[1]) * this.TailleTile);
+                    if (this.TileDepuisIndex(id).InCamera(x * this.TailleTile, - (1 + y) * this.TailleTile))
+                        this.TileDepuisIndex(id).Dessin(imageCtx, (x - this.RectDraw[0]) * this.TailleTile, (this.RectDraw[4] * 2 - y + this.RectDraw[1]) * this.TailleTile, id);
                 }
                 
             }

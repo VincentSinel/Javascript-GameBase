@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 <html style="background-color: gray;">
+
+    <script src="Fichier/DataBase.js" charset="utf-8"></script>
+
     <script src="Programmes/Base/Color.js"></script>
     <script src="Programmes/Base/Polygone.js"></script>
     <script src="Programmes/Base/Vecteur.js"></script>
@@ -9,12 +12,14 @@
     <script src="Programmes/Elements/Lutin/BulleDialogue.js" charset="utf-8"></script>
     <script src="Programmes/Elements/Lutin/Lutin.js" charset="utf-8"></script>
     <script src="Programmes/Elements/Lutin/Lutin_SC.js" charset="utf-8"></script>
-    <script src="Programmes/Elements/Tilemap/Tile.js" charset="utf-8"></script>
+    <script src="Programmes/Elements/Tilemap/Tiles/Tile.js" charset="utf-8"></script>
+    <script src="Programmes/Elements/Tilemap/Tiles/MultiTile.js" charset="utf-8"></script>
     <script src="Programmes/Elements/Tilemap/TileMap.js" charset="utf-8"></script>
     
     <script src="Programmes/Utilitaires/Camera.js" charset="utf-8"></script>
     <script src="Programmes/Utilitaires/Clavier.js" charset="utf-8"></script>
     <script src="Programmes/Utilitaires/Contacts.js" charset="utf-8"></script>
+    <script src="Programmes/Utilitaires/Datas.js" charset="utf-8"></script>
     <script src="Programmes/Utilitaires/Debug.js" charset="utf-8"></script>
     <script src="Programmes/Utilitaires/Souris.js" charset="utf-8"></script>
     <script src="Programmes/Utilitaires/Utilitaires.js" charset="utf-8"></script>
@@ -51,6 +56,18 @@
     <!-- Ce script doit être ajouté en dernier -->
     <script src="Jeu.js"></script>
     <script src="Jeu_Base.js"></script>
+    <style>
+        canvas {
+            padding: 0;
+            margin: auto;
+            display: block;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+    </style>
     <body onload="Initialisation()">
     </body>
 </html>

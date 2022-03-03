@@ -15,9 +15,10 @@ class Niveau2 extends Scene
         Tiles.push(new Tile("Images/Tilemap/Snow1.png"))
         Tiles.push(new Tile("Images/Tilemap/Stone1.png"))
         Tiles.push(new Tile("Images/Tilemap/Water1.png", true))
+        Tiles.push(new MultiTile("Images/Tilemap/Tile-exterieur.png", 32))
         this.Tilemap = new TileMap(0,0,200,200,Tiles)
-        this.Tilemap.Edit = false;
-        this.Tilemap.Charger("Fichier/TileMapData.txt")
+        this.Tilemap.Edit = true;
+        this.Tilemap.Charger("Maison1")
 
         this.PNJ = new PNJ(200,200,["Images/Joueur/B_1.png"])
 

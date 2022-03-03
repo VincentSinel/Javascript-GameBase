@@ -3,6 +3,7 @@
 
 var lutin
 var UI
+var UI2
 
 //============================================================================================
 
@@ -21,6 +22,9 @@ function InitObjets()
     UI = new Toggle(Ecran_Largeur - 60,0,60,25, "Grille");
     UI.ClicAction = function(){ Debug.Parametre.Grille = !Debug.Parametre.Grille }
     UI.Toggle = Debug.Parametre.Grille;
+
+    UI2 = new Boutton(Ecran_Largeur - 130, 0, 60, 25, "Plein Ecran")
+    UI2.ClicAction = function(){ Camera.PleinEcran()};
 }
 
 /**

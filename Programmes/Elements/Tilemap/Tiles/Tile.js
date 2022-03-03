@@ -1,13 +1,23 @@
 class Tile
 {
-    constructor(Texture, Contact = false)
+    constructor(Texture, Contact = false, TailleTile = undefined)
     {
         this.TileMap = undefined;
         this.Texture = Texture;
+        this.TailleTile = TailleTile;
         this.Image = new Image();
+        var _this = this;
+        this.Image.onload = function(e) {_this.ImageCharge()};
         this.Image.src = Texture;
         this.DI = 0;
         this.Contact = Contact;
+        this.Nombre = 1;
+        this.OffSet = 0;
+    }
+
+    ImageCharge()
+    {
+        
     }
 
     SetTileMap(Tilemap)
@@ -16,7 +26,7 @@ class Tile
         this.DI = Math.sqrt(2) * this.TileMap.TailleTile
     }
 
-    Dessin(Context, X, Y)
+    Dessin(Context, X, Y, index = 0)
     {
         Context.drawImage(this.Image, X, Y);
     }

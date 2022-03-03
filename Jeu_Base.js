@@ -24,6 +24,7 @@ var TempsPrecedent = Date.now();
  function Initialisation()
  {
     console.clear();
+    Datas.ChargerData();
     CreationCanvas();
     InitEvenements();
     InitObjets();
@@ -48,8 +49,12 @@ var TempsPrecedent = Date.now();
     let now = Date.now();
     let dt = Math.min((now - TempsPrecedent) * FPS / 1000.0, MAXFrameJump);
 
+    let TempContext = document.createElement("canvas").getContext("2d");
+    TempContext.canvas.width = Ecran_Largeur; // Modification taille
+    TempContext.canvas.height = Ecran_Hauteur; // Modification taille
+
     // Action du DEBUGGEUR avant calcul général (Déplacement camera par exemple)
-    Debug.UPDATE(ctx, "PreCalcul", dt);
+    Debug.UPDATE(TempContext, "PreCalcul", dt);
 
     // Lancement de la boucle de calcul;
     Calcul(dt);
@@ -59,24 +64,39 @@ var TempsPrecedent = Date.now();
     fix_dpi()
 
     //Efface l'écran
-    ctx.fillStyle = "black"
-    ctx.fillRect(0,0,Ecran_Largeur, Ecran_Hauteur);
+    TempContext.fillStyle = "black"
+    TempContext.fillRect(0,0,Ecran_Largeur, Ecran_Hauteur);
 
     // Action du DEBUGGEUR avant Dessin général (Dessin de la grille par exemple)
-    Debug.UPDATE(ctx, "Pre", dt);
+    Debug.UPDATE(TempContext, "Pre", dt);
 
     
-    ctx.imageSmoothingEnabled = false;
+    TempContext.imageSmoothingEnabled = false;
     // Lancement de la boucle de dessin;
-    Dessin(ctx);
-    UIElement.Dessin(ctx);
+    Dessin(TempContext);
+    UIElement.Dessin(TempContext);
+
+    if (Clavier.ToucheJusteBasse("Escape"))
+    {
+        if (document.fullscreenElement != null)
+        {
+            if (Camera.FullScreen)
+            {
+                //Camera.PleinEcran();
+            }
+        }
+    }
 
     // Mise a jour de l'appuie des touches
     Clavier.Update();
     Souris.Update();
 
     // Action du DEBUGGEUR après Dessin général (Ecriture des informations par exemple)
-    Debug.UPDATE(ctx, "Post", dt);
+    Debug.UPDATE(TempContext, "Post", dt);
+
+    ctx.imageSmoothingEnabled = false;
+    ctx.scale(canvas.width / Ecran_Largeur, canvas.height / Ecran_Hauteur);
+    ctx.drawImage(TempContext.canvas, 0, 0)
 
     // Enregistrement du temps
     TempsPrecedent = now;
@@ -98,6 +118,9 @@ function CreationCanvas()
     // Modification des dimensions
     canvas.width = Ecran_Largeur; // la largeur
     canvas.height = Ecran_Hauteur; // la hauteur
+    
+    canvas.style.width = Ecran_Largeur + 'px';
+    canvas.style.height = Ecran_Hauteur + 'px';
 
     // Desactive le clic droit sur le canvas
     canvas.oncontextmenu = () => false;
@@ -105,6 +128,7 @@ function CreationCanvas()
     // Récupération du context de dessin
     ctx = canvas.getContext("2d");
     ctx.imageSmoothingEnabled = false;
+    ctx.scale(2,2);
 }
 
 /**
@@ -155,5 +179,6 @@ function InitEvenements(){
     canvas.addEventListener("mousewheel", mousescroll);
     canvas.addEventListener("DOMMouseScroll", mousescroll);
     
+    document.addEventListener('fullscreenchange', event => {  Camera.RecalculPleinEcran(); });
 }
 //=====================================================

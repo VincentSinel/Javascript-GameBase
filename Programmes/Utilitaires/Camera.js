@@ -5,7 +5,7 @@ class Camera
     static Zoom = 100;
     static Direction = 0;
 
-    static #FullScreen = false;
+    static FullScreen = false;
 
     /**
      * Adapte une position X à celle de la camera
@@ -89,31 +89,74 @@ class Camera
 
      static PleinEcran()
      {
-         if (Camera.#FullScreen)
-         {
-            if(document.webkitCancelFullScreen) 
+         if (document.fullscreenElement)
+         {  
+            if (document.exitFullscreen)
+            {
+                document.exitFullscreen();
+            }
+            else if(document.webkitCancelFullScreen) 
             {
                 document.webkitCancelFullScreen(); //Chrome
-                Camera.#FullScreen = false;
             }
             else
             {
                 document.mozCancelFullScreen();
-                Camera.#FullScreen = false;
             }
          }
          else
          {
-            if(canvas.webkitRequestFullScreen) 
+            if (document.documentElement.requestFullscreen)
+            {
+                document.documentElement.requestFullscreen();
+            }
+            else if(canvas.webkitRequestFullScreen) 
             {
                 document.body.webkitRequestFullScreen();
-                Camera.#FullScreen = true;
             }
             else 
             {
                 document.body.mozRequestFullScreen();
-                Camera.#FullScreen = true;
-            } 
+            }
          }
      }
+
+     static RecalculPleinEcran()
+     {
+        if (document.fullscreenElement)
+        {
+            Camera.RedefinirTailleCanvas()
+        }
+        else
+        {
+            canvas.style.width = Ecran_Largeur + 'px';
+            canvas.style.height = Ecran_Hauteur + 'px';
+            canvas.width = Ecran_Largeur;
+            canvas.height = Ecran_Hauteur;
+            ctx.scale(1,1);
+        }
+     }
+
+     static RedefinirTailleCanvas() 
+     {
+
+        var canvasRatio = canvas.height / canvas.width;
+        var windowRatio = screen.height / screen.width;
+        var width;
+        var height;
+
+        if (windowRatio < canvasRatio) {
+            height = screen.height;
+            width = height / canvasRatio;
+        } else {
+            width = screen.width;
+            height = width * canvasRatio;
+        }
+    
+        canvas.style.width = width + 'px';
+        canvas.style.height = height + 'px';
+
+        canvas.width = width;
+        canvas.height = height;
+    }
 }
