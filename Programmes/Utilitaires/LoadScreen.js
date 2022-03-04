@@ -31,7 +31,6 @@ class LoadScreen
         ctx.fillStyle = "Black";
         ctx.fillRect(0, 0, w, h);
 
-        
         ctx.font = "10px Arial";
         ctx.textAlign = "center";
         ctx.fillStyle = "red";

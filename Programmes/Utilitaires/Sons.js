@@ -12,8 +12,8 @@ class Sons
     static #SourceFondSon;
     static #MusiqueCount = 0;
     static #SonCount = 0; 
-    static #SourceP_Musique = true;
-    static #SourceP_Bruit = true;
+    static SourceP_Musique = true;
+    static SourceP_Bruit = true;
 
     static #JouerFondSonore(Nom, volume = 1.0)
     {
@@ -29,7 +29,7 @@ class Sons
 
     static #JouerSonCourt(Nom, volume = 1.0)
     {
-      Sons.#SourceP_Bruit = false;
+      Sons.SourceP_Bruit = false;
       Sons.#SonCount +=1;
       let source = Sons.#CreerSource(Nom,volume)
       source.source.start(0)
@@ -43,7 +43,7 @@ class Sons
       Sons.#SonCount -= 1;
       if (Sons.#SonCount == 0)
       {
-        Sons.#SourceP_Bruit = true;
+        Sons.SourceP_Bruit = true;
       }
     }
 
@@ -61,7 +61,7 @@ class Sons
 
     static #JouerMusiqueCourte(Nom, volume = 1.0)
     {
-      Sons.#SourceP_Musique = false;
+      Sons.SourceP_Musique = false;
       Sons.#MusiqueCount +=1;
       let source = Sons.#CreerSource(Nom, volume)
       source.source.start(0)
@@ -75,7 +75,7 @@ class Sons
       Sons.#MusiqueCount -= 1;
       if (Sons.#MusiqueCount == 0)
       {
-        Sons.#SourceP_Musique = true;
+        Sons.SourceP_Musique = true;
       }
     }
 
@@ -150,11 +150,11 @@ class Sons
     {
       if (Sons.SourceFondMusique)
       {
-        if (Sons.#SourceP_Musique)
+        if (Sons.SourceP_Musique)
         {
           if (Sons.SourceFondMusique.gainNode.gain.value < Sons.SourceFondMusique.gainMax)
           {
-            Sons.SourceFondMusique.gainNode.gain.value = Math.min(Sons.SourceFondMusique.gainNode.gain.value * 1.1, Sons.SourceFondMusique.gainMax)
+            Sons.SourceFondMusique.gainNode.gain.value = Math.min(Math.max(Sons.SourceFondMusique.gainNode.gain.value, 0.01) * 1.1, Sons.SourceFondMusique.gainMax)
           }
         }
         else
@@ -168,7 +168,7 @@ class Sons
       
       if (Sons.SourceFondSon)
       {
-        if (Sons.#SourceP_Bruit)
+        if (Sons.SourceP_Bruit)
         {
           if (Sons.SourceFondSon.gainNode.gain.value < Sons.SourceFondSon.gainMax)
           {

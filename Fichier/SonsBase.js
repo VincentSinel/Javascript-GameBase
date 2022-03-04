@@ -4,7 +4,7 @@ var SonsBase = [
 
       
     // BGM : BackGround Music
-      '././Sons/BGM/Airship.ogg',/*
+      '././Sons/BGM/Airship.ogg',
       '././Sons/BGM/Battle1.ogg',
       '././Sons/BGM/Battle2.ogg',
       '././Sons/BGM/Battle3.ogg',

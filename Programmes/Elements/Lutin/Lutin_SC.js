@@ -98,7 +98,6 @@ class Lutin_SC extends Lutin
 
             let x = this.Decoupage[0] * (this.CostumeActuel % (this.Image.width / this.Decoupage[0]));
             let y = this.Decoupage[1] * Math.floor(this.CostumeActuel / (this.Image.width / this.Decoupage[0]));
-            console.log(this.Image.width);
             if (this.Teinte.A != 0)
             {
                 // Applique une teinte au lutin

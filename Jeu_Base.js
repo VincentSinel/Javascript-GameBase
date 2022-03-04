@@ -14,9 +14,10 @@ const MAXFrameJump = 2;
 // Variable lié au canvas;
 var canvas, ctx;
 var TotalFrame = 0;
-// Vraible lié au temps;
-let dpi = window.devicePixelRatio;
+// Information supplémentaire;
+var dpi = window.devicePixelRatio;
 var TempsPrecedent = Date.now();
+var fade = 0.0; var fading = 0;
 
 /**
  * Initialisation du programme
@@ -29,9 +30,11 @@ var TempsPrecedent = Date.now();
     Sons.Initialisation();
     InitEvenements();
     InitObjets();
-
  }
 
+/**
+ * Lance la boucle principal après le chargement des différents fichier par la class LoadScreen
+ */
  function DemarrerBouclePrincipal()
  {
     window.requestAnimationFrame(BouclePrincipale);
@@ -53,6 +56,7 @@ var TempsPrecedent = Date.now();
     let now = Date.now();
     let dt = Math.min((now - TempsPrecedent) * FPS / 1000.0, MAXFrameJump);
 
+    // Creation d'un canvas temporaire (pour le dilater lors de la mise en plein ecran)
     let TempContext = document.createElement("canvas").getContext("2d");
     TempContext.canvas.width = Ecran_Largeur; // Modification taille
     TempContext.canvas.height = Ecran_Hauteur; // Modification taille
@@ -70,27 +74,32 @@ var TempsPrecedent = Date.now();
     //Efface l'écran
     TempContext.fillStyle = "black"
     TempContext.fillRect(0,0,Ecran_Largeur, Ecran_Hauteur);
+    TempContext.imageSmoothingEnabled = false;
 
     // Action du DEBUGGEUR avant Dessin général (Dessin de la grille par exemple)
     Debug.UPDATE(TempContext, "Pre", dt);
 
-    
-    TempContext.imageSmoothingEnabled = false;
     // Lancement de la boucle de dessin;
     Dessin(TempContext);
     UIElement.Dessin(TempContext);
 
-    // Mise a jour de l'appuie des touches
+    // Mise a jour des modules
     Clavier.Update();
     Souris.Update();
     Sons.Update();
+    MiseAJourFade();
 
     // Action du DEBUGGEUR après Dessin général (Ecriture des informations par exemple)
     Debug.UPDATE(TempContext, "Post", dt);
 
+    // Dessine le rendu sur le canvas principal
     ctx.imageSmoothingEnabled = false;
     ctx.scale(canvas.width / Ecran_Largeur, canvas.height / Ecran_Hauteur);
     ctx.drawImage(TempContext.canvas, 0, 0)
+
+    // Met en place le dégradé d'affichage
+    ctx.fillStyle = Color.Couleur(0, 0, 0, fade);
+    ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
     // Enregistrement du temps
     TempsPrecedent = now;
@@ -98,11 +107,38 @@ var TempsPrecedent = Date.now();
     // Relance de cette fonction
     window.requestAnimationFrame(BouclePrincipale);
  }
+//============================================================================================
+/// Gestion du dégradé d'écran
+//============================================================================================
+function MiseAJourFade()
+{
+    if (fading == 1)
+    {
+        if (fade < 1.0)
+        {
+            fade = Math.min(fade + 0.05, 1.0)
+        }
+        else
+        {
+            fading = 0;
+        }
+    }
+    else if (fading == -1)
+    {
+        if (fade > 0.0)
+        {
+            fade = Math.max(fade - 0.05, 0.0)
+        }
+        else
+        {
+            fading = 0;
+        }
+    }
+}
 
 //============================================================================================
 /// Création du canvas sur la page HTML
 //============================================================================================
-
 function CreationCanvas()
 {
     // Création du canvas
