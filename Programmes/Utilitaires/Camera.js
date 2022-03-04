@@ -106,17 +106,17 @@ class Camera
          }
          else
          {
-            if (document.documentElement.requestFullscreen)
+            if (canvas.requestFullscreen)
             {
-                document.documentElement.requestFullscreen();
+                canvas.requestFullscreen();
             }
             else if(canvas.webkitRequestFullScreen) 
             {
-                document.body.webkitRequestFullScreen();
+                canvas.webkitRequestFullScreen();
             }
             else 
             {
-                document.body.mozRequestFullScreen();
+                canvas.mozRequestFullScreen();
             }
          }
      }
@@ -139,15 +139,14 @@ class Camera
 
      static RedefinirTailleCanvas() 
      {
-
-        var canvasRatio = canvas.height / canvas.width;
+        var canvasRatio = Ecran_Hauteur / Ecran_Largeur;
         var windowRatio = screen.height / screen.width;
         var width;
         var height;
 
         if (windowRatio < canvasRatio) {
             height = screen.height;
-            width = height / canvasRatio;
+            width = height / canvasRatio ;
         } else {
             width = screen.width;
             height = width * canvasRatio;

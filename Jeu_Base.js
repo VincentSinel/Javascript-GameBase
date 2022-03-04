@@ -24,12 +24,16 @@ var TempsPrecedent = Date.now();
  function Initialisation()
  {
     console.clear();
-    Datas.ChargerData();
     CreationCanvas();
+    Datas.ChargerData();
+    Sons.Initialisation();
     InitEvenements();
     InitObjets();
- 
-    //setInterval(BouclePrincipale, 1000 / FPS);
+
+ }
+
+ function DemarrerBouclePrincipal()
+ {
     window.requestAnimationFrame(BouclePrincipale);
  }
  
@@ -76,20 +80,10 @@ var TempsPrecedent = Date.now();
     Dessin(TempContext);
     UIElement.Dessin(TempContext);
 
-    if (Clavier.ToucheJusteBasse("Escape"))
-    {
-        if (document.fullscreenElement != null)
-        {
-            if (Camera.FullScreen)
-            {
-                //Camera.PleinEcran();
-            }
-        }
-    }
-
     // Mise a jour de l'appuie des touches
     Clavier.Update();
     Souris.Update();
+    Sons.Update();
 
     // Action du DEBUGGEUR après Dessin général (Ecriture des informations par exemple)
     Debug.UPDATE(TempContext, "Post", dt);
@@ -138,9 +132,13 @@ function CreationCanvas()
 function fix_dpi() {
     //get CSS height
     //the + prefix casts it to an integer
-    //the slice method gets rid of "px"let style_height = +getComputedStyle(canvas).getPropertyValue("height").slice(0, -2);//get CSS width
-    let style_width = +getComputedStyle(canvas).getPropertyValue("width").slice(0, -2);//scale the canvascanvas.setAttribute('height', style_height * dpi);
+    //the slice method gets rid of "px"
+    let style_height = +getComputedStyle(canvas).getPropertyValue("height").slice(0, -2);//get CSS width
+    let style_width = +getComputedStyle(canvas).getPropertyValue("width").slice(0, -2);//scale the canvas
+    canvas.setAttribute('height', style_height * dpi);
     canvas.setAttribute('width', style_width * dpi);
+    canvas.style.width = Ecran_Largeur + 'px';
+    canvas.style.height = Ecran_Hauteur + 'px';
 }
 
 //============================================================================================

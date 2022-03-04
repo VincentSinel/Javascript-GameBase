@@ -57,8 +57,8 @@ class Souris
     }
     static MouseMove(e)
     {
-        this.CX = e.offsetX / canvas.width * Ecran_Largeur
-        this.CY = e.offsetY / canvas.height * Ecran_Hauteur
+        this.CX = e.offsetX / canvas.width * Ecran_Largeur * dpi
+        this.CY = e.offsetY / canvas.height * Ecran_Hauteur * dpi
 
         this.EtatBouton[0] = e.buttons % 2 == 1;
         this.EtatBouton[1] = e.buttons % 8 >= 4;

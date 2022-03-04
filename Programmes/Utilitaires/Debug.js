@@ -1,7 +1,7 @@
 class Debug
 {
     static FPS_Reel = 0;
-    static GridSize = 40;
+    static GridSize = 32;
     static Textes = [];
     static Vecteurs = []; // Les vecteur sont des vecteurs 4
     static Rectangles = [] // Les rectangles sont un tableau [X, Y, W, H]

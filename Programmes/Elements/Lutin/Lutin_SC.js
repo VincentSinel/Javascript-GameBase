@@ -12,11 +12,17 @@ class Lutin_SC extends Lutin
         super(X,Y,[Texture])
         this.Decoupage = Decoupage;
 
-        let w = this.Image.width / Decoupage[0]
-        let h = this.Image.height / Decoupage[1]
-        this.MaxCostume = w * h - 1;
+        let t = this;
+        this.Image.onload = function (){t.Recalcul()};
 
         this.CostumeActuel = Math.max(Math.min(IdCostum, this.MaxCostume),0);
+    }
+
+    Recalcul()
+    {
+        let w = this.Image.width / this.Decoupage[0]
+        let h = this.Image.height / this.Decoupage[1]
+        this.MaxCostume = w * h - 1;
     }
 
     /**
@@ -92,6 +98,7 @@ class Lutin_SC extends Lutin
 
             let x = this.Decoupage[0] * (this.CostumeActuel % (this.Image.width / this.Decoupage[0]));
             let y = this.Decoupage[1] * Math.floor(this.CostumeActuel / (this.Image.width / this.Decoupage[0]));
+            console.log(this.Image.width);
             if (this.Teinte.A != 0)
             {
                 // Applique une teinte au lutin
