@@ -4,9 +4,10 @@ class TileMap
      * Création d'un lutin manipulable avec des fonction simple
      * Mettre TileMap.Edit à true pour lancer l'édition du tilemap
      * Utiliser TileMap.Sauvegarder() pour sauvegarder le contenue du tilemap en un fichier .json
+     * Utiliser TileMap.Charger() pour charger le contenue depuis la base de donnée
      * @param {number} X Position X du lutin
      * @param {number} Y Position Y du lutin
-     * @param {Array<string>} Tiles Liste des tiles composant notre tilemap
+     * @param {Array<Tile>} Tiles Liste des tiles composant notre tilemap
      */
     constructor(X,Y, W, H, Tiles)
     {
@@ -32,7 +33,7 @@ class TileMap
         {     
             for (let x = 0; x < W; x++) 
             {       
-                this.Contenue.push(-1)//x % this.Tiles.length);
+                this.Contenue.push(0)//x % this.Tiles.length);
             }
         }
 

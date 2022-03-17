@@ -1,77 +1,32 @@
 <!DOCTYPE html>
 <html style="background-color: gray;">
+    <head>
+        <meta charset="utf-8">
+        <script src="Moteur de jeu/Moteur.js" charset="utf-8"></script>
 
-    <script src="Fichier/DataBase.js" charset="utf-8"></script>
-    <script src="Fichier/SonsBase.js" charset="utf-8"></script>
+        <!--
+        <script src="Programmes/GameObject/JeuPong/Balle.js" charset="utf-8"></script>
+        <script src="Programmes/GameObject/JeuPong/Brique.js" charset="utf-8"></script>
+        <script src="Programmes/GameObject/JeuPong/Paddle.js" charset="utf-8"></script>
+        <script src="Programmes/GameObject/JeuPong/JeuPong.js" charset="utf-8"></script>
+        -->
 
-    <script src="Programmes/Base/Color.js"></script>
-    <script src="Programmes/Base/Polygone.js"></script>
-    <script src="Programmes/Base/Vecteur.js"></script>
+        <!--
+        <script src="Programmes/GameObject/JeuMoto/Moto.js" charset="utf-8"></script>
+        <script src="Programmes/GameObject/JeuMoto/JeuMoto.js" charset="utf-8"></script>
+        -->
 
-    <script src="Programmes/Elements/NinePatch.js" charset="utf-8"></script>
-    <script src="Programmes/Elements/Scene.js" charset="utf-8"></script>
-    <script src="Programmes/Elements/Lutin/BulleDialogue.js" charset="utf-8"></script>
-    <script src="Programmes/Elements/Lutin/Lutin.js" charset="utf-8"></script>
-    <script src="Programmes/Elements/Lutin/Lutin_SC.js" charset="utf-8"></script>
-    <script src="Programmes/Elements/Tilemap/Tiles/Tile.js" charset="utf-8"></script>
-    <script src="Programmes/Elements/Tilemap/Tiles/MultiTile.js" charset="utf-8"></script>
-    <script src="Programmes/Elements/Tilemap/TileMap.js" charset="utf-8"></script>
+        <!---->
+        <script src="Programmes/GameObject/RPG/Joueur.js" charset="utf-8"></script>
+        <script src="Programmes/GameObject/RPG/PNJ.js" charset="utf-8"></script>
+        <script src="Programmes/GameObject/RPG/Niveau1.js" charset="utf-8"></script>
+        <script src="Programmes/GameObject/RPG/Niveau2.js" charset="utf-8"></script>
+        <script src="Jeu.js" charset="utf-8"></script>
+        -->
+    </head>
     
-    <script src="Programmes/Utilitaires/Camera.js" charset="utf-8"></script>
-    <script src="Programmes/Utilitaires/Clavier.js" charset="utf-8"></script>
-    <script src="Programmes/Utilitaires/Contacts.js" charset="utf-8"></script>
-    <script src="Programmes/Utilitaires/Datas.js" charset="utf-8"></script>
-    <script src="Programmes/Utilitaires/Debug.js" charset="utf-8"></script>
-    <script src="Programmes/Utilitaires/Souris.js" charset="utf-8"></script>
-    <script src="Programmes/Utilitaires/Utilitaires.js" charset="utf-8"></script>
-    <script src="Programmes/Utilitaires/Sons.js" charset="utf-8"></script>
-    <script src="Programmes/Utilitaires/LoadScreen.js" charset="utf-8"></script>
+    <body onload="InitMoteur()">
 
-    <!--
-    <script src="Programmes/GameObject/JeuPong/Balle.js" charset="utf-8"></script>
-    <script src="Programmes/GameObject/JeuPong/Brique.js" charset="utf-8"></script>
-    <script src="Programmes/GameObject/JeuPong/Paddle.js" charset="utf-8"></script>
-    <script src="Programmes/GameObject/JeuPong/JeuPong.js" charset="utf-8"></script>
-    -->
-
-    <!--
-    <script src="Programmes/GameObject/JeuMoto/Moto.js" charset="utf-8"></script>
-    <script src="Programmes/GameObject/JeuMoto/JeuMoto.js" charset="utf-8"></script>
-    -->
-
-    <!---->
-    <script src="Programmes/GameObject/RPG/Joueur.js"utf-8"></script>
-    <script src="Programmes/GameObject/RPG/PNJ.js" charset="utf-8"></script>
-    <script src="Programmes/GameObject/RPG/Niveau1.js" charset="utf-8"></script>
-    <script src="Programmes/GameObject/RPG/Niveau2.js" charset="utf-8"></script>
-    -->
-
-    <script src="Programmes/Elements/UI/UIElement.js" charset="utf-8"></script>
-    <script src="Programmes/Elements/UI/Panneau.js" charset="utf-8"></script>
-    <script src="Programmes/Elements/UI/Toggle.js" charset="utf-8"></script>
-    <script src="Programmes/Elements/UI/Boutton.js" charset="utf-8"></script>
-    <script src="Programmes/Elements/UI/CheckBox.js" charset="utf-8"></script>
-    <script src="Programmes/Elements/UI/Slider.js" charset="utf-8"></script>
-    <script src="Programmes/Elements/UI/TextBox.js" charset="utf-8"></script>
-    <script src="Programmes/Elements/UI/TextBlock.js" charset="utf-8"></script>
-    <script src="Programmes/Elements/UI/Liste.js" charset="utf-8"></script>
-
-    <!-- Ce script doit être ajouté en dernier -->
-    <script src="Jeu.js"></script>
-    <script src="Jeu_Base.js"></script>
-    <style>
-        canvas {
-            padding: 0;
-            margin: auto;
-            display: block;
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            right: 0;
-        }
-    </style>
-    <body onload="Initialisation()">
-        <input id="inp" type='file' style="visibility:hidden;" onchange="readFile(event)" />
     </body>
+    
 </html>

@@ -1,4 +1,4 @@
-class Niveau1
+class Niveau1 extends Scene
 {
     static Joueur;
 
@@ -16,7 +16,6 @@ class Niveau1
         Tiles.push(new Tile("Images/Tilemap/Water1.png"))
         this.Tilemap = new TileMap(0,0,200,200,Tiles)
         this.Tilemap.Edit = false;
-        this.Tilemap.Charger("Fichier/TileMapData.txt")
 
         this.PNJ = new PNJ(200,200,["Images/Joueur/B_1.png"])
     }

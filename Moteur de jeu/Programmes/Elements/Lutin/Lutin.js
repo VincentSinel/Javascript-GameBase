@@ -13,14 +13,16 @@ class Lutin
         this.Z = 0; //TODO Ajouter la prise en compte du Z
         this.Direction = 0;
         this.Zoom = 100;
-        this.Image = new Image();
-        this.Image.src = Costumes[0];
         this.Costumes = [];
+        var _this = this;
         for (let c = 0; c < Costumes.length; c++) {
             let i = new Image();
             i.src = Costumes[c];
+            i.onload = function(e) {_this.ImageCharge(e)};
+            i.onerror = function(e) {console.log("Le costume " + e.target.src + " n'a pas pu être chargé")};
             this.Costumes.push(i);
         }
+        this.Image = this.Costumes[0]
         this.CostumeActuel = 0;
         this.Visible = true;
         this.Time = 0;
@@ -29,6 +31,15 @@ class Lutin
         this.Bulle = new BulleDialogue("", 0,0)
         this.CentreRotation = new Vecteur2(0.5,0.5)
         this.Velocite = new Vecteur2(0, 0);
+        this.ImageChargé = false;
+        this.ImageChargéCompte = Costumes.length;
+    }
+
+    ImageCharge(e)
+    {
+        this.ImageChargéCompte--;
+        if (this.ImageChargéCompte == 0)
+            this.ImageChargé = true;
     }
 
     /**
@@ -149,7 +160,7 @@ class Lutin
 
     Dessin(Context)
     {
-        if (this.Visible)
+        if (this.Visible && this.ImageChargé)
         {
 
             // Sauvegarde la position actuel du canvas 

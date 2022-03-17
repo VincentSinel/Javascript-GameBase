@@ -2,7 +2,7 @@ var SonsBase = [
     // Autre
       //'././Sons/Autre/Son.ogg',
 
-      
+      /*
     // BGM : BackGround Music
       '././Sons/BGM/Airship.ogg',
       '././Sons/BGM/Battle1.ogg',
@@ -48,6 +48,7 @@ var SonsBase = [
       '././Sons/BGM/Town7.ogg',
       //*/
 
+      /*
     // BGS : BackGround Sound
       '././Sons/BGS/Clock.ogg',
       '././Sons/BGS/Darkness.ogg',
@@ -61,6 +62,7 @@ var SonsBase = [
       '././Sons/BGS/Wind.ogg',
       //*/
 
+      /*
     // ME : Music Effects
       '././Sons/ME/Fanfare1.ogg',
       '././Sons/ME/Fanfare2.ogg',
@@ -77,6 +79,7 @@ var SonsBase = [
       '././Sons/ME/Victory2.ogg',
       //*/
 
+      /*
     // SE : Sounds Effects
       '././Sons/SE/Absorb1.ogg',
       '././Sons/SE/Absorb2.ogg',

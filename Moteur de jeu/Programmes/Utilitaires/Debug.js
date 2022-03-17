@@ -1,3 +1,12 @@
+/**
+ * Module de Debuggage. Les fonctions principales sont :
+ * Debug.AjoutInfo("texte")
+ * Debug.AjoutRectangle(rect)
+ * Debug.AjoutVecteur(centre, direction)
+ * 
+ * Variable :
+ * Debug.Parametre
+ */
 class Debug
 {
     static FPS_Reel = 0;
@@ -12,14 +21,14 @@ class Debug
         {
             if (Debug.Parametre.Camera)
             {
-                Debug.DeplaceCamera()
+                Debug.#DeplaceCamera()
             }
         }
         else if (etape == "Pre")
         {
             if (Debug.Parametre.Grille)
             {
-                this.Grid(Context, Math.floor(Debug.GridSize))
+                this.#Grid(Context, Math.floor(Debug.GridSize))
             }
         }
         else
@@ -35,20 +44,20 @@ class Debug
                 Debug.Textes.push("Souris X : " + Souris.X.toFixed(2))
                 Debug.Textes.push("Souris Y : " + Souris.Y.toFixed(2))
                 Debug.Textes.push("Grid Siz : " + Math.floor(Debug.GridSize))
-                this.DessinInfo(Context, Debug.Textes)
+                this.#DessinInfo(Context, Debug.Textes)
                 Debug.Textes = [];
             }
     
             if (Debug.Parametre.Cible)
             {
-                this.Cible(Context)
+                this.#Cible(Context)
             }
     
             if (Debug.Parametre.Vecteur)
             {
                 for (let v = 0; v < Debug.Vecteurs.length; v++) 
                 {
-                    Debug.Vecteur(Context, Debug.Vecteurs[v]);
+                    Debug.#Vecteur(Context, Debug.Vecteurs[v]);
                 }
                 Debug.Vecteurs = []
             }
@@ -57,7 +66,7 @@ class Debug
             {
                 for (let v = 0; v < Debug.Rectangles.length; v++) 
                 {
-                    Debug.DessinRectangle(Context, Debug.Rectangles[v]);
+                    Debug.#DessinRectangle(Context, Debug.Rectangles[v]);
                 }
                 Debug.Rectangles = []
             }
@@ -65,7 +74,7 @@ class Debug
     }
 
 
-    static DeplaceCamera()
+    static #DeplaceCamera()
     {
         if (Clavier.ToucheBasse("j"))
         {
@@ -115,6 +124,11 @@ class Debug
         }
     }
 
+    /**
+     * Ajoute un vecteur dans la liste de dessin
+     * @param {Vecteur2} centre Point de départ du vecteur
+     * @param {Vecteur2} direction Sens de déplacement relatif au centre
+     */
     static AjoutVecteur(centre,direction)
     {
         Debug.Vecteurs.push(
@@ -126,7 +140,12 @@ class Debug
             })
     }
 
-    static Vecteur(Context, vec)
+    /**
+     * Dessin 
+     * @param {context} Context Context de dessin
+     * @param {Array} vec Informations sur le vecteur à tracé
+     */
+    static #Vecteur(Context, vec)
     {
         Context.save();
         Camera.DeplacerCanvas(Context)
@@ -143,7 +162,12 @@ class Debug
         Context.restore();
     }
 
-    static DessinRectangle(Context, rect)
+    /**
+     * Dessine le rectangle voulu sur le canvas en prenant en compte la position de la camera
+     * @param {context} Context Context de dessin
+     * @param {Array} rect Rectangle à dessiner.
+     */
+    static #DessinRectangle(Context, rect)
     {
         Context.save();
         Camera.DeplacerCanvas(Context)
@@ -159,7 +183,7 @@ class Debug
      * Créer une cible au centre de l'écran
      * @param {context} Context Context de dessin
      */
-    static Cible(Context)
+    static #Cible(Context)
     {
         Context.strokeStyle = "Red"
         Context.beginPath();
@@ -185,7 +209,7 @@ class Debug
      * @param {context} Context Context de dessin
      * @param {number} Size Taille des cellules en pixel
      */
-    static Grid(Context, Size)
+    static #Grid(Context, Size)
     {
         Context.save();
         Camera.DeplacerCanvas(Context)
@@ -230,7 +254,7 @@ class Debug
      * @param {context} Context Context de dessin
      * @param {Array<string>} Texte Liste des textes à afficher
      */
-    static DessinInfo(Context,Texte)
+    static #DessinInfo(Context,Texte)
     {
         Context.fillStyle = "white"
         Context.font = "12px Arial";
@@ -249,7 +273,10 @@ class Debug
         Debug.Textes.push(Texte)
     }
 
-
+    /**
+     * Ajoute un rectangle à tracé dans la liste des rectangles
+     * @param {Array} rect Tableau avec X, Y, Largeur, Hauteur
+     */
     static AjoutRectangle(rect)
     {
         Debug.Rectangles.push(rect);

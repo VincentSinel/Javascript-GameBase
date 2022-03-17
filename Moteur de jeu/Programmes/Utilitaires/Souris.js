@@ -1,3 +1,15 @@
+/**
+ * Module de gestion de la souris. Les fonctions principales sont :
+ * Souris.Position()
+ * Souris.BoutonClic(index)
+ * Souris.BoutonJustClic(index)
+ * Souris.BoutonJustDeclic(index)
+ * 
+ * Variable :
+ * Souris.X
+ * Souris.X
+ * Souris.Scroll
+ */
 class Souris
 {
     static X = 0;
@@ -11,6 +23,10 @@ class Souris
     static JusteHaut =  [false, false, false, false, false];
     static Scroll = 0;
 
+    /**
+     * Renvoie un vecteur définissant la position de la souris.
+     * @returns Position de la souris sous forme de vecteur
+     */
     static Position()
     {
         return new Vecteur2(Souris.X, Souris.Y)
@@ -45,6 +61,7 @@ class Souris
     }
 
 
+    // Fonction lié au événements
     static MouseDown(e)
     {
         this.EtatBouton[e.button] = true;
@@ -72,7 +89,7 @@ class Souris
         this.Scroll = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
     }
 
-
+    // Mise a jour de la position de la souris et des clics.
     static Update()
     {
         let vec = new Vecteur2(this.CX, this.CY);

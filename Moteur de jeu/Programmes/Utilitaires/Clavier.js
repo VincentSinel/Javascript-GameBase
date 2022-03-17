@@ -1,3 +1,9 @@
+/**
+ * Module de gestion du clavier. Les fonctions principales sont :
+ * Clavier.ToucheBasse(code, TestCase = false)
+ * Clavier.ToucheJusteBasse(code, TestCase = false)
+ * Clavier.ToucheJusteHaute(code, TestCase = false)
+ */
 class Clavier
 {
     static Pressed = [];
@@ -44,6 +50,9 @@ class Clavier
             return this.JustReleased.includes(code) || this.JustReleased.includes(code.toLowerCase()) || this.JustReleased.includes(code.toUpperCase());
     }
 
+    /**
+     * Fonction lié au événements
+     */
     static KeyDown(e)
     {
         if (!this.Pressed.includes(e.key))
@@ -52,7 +61,6 @@ class Clavier
             this.Pressed.push(e.key);
         }
     }
-
     static KeyUp(e)
     {
         let index = this.Pressed.indexOf(e.key);
@@ -62,7 +70,9 @@ class Clavier
         this.JustReleased.push(e.key);
     }
 
-
+    /**
+     * Mise a jour des touches préssé
+     */
     static Update()
     {
         this.JustPressed.length = 0;

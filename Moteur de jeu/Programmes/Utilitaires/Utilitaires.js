@@ -47,6 +47,7 @@
  }
  //=====================================================
 
+ 
  ChargerImage = async img => {
     return new Promise((resolve, reject) => {
         img.onload = async () => {

@@ -1,3 +1,11 @@
+/**
+ * Module de gestion des données. Les fonctions principales sont :
+ * Datas.AjoutTilemapData("nom", largeur, ahuteur, Data)
+ * Datas.DataTileMap("nom")
+ * Datas.AjoutElementSave("nom", Data)
+ * Datas.Sauvegarder()
+ * Datas.Charger()
+ */
 function readFile(e) {
     var file = e.target.files[0];
     if (!file) return;
@@ -11,14 +19,26 @@ function readFile(e) {
 class Datas
 {
     static TileMapsData = {};
-    static DataSave = {};
+    static DataSave = {}; // Contenue de la sauvegarde actuel
 
+    /**
+     * Enregistre un tilemap dans la base de donnée.
+     * @param {string} Nom Nom du tilemap
+     * @param {integer} W Largeur
+     * @param {integer} H Hauteur
+     * @param {string} Data Données
+     */
     static AjoutTilemapData(Nom,W,H,Data)
     {
         let data = {Nom: Nom, Largeur: W, Hauteur: H, Data: Data};
         Datas.TileMapsData[Nom] = data
     }
 
+    /**
+     * Récupère les données d'un tilemap à partir de son nom
+     * @param {string} Nom Nom du tilemap
+     * @returns Données correspondante
+     */
     static DataTileMap(Nom)
     {
         if (Datas.TileMapsData[Nom])
@@ -31,7 +51,9 @@ class Datas
         }
     }
 
-
+    /**
+     * Lance le chargement de toutes les données
+     */
     static ChargerData()
     {
         Datas.TileMapsData = DataBase.Tilemaps;
@@ -48,6 +70,9 @@ class Datas
         return "var DataBase = " + JSON.stringify(Data)
     }
 
+    /**
+     * Lance la sauvegarde et le téléchargement de la base de donnée
+     */
     static SauvegarderData()
     {
         let filename = "DataBase.js"
@@ -69,11 +94,19 @@ class Datas
         }
     }
 
+    /**
+     * Ajoute des élèments à sauvegarder dans les données utilisateur.
+     * @param {string} Nom Nom de la donnée à sauvegarder
+     * @param {Object} Contenue Contenue à sauvegarder
+     */
     static AjoutElementSave(Nom, Contenue)
     {
         Datas.DataSave[Nom] = Contenue;
     }
 
+    /**
+     * Sauvegarde les données utilisateur
+     */
     static Sauvegarder()
     {
         let filename = "Sauvegarde1.json"
@@ -95,12 +128,20 @@ class Datas
         }
     }
 
+    /**
+     * lance le chargement d'un fichier
+     */
     static Charger()
     {
         document.getElementById('inp').click();
     }
 
-    static ChargeComplete(Data)
+
+    /**
+     * Récupère les données depuis un fichier.
+     * @param {Donnée} Data Donnée chargé
+     */
+    static ChargeComplete(Data) 
     {
         Datas.DataSave = JSON.parse(Data);
     }

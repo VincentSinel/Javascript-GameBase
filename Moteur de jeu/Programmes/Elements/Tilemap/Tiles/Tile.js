@@ -13,11 +13,12 @@ class Tile
         this.Contact = Contact;
         this.Nombre = 1;
         this.OffSet = 0;
+        this.ImageChargé = false;
     }
 
     ImageCharge()
     {
-        
+        this.ImageChargé = true;
     }
 
     SetTileMap(Tilemap)
@@ -28,7 +29,8 @@ class Tile
 
     Dessin(Context, X, Y, index = 0)
     {
-        Context.drawImage(this.Image, X, Y);
+        if (this.ImageChargé)
+            Context.drawImage(this.Image, X, Y);
     }
 
     InCamera(X,Y)

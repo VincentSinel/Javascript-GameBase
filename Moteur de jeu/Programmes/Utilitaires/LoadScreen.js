@@ -1,10 +1,13 @@
+/**
+ * Gère l'écran de chargement
+ */
 class LoadScreen
 {
     static Chargement = 0;
     static SonMax = 0;
     static SonLoaded = 0;
 
-
+    // Mise a jour des sons chargé
     static Update_Son()
     {
         LoadScreen.SonLoaded += 1;
@@ -12,18 +15,19 @@ class LoadScreen
     }
 
 
-
+    // Mise a jour de l'écran de chargement
     static Update()
     {
         LoadScreen.Chargement = LoadScreen.SonLoaded / LoadScreen.SonMax * 100.0;
-        if (LoadScreen.Chargement >= 100)
+        console.log(LoadScreen.SonMax)
+        if (LoadScreen.Chargement >= 100 || LoadScreen.SonMax == 0)
         {
             DemarrerBouclePrincipal();
         }
         LoadScreen.Dessin();
     }
 
-
+    // Rafraichissement de l'ecran.
     static Dessin()
     {
         let w = ctx.canvas.width / 2;

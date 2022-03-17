@@ -1,3 +1,15 @@
+/**
+ * Module de Calcul de contacts. Les fonctions principales sont :
+ * Contacts.PointDansTriangle(A, B, C, P)
+ * Contacts.PointDansRectangle(X, Y, Z, W, P)
+ * Contacts.PointDansPolygone(Poly, P)
+ * Contacts.PolygonesIntersection (a, b)
+ * Contacts.CercleContreRectangle(X,Y,Z,W, P, Radius)
+ * Contacts.RectContreRect(X1,Y1,W1,X2,Y2,W2)
+ * Contacts.rotatedRectanglesCollide(r1X, r1Y, r1W, r1H, r1A, r2X, r2Y, r2W, r2H, r2A)
+ * Contacts.AABB(X1, Y1, Z1, X2, Y2, Z2)
+ * Contacts.AngleRebond(Normal, Direction)
+ */
 class Contacts
 {
     /**
@@ -132,6 +144,16 @@ class Contacts
     };
 
 
+    /**
+     * Test la collision entre un rectangle avec rotation et un cercle
+     * @param {Vecteur2} X Position angle haut gauche
+     * @param {Vecteur2} Y Position angle haut droit
+     * @param {Vecteur2} Z Position angle bas droit
+     * @param {Vecteur2} W Position angle bas gauche
+     * @param {Vecteur2} P Centre du cercle
+     * @param {float} Radius rayon du cercle
+     * @returns Vrai si il y a contact, faux sinon
+     */
     static CercleContreRectangle(X,Y,Z,W, P, Radius)
     {
         let a = Vecteur2.AVersB(X,Y).Normaliser(Radius);
@@ -178,6 +200,16 @@ class Contacts
         return 0;
     }
 
+    /**
+     * Test si deux rectangle avec une rotation sont en collision.
+     * @param {Vecteur2} X1 Position angle haut gauche du rectangle 1
+     * @param {Vecteur2} Y1 Position angle haut droit du rectangle 1
+     * @param {Vecteur2} W1 Position angle bas gauche du rectangle 1
+     * @param {Vecteur2} X2 Position angle haut gauche du rectangle 2
+     * @param {Vecteur2} Y2 Position angle haut droit du rectangle 2
+     * @param {Vecteur2} W2 Position angle bas gauche du rectangle 2
+     * @returns Vrai si les deux rectangle sont en collision, faux sinon
+     */
     static RectContreRect(X1,Y1,W1,X2,Y2,W2)
     {
         let w1 = Math.sqrt((X1.X-Y1.X) * (X1.X-Y1.X) + (X1.Y-Y1.Y) * (X1.Y-Y1.Y))
@@ -189,6 +221,20 @@ class Contacts
         return rotatedRectanglesCollide(X1.X, X1.Y, w1, h1, a1, X2.X, X2.Y, w2, h2, a2)
     }
 
+    /**
+     * Test si deux rectangleavec une rotation sont en collision.
+     * @param {float} r1X Position X angle haut gauche du rectangle 1
+     * @param {float} r1Y Position Y angle haut gauche du rectangle 1
+     * @param {float} r1W Largeur du rectangle 1
+     * @param {float} r1H Hauteur du rectangle 1
+     * @param {float} r1A Angle de rotation du rectangle 1
+     * @param {float} r2X Position X angle haut gauche du rectangle 2
+     * @param {float} r2Y Position Y angle haut gauche du rectangle 2
+     * @param {float} r2W Largeur du rectangle 2
+     * @param {float} r2H Hauteur du rectangle 2
+     * @param {float} r2A Angle de rotation du rectangle 2
+     * @returns Vrai si les deux rectangle sont en collision, faux sinon
+     */
     static rotatedRectanglesCollide(r1X, r1Y, r1W, r1H, r1A, r2X, r2Y, r2W, r2H, r2A) {
         let r1HW = r1W / 2;
         let r1HH = r1H / 2;
@@ -229,12 +275,27 @@ class Contacts
                r2X < r1BBX + r1BBW && r2X + r2W > r1BBX && r2Y < r1BBY + r1BBH && r2Y + r2H > r1BBY;
       }
 
-    static AABB(r1X, r1Y, r1W, r1H, r2X, r2Y, r2W, r2H)
+    /**
+     * Test si deux rectangle avec sans rotation sont en collision.
+     * @param {Vecteur2} X1 Position angle haut gauche du rectangle 1
+     * @param {Vecteur2} Y1 Position angle haut droit du rectangle 1
+     * @param {Vecteur2} Z1 Position angle bas droit du rectangle 1
+     * @param {Vecteur2} X2 Position angle haut gauche du rectangle 2
+     * @param {Vecteur2} Y2 Position angle haut droit du rectangle 2
+     * @param {Vecteur2} Z2 Position angle bas droit du rectangle 2
+     * @returns Vrai si les deux rectangle sont en collision, faux sinon
+     */
+    static AABB(X1, Y1, Z1, X2, Y2, Z2)
     {
         return X1.X < Y2.X && Y1.X > X2.X && X1.Y < Z2.Y && Z1.Y > X2.Y;
     }
 
-
+    /**
+     * Calcul l'angle de rebond avec une surface
+     * @param {Vecteur2} Normal Vecteur Normal à la collision
+     * @param {Float} Direction Angle d'arrivé
+     * @returns Angle de renvoie
+     */
     static AngleRebond(Normal, Direction)
     {
         let v = Vecteur2.AngleVersVecteur(Direction)

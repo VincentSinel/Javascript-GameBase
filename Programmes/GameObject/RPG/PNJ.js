@@ -12,8 +12,8 @@ class PNJ extends Lutin
     {
         super.Calcul(Delta)
 
-        let x = Niveau2.Joueur.X - this.X;
-        let y = Niveau2.Joueur.Y - this.Y;
+        let x = Niveau1.Joueur.X - this.X;
+        let y = Niveau1.Joueur.Y - this.Y;
         let distance = Math.sqrt(x*x + y*y)
 
 

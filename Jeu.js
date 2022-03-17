@@ -1,3 +1,5 @@
+
+
 //============================================================================================
 // Ajouter ici les variables à créer
 
@@ -13,7 +15,7 @@ function InitObjets()
 {
     // Ajouter ici les objets à creer
 
-    lutin = new Niveau2();
+    lutin = new Niveau1();
 
     Debug.Parametre.Camera = true;
     Debug.Parametre.Grille = false;
@@ -25,9 +27,6 @@ function InitObjets()
 
     let UI2 = new Boutton(Ecran_Largeur - 130, 0, 60, 25, "Plein Ecran")
     UI2.ClicAction = function(){ Camera.PleinEcran()};
-
-    Datas.AjoutElementSave("Nom", {x: 0, y: 0, nom: "test"})
-    Datas.Sauvegarder();
 }
 
 /**

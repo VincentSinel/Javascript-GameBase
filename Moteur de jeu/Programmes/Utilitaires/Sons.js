@@ -1,3 +1,11 @@
+/**
+ * Module de gestion des sons. Les fonctions principales sont :
+ * Sons.Jouer_Bruit("nom.ogg")
+ * Sons.Jouer_MusiqueCourte("nom.ogg")
+ * Sons.Jouer_BruitFond("nom.ogg")
+ * Sons.Jouer_MusiqueFond("nom.ogg")
+ * Sons.Jouer_AutreSon("nom.ogg")
+ */
 class Sons
 {
     static VolumeFondSonore = 1.0;
@@ -12,9 +20,11 @@ class Sons
     static #SourceFondSon;
     static #MusiqueCount = 0;
     static #SonCount = 0; 
+    
     static SourceP_Musique = true;
     static SourceP_Bruit = true;
 
+    // Fonction caché pour jouer un fond sonore
     static #JouerFondSonore(Nom, volume = 1.0)
     {
       if (Sons.#SourceFondSon)
@@ -27,6 +37,7 @@ class Sons
       }
     }
 
+    // Fonction caché pour jouer un son court
     static #JouerSonCourt(Nom, volume = 1.0)
     {
       Sons.SourceP_Bruit = false;
@@ -38,6 +49,7 @@ class Sons
       }
     }
 
+    // Fonction caché de détection de la fin d'un son cours
     static #FinLectureSonCourt()
     {
       Sons.#SonCount -= 1;
@@ -47,6 +59,7 @@ class Sons
       }
     }
 
+    // Fonction caché pour jouer une musique
     static #JouerMusique(Nom, volume = 1.0)
     {
       if (Sons.#SourceFondMusique)
@@ -59,6 +72,7 @@ class Sons
       }
     }
 
+    // Fonction caché pour jouer une musique courte
     static #JouerMusiqueCourte(Nom, volume = 1.0)
     {
       Sons.SourceP_Musique = false;
@@ -70,6 +84,7 @@ class Sons
       }
     }
 
+    // Fonction caché de détection de la fin d'une musique courte
     static #FinLectureMusiqueCourte()
     {
       Sons.#MusiqueCount -= 1;
@@ -79,6 +94,7 @@ class Sons
       }
     }
 
+    // Fonction caché pour créer une source de son
     static #CreerSource(Nom, volume, loop = false) 
     {
       if (SonsBase.indexOf(Nom) >= 0)
@@ -86,11 +102,11 @@ class Sons
         var source = Sons.#context.createBufferSource();
         var gainNode = Sons.#context.createGain ? Sons.#context.createGain() : Sons.#context.createGainNode();
         source.buffer = Sons.#buffer[SonsBase.indexOf(Nom)];
-        // Turn on looping
+        // Active la boucle du son
         source.loop = loop;
-        // Connect source to gain.
+        // Ajout du gain à la source
         source.connect(gainNode);
-        // Connect gain to destination.
+        // Connection du gain et du contexte de son
         gainNode.connect(Sons.#context.destination);
     
         return {
@@ -105,31 +121,55 @@ class Sons
       }
     }
 
+    /**
+     * Lance la lecture d'un bruit.
+     * @param {string} Nom Nom du fichier audio à jouer. Ce doit être le nom du fichier se trouvant dans le dossier SE.
+     * @param {float} volume Volume du son entre 0 et 1 (par default 1.0)
+     */
     static Jouer_Bruit(Nom, volume = false)
     {
         Sons.#JouerSonCourt("././Sons/SE/" + Nom, volume || Sons.VolumeFondSonore)
     }
-    
+    /**
+     * Lance la lecture d'une musique courte.
+     * @param {string} Nom Nom du fichier audio à jouer. Ce doit être le nom du fichier se trouvant dans le dossier ME.
+     * @param {float} volume Volume du son entre 0 et 1 (par default 1.0)
+     */
     static Jouer_MusiqueCourte(Nom, volume = false)
     {
         Sons.#JouerMusiqueCourte("././Sons/ME/" + Nom, volume || Sons.VolumeMusique)
     }
-    
+    /**
+     * Lance la lecture d'un bruit de fond.
+     * @param {string} Nom Nom du fichier audio à jouer. Ce doit être le nom du fichier se trouvant dans le dossier BGS.
+     * @param {float} volume Volume du son entre 0 et 1 (par default 1.0)
+     */
     static Jouer_BruitFond(Nom, volume = false)
     {
         Sons.#JouerFondSonore("././Sons/BGS/" + Nom,  volume || Sons.VolumeSons)
     }
-    
+    /**
+     * Lance la lecture d'une musique de fond
+     * @param {string} Nom Nom du fichier audio à jouer. Ce doit être le nom du fichier se trouvant dans le dossier BGM.
+     * @param {float} volume Volume du son entre 0 et 1 (par default 1.0)
+     */
     static Jouer_MusiqueFond(Nom, volume = false)
     {
         Sons.#JouerMusique("././Sons/BGM/" + Nom, volume || Sons.VolumeMusique)
     }
-
+    /**
+     * Lance la lecture d'un autre son.
+     * @param {string} Nom Nom du fichier audio à jouer. Ce doit être le nom du fichier se trouvant dans le dossier Autre.
+     * @param {float} volume Volume du son entre 0 et 1 (par default 1.0)
+     */
     static Jouer_AutreSon(Nom, volume = false)
     {
         Sons.#JouerSonCourt("././Sons/Autre/" + Nom, volume || Sons.VolumeSons)
     }
 
+    /**
+     * Initialisation du module son (lance le chargement des fichier choisis dans le SonsData.js)
+     */
     static Initialisation()
     {
         window.AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -144,8 +184,14 @@ class Sons
             );
 
         Sons.#bufferLoader.load();
+        if (LoadScreen.SonMax == 0)
+          LoadScreen.Update_Son();
     }
 
+    /**
+     * Mise a jour de la musique et du son de fond
+     * @param {float} dt Temps depuis la dernière mise à jour
+     */
     static Update(dt)
     {
       if (Sons.SourceFondMusique)
@@ -190,7 +236,9 @@ class Sons
         Sons.#buffer = bufferList;
       }
 }
-
+/**
+ * Objet de charge des fichiers audio.
+ */
 class BufferLoader
 {
   constructor(context, urlList, callback)

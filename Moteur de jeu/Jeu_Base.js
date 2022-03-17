@@ -29,14 +29,15 @@ var fade = 0.0; var fading = 0;
     Datas.ChargerData();
     Sons.Initialisation();
     InitEvenements();
-    InitObjets();
  }
 
 /**
- * Lance la boucle principal après le chargement des différents fichier par la class LoadScreen
+ * Initialise les objest utilisateur et lance la boucle principal après 
+ * le chargement des différents fichier par la class LoadScreen
  */
  function DemarrerBouclePrincipal()
  {
+    InitObjets();
     window.requestAnimationFrame(BouclePrincipale);
  }
  
@@ -216,3 +217,9 @@ function InitEvenements(){
     document.addEventListener('fullscreenchange', event => {  Camera.RecalculPleinEcran(); });
 }
 //=====================================================
+
+
+
+
+
+

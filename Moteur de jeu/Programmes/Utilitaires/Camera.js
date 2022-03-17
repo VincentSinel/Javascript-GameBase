@@ -1,3 +1,13 @@
+/**
+ * Module de gestion de la Camera. Les fonctions principales sont :
+ * Camera.AdapteX(posX)
+ * Camera.AdapteY(posY)
+ * Camera.AdapteZoom(zoom)
+ * Camera.DeplacerCanvas(Context)
+ * Camera.CameraVersEcran(P)
+ * Camera.EcranVersCamera(P)
+ * Camera.PleinEcran()
+ */
 class Camera
 {
     static X = 0;
@@ -86,7 +96,9 @@ class Camera
          return new Vecteur2(x,y)
      }
 
-
+     /**
+      * Lance le plein écran du canvas
+      */
      static PleinEcran()
      {
          if (document.fullscreenElement)
@@ -121,6 +133,9 @@ class Camera
          }
      }
 
+     /**
+      * Recalcul les dimension du canvas pour le plein écran
+      */
      static RecalculPleinEcran()
      {
         if (document.fullscreenElement)
@@ -137,6 +152,9 @@ class Camera
         }
      }
 
+     /**
+      * Redefinit la taille du canvas
+      */
      static RedefinirTailleCanvas() 
      {
         var canvasRatio = Ecran_Hauteur / Ecran_Largeur;
