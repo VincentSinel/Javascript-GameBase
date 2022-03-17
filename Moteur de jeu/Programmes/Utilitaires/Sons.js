@@ -254,7 +254,7 @@ class BufferLoader
   {
     // Load buffer asynchronously
     var request = new XMLHttpRequest();
-    request.open("GET", url, true);
+    request.open("GET", "./././" + url, true);
     request.responseType = "arraybuffer";
 
     var loader = this;

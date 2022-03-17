@@ -1,4 +1,4 @@
-class Niveau1 extends Scene
+class Niveau1
 {
     static Joueur;
 
