@@ -16,6 +16,8 @@
  */
 class NinePatch
 {
+    #Rect
+    #TempCanvas
     /**
      * Création d'un NinePatch
      * @param {string} Texture Texture du rectangle
@@ -31,6 +33,8 @@ class NinePatch
         this.X = 0;
         this.Y = 0;
         this.Reajuster(0,0)
+        this.#Rect = [this.X, this.Y, this.W, this.H];
+        this.#TempCanvas = undefined;
     }
 
     /**
@@ -42,6 +46,7 @@ class NinePatch
     {
         this.W = Math.max(width, this.Parametre[0] + this.Parametre[1]);
         this.H = Math.max(height, this.Parametre[2] + this.Parametre[3]);
+        this.#Rect = [this.X, this.Y, this.W, this.H];
     }
 
     ChangeTexture(Texture)
@@ -52,6 +57,18 @@ class NinePatch
     
     Dessin(Context)
     {
+        let rect = [this.X, this.Y, this.W, this.H];
+        if (JSON.stringify(rect) === JSON.stringify(this.#Rect) && this.#TempCanvas != undefined)
+        {
+            return this.#TempCanvas.canvas
+        }
+
+        // Création d'un canvas temporaire
+        if (this.#TempCanvas === undefined)
+        {
+            this.#TempCanvas = document.createElement("canvas").getContext("2d");
+        }
+
         let w1 = this.Parametre[0]
         let x2 = w1
         let w3 = this.Parametre[1]
@@ -68,46 +85,46 @@ class NinePatch
         let h = h1 + h3;
 
         // Applique une teinte au lutin
-        let imageCtx = document.createElement("canvas").getContext("2d"); // Création d'un canvas temporaire
-        imageCtx.canvas.width = this.W; // Modification taille
-        imageCtx.canvas.height = this.H; // Modification taille
+        this.#TempCanvas.canvas.width = this.W; // Modification taille
+        this.#TempCanvas.canvas.height = this.H; // Modification taille
 
         if (this.Teinte.A != 0)
         {
 
 
-            imageCtx.fillStyle = this.Teinte.RGBA();// Définit la couleur de remplissage
-            imageCtx.fillRect(0, 0, this.Image.width, this.Image.height);// Dessine un rectangle de couleur par dessus la figure
-            imageCtx.globalCompositeOperation = "destination-atop";// Modifie le style d'ajout des couleurs
+            this.#TempCanvas.fillStyle = this.Teinte.RGBA();// Définit la couleur de remplissage
+            this.#TempCanvas.fillRect(0, 0, this.Image.width, this.Image.height);// Dessine un rectangle de couleur par dessus la figure
+            this.#TempCanvas.globalCompositeOperation = "destination-atop";// Modifie le style d'ajout des couleurs
 
         }
 
         // Coins
-        imageCtx.drawImage(this.Image, 0, 0, this.Parametre[0], this.Parametre[2],
+        this.#TempCanvas.drawImage(this.Image, 0, 0, this.Parametre[0], this.Parametre[2],
             0, 0, w1, h1);
-        imageCtx.drawImage(this.Image, this.Image.width - this.Parametre[1], 0, this.Parametre[1], this.Parametre[2],
+        this.#TempCanvas.drawImage(this.Image, this.Image.width - this.Parametre[1], 0, this.Parametre[1], this.Parametre[2],
             x3, 0, w3, h1);
-        imageCtx.drawImage(this.Image, 0, this.Image.height - this.Parametre[3], this.Parametre[0], this.Parametre[3],
+        this.#TempCanvas.drawImage(this.Image, 0, this.Image.height - this.Parametre[3], this.Parametre[0], this.Parametre[3],
             0, y3, w1, h3);
-        imageCtx.drawImage(this.Image, this.Image.width - this.Parametre[1], this.Image.height - this.Parametre[3], this.Parametre[1], this.Parametre[3],
+        this.#TempCanvas.drawImage(this.Image, this.Image.width - this.Parametre[1], this.Image.height - this.Parametre[3], this.Parametre[1], this.Parametre[3],
             x3, y3, w3, h3);
 
         // Bords
-        imageCtx.drawImage(this.Image, this.Parametre[0], 0, this.Image.width - w, this.Parametre[2],
+        this.#TempCanvas.drawImage(this.Image, this.Parametre[0], 0, this.Image.width - w, this.Parametre[2],
             x2, 0, w2, h1);
-        imageCtx.drawImage(this.Image, this.Parametre[0], this.Image.height - this.Parametre[3], this.Image.width - w, this.Parametre[3],
+        this.#TempCanvas.drawImage(this.Image, this.Parametre[0], this.Image.height - this.Parametre[3], this.Image.width - w, this.Parametre[3],
             x2, y3, w2, h3);
-        imageCtx.drawImage(this.Image, 0, this.Parametre[2], this.Parametre[0], this.Image.height - h,
+        this.#TempCanvas.drawImage(this.Image, 0, this.Parametre[2], this.Parametre[0], this.Image.height - h,
             0, y2, w1, h2);
-        imageCtx.drawImage(this.Image, this.Image.width - this.Parametre[1], this.Parametre[2], this.Parametre[1], this.Image.height - h,
+        this.#TempCanvas.drawImage(this.Image, this.Image.width - this.Parametre[1], this.Parametre[2], this.Parametre[1], this.Image.height - h,
             x3, y2, w3, h2);
 
         // Centre
-        imageCtx.drawImage(this.Image, this.Parametre[0], this.Parametre[2], this.Image.width - w, this.Image.height - h,
+        this.#TempCanvas.drawImage(this.Image, this.Parametre[0], this.Parametre[2], this.Image.width - w, this.Image.height - h,
             x2, y2, w2, h2);
 
-        Context.drawImage(imageCtx.canvas, this.X, this.Y); // Dessin du canvas temporaire dans le canvas original
+        Context.drawImage(this.#TempCanvas.canvas, this.X, this.Y); // Dessin du canvas temporaire dans le canvas original
 
+        this.#Rect = rect;
         
     }
 

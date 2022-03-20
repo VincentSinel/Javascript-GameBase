@@ -9,7 +9,8 @@
  */
 class Debug
 {
-    static FPS_Reel = 0;
+    static FPS_Reel = [];
+    static FPS_Mesure = FPS
     static GridSize = 32;
     static Textes = [];
     static Vecteurs = []; // Les vecteur sont des vecteurs 4
@@ -35,8 +36,14 @@ class Debug
         {
             if (Debug.Parametre.Info)
             {
-                Debug.FPS_Reel = Math.round((Debug.FPS_Reel * 59 + FPS / Delta) / 60);
-                Debug.Textes.push("FPS : " + Debug.FPS_Reel)
+                Debug.FPS_Reel.push(FPS / Delta);
+                if (Debug.FPS_Reel.length > this.FPS_Mesure)
+                    Debug.FPS_Reel.shift()
+                let total = 0;
+                for (let a = 0; a < Debug.FPS_Reel.length; a++) {
+                    total += Debug.FPS_Reel[a];
+                }
+                Debug.Textes.push("FPS : " + Math.round(total / Debug.FPS_Reel.length))
                 Debug.Textes.push("Camera X : " + Camera.X.toFixed(2))
                 Debug.Textes.push("Camera Y : " + Camera.Y.toFixed(2))
                 Debug.Textes.push("Camera O : " + Camera.Direction)

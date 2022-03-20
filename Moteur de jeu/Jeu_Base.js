@@ -178,33 +178,29 @@ function fix_dpi() {
     canvas.style.height = Ecran_Hauteur + 'px';
 }
 
-//============================================================================================
-/// Ajout des test d'événements (Appuye d'une touche ou de la souris, Position de la souris)
-//============================================================================================
-
-var keydown = function (e) {
-    Clavier.KeyDown(e);
-};
-var keyup = function (e) {
-    Clavier.KeyUp(e);
-};
-var mousedown = function (e) {
-    Souris.MouseDown(e);
-};
-var mouseup = function (e) {
-    Souris.MouseUp(e);
-};
-var mousemove = function(e){
-    Souris.MouseMove(e);
-}
-var mousescroll = function(e){
-    Souris.MouseScroll(e);
-}
-//=====================================================
-/**
- * Ajoute les différents test d'événement
- */
+/** ============================================================================================
+ * Ajoute les différents test d'événement (Appuye d'une touche ou de la souris, Position de la souris)
+ *///===========================================================================================
 function InitEvenements(){
+    var keydown = function (e) {
+        Clavier.KeyDown(e);
+    };
+    var keyup = function (e) {
+        Clavier.KeyUp(e);
+    };
+    var mousedown = function (e) {
+        Souris.MouseDown(e);
+    };
+    var mouseup = function (e) {
+        Souris.MouseUp(e);
+    };
+    var mousemove = function(e){
+        Souris.MouseMove(e);
+    }
+    var mousescroll = function(e){
+        Souris.MouseScroll(e);
+    }
+
     window.addEventListener('keydown', keydown);
     window.addEventListener('keyup', keyup);
 

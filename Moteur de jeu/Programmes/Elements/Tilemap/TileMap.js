@@ -307,6 +307,22 @@ class TileMap
             let x = this.RectDraw[0] * this.TailleTile; // Position X de dessin de l'image dans le canvas principal
             let y = (-this.RectDraw[4] * 2 - this.RectDraw[1] - 1) * this.TailleTile; // Position Y de dessin de l'image dans le canvas principal
 
+            if (this.Edit && this.Edit_SelectedTile >= 0)
+            {
+                if (this.Edit_SelectedTile >= 0)
+                {
+                    let sx = Math.floor((Souris.X - this.X) / this.TailleTile);
+                    let sy = Math.floor((Souris.Y - this.Y) / this.TailleTile + 1 );
+                    this.TileDepuisIndex(this.Edit_SelectedTile).Dessin(can, sx * this.TailleTile - x, -sy * this.TailleTile - y, this.Edit_SelectedTile)
+                }
+                else
+                {
+                    can.fillRect(sx * this.TailleTile - x,-sy * this.TailleTile - y, this.TailleTile, this.TailleTile)
+                }
+                this.#LastRectangle = undefined;
+            }
+
+
             if (this.Teinte.A != 0)
             {
                 // Applique une teinte au lutin
@@ -317,19 +333,12 @@ class TileMap
                 imageCtx.fillStyle = this.Teinte.RGBA();// Définit la couleur de remplissage
                 imageCtx.fillRect(0, 0, this.Image.width, this.Image.height);// Dessine un rectangle de couleur par dessus la figure
                 imageCtx.globalCompositeOperation = "destination-atop";// Modifie le style d'ajout des couleurs
-                imageCtx.drawImage(can ,0,0); // Dessin de l'image sur le canvas temporaire
+                imageCtx.drawImage(can.canvas ,0,0); // Dessin de l'image sur le canvas temporaire
                 Context.drawImage(imageCtx.canvas, x, y); // Dessin du canvas temporaire dans le canvas original
             }
             else
             {
-                Context.drawImage(can, x, y)
-            }
-
-            if (this.Edit && this.Edit_SelectedTile >= 0)
-            {
-                x = Math.floor((Souris.X - this.X) / this.TailleTile);
-                y = Math.floor((Souris.Y - this.Y) / this.TailleTile + 1 );
-                this.TileDepuisIndex(this.Edit_SelectedTile).Dessin(Context, x * this.TailleTile, -y * this.TailleTile, this.Edit_SelectedTile)
+                Context.drawImage(can.canvas, x, y)
             }
 
             // Retourne à la position initiale du canvas
@@ -346,7 +355,7 @@ class TileMap
         // ignore la création du canvas si celui-ci est identique
         if (JSON.stringify(this.RectDraw) === JSON.stringify(this.#LastRectangle) && this.#LastCanvas != undefined)
         {
-            return this.#LastCanvas.canvas
+            return this.#LastCanvas
         }
 
         // Création d'un canvas temporaire
@@ -373,6 +382,6 @@ class TileMap
             }
         }
         this.#LastRectangle = this.RectDraw;
-        return this.#LastCanvas.canvas
+        return this.#LastCanvas
     }
 }

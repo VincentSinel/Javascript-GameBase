@@ -8,6 +8,8 @@ var Scripts = [
     "Programmes/Base/Polygone.js",
     "Programmes/Base/Vecteur.js",
 
+    "Jeu_Base.js",
+
     "Programmes/Elements/UI/UIElement.js",
     "Programmes/Elements/UI/Panneau.js",
     "Programmes/Elements/UI/Toggle.js",
@@ -39,7 +41,7 @@ var Scripts = [
     "Programmes/Utilitaires/LoadScreen.js",
     "Programmes/Utilitaires/Textures.js",
 
-    "Jeu_Base.js",
+    
 ]
 
 //=====================================================
