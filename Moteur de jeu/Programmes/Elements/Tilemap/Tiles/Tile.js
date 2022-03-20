@@ -5,20 +5,13 @@ class Tile
         this.TileMap = undefined;
         this.Texture = Texture;
         this.TailleTile = TailleTile;
-        this.Image = new Image();
-        var _this = this;
-        this.Image.onload = function(e) {_this.ImageCharge()};
-        this.Image.src = Texture;
+        
+        this.Image = Textures.Charger(Texture);
+
         this.DI = 0;
         this.Contact = Contact;
         this.Nombre = 1;
         this.OffSet = 0;
-        this.ImageChargé = false;
-    }
-
-    ImageCharge()
-    {
-        this.ImageChargé = true;
     }
 
     SetTileMap(Tilemap)
@@ -29,8 +22,7 @@ class Tile
 
     Dessin(Context, X, Y, index = 0)
     {
-        if (this.ImageChargé)
-            Context.drawImage(this.Image, X, Y);
+        Context.drawImage(this.Image, X, Y);
     }
 
     InCamera(X,Y)

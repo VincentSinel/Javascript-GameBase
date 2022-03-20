@@ -1,4 +1,7 @@
-var SonsBase = [
+/**
+ * Liste de toutes les sons à chargé pour le moteur de jeu
+ */
+var Librairie_Sons = [
     // Autre
       //'Sons/Autre/Son.ogg',
 

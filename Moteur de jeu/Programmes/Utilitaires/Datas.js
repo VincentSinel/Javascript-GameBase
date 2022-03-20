@@ -28,9 +28,9 @@ class Datas
      * @param {integer} H Hauteur
      * @param {string} Data Données
      */
-    static AjoutTilemapData(Nom,W,H,Data)
+    static AjoutTilemapData(Nom,W,H,Data, Version)
     {
-        let data = {Nom: Nom, Largeur: W, Hauteur: H, Data: Data};
+        let data = {Nom: Nom, Largeur: W, Hauteur: H, Data: Data, Version: Version};
         Datas.TileMapsData[Nom] = data
     }
 
@@ -47,7 +47,8 @@ class Datas
         }
         else
         {
-            throw "Aucun tilemap ne portant ce nom n'as été trouvé : " + Nom
+            console.log("Aucun tilemap ne portant ce nom n'as été trouvé : " + Nom)
+            return false
         }
     }
 
@@ -145,4 +146,9 @@ class Datas
     {
         Datas.DataSave = JSON.parse(Data);
     }
+}
+//Permet de s'assurer que la variable DataBase est générer
+if (typeof DataBase === 'undefined')
+{
+  var DataBase =  {"Tilemaps":{}}
 }

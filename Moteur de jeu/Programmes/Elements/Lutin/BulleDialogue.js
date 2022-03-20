@@ -11,7 +11,7 @@ class BulleDialogue extends NinePatch
      */
     constructor(Texte, X, Y)
     {
-        super("Images/Bulle.png",[45, 20, 20, 35])
+        super("System/Bulle",[45, 20, 20, 35])
         this.Texte = Texte
         this.X = X;
         this.Y = Y;

@@ -1,5 +1,9 @@
 class TileMap
 {
+    #LastCanvas
+    #LastRectangle
+
+    static SauvegardeVersion = "1.0"
     /**
      * Création d'un lutin manipulable avec des fonction simple
      * Mettre TileMap.Edit à true pour lancer l'édition du tilemap
@@ -43,6 +47,15 @@ class TileMap
 
         this.Edit_SelectedTile = -1;
         this.RecalculTileLength();
+
+        this.#LastCanvas = undefined;
+        this.#LastRectangle = undefined;
+    }
+
+    Edition()
+    {
+        this.Edit = true;
+        this.EditUI = new MenuEditionTileMap(this);
     }
 
     RecalculTileLength()
@@ -59,6 +72,7 @@ class TileMap
             }
             j++;
         });
+        this.#LastRectangle = undefined;
     }
 
     TileDepuisIndex(id)
@@ -73,18 +87,47 @@ class TileMap
     Charger(Nom)
     {
         let data = Datas.DataTileMap(Nom)
-        this.#Charge(data)
+        if (data)
+        {
+            this.#Charge(data)
+        }
     }
 
     #Charge(data)
     {
         this.W = data.Largeur;
         this.H = data.Hauteur;
-        let datas = data.Data.split(",");
-        this.Contenue = [];
-        datas.forEach(s => {
-            this.Contenue.push(parseInt(s))
-        });
+        let v = data.Version;
+        if (v == undefined)
+        {
+            let datas = data.Data.split(",");
+            this.Contenue = [];
+            datas.forEach(s => {
+                this.Contenue.push(parseInt(s))
+            });
+        }
+        else if (v == "1.0")
+        {
+            let datas = data.Data.split(",");
+            this.Contenue = [];
+            datas.forEach(s => {
+                if (s.includes("x"))
+                {
+                    let x = s.split("x");
+                    let l = parseInt(x[0]);
+                    let v = parseInt(x[1]);
+                    for (let i = 0; i < l; i++) 
+                    {
+                        this.Contenue.push(v)             
+                    }
+                }
+                else
+                {
+                    this.Contenue.push(parseInt(s)) 
+                }
+                
+            });
+        }
     }
 
     /**
@@ -92,14 +135,36 @@ class TileMap
      */
     Sauvegarder()
     {
-        let data = this.Contenue[0].toString();
+        let data = this.#EncodeData();
+
+        Datas.AjoutTilemapData(prompt("Donner un nom à ce tilemap.\nAttention ce nom doit être unique, si un tilemap du même nom existe, il sera supprimé.\nLe fichier téléchargé ne doit lui pas changer de nom est vient remplacer celui présent dans le dossier Fichier du site Web", "Maison1"), this.W, this.H, data, TileMap.SauvegardeVersion)
+        Datas.SauvegarderData();
+    }
+
+    #EncodeData()
+    {
+        let l = 1;
+        let v = this.Contenue[0];
+        let data = ""
         for(let i = 1; i < this.Contenue.length; i++)
         {
-            data += "," + this.Contenue[i].toString();
+            if (this.Contenue[i] == v)
+                l+= 1;
+            else
+            {
+                if (l == 1)
+                    data += l.toString() + ",";
+                else
+                    data += l.toString() + "x" + v.toString() + ",";
+                l = 1;
+                v = this.Contenue[i];
+            }
         }
-
-        Datas.AjoutTilemapData(prompt("Donner un nom à ce tilemap.\nAttention ce nom doit être unique, si un tilemap du même nom existe, il sera supprimé.\nLe fichier téléchargé ne doit lui pas changer de nom est vient remplacer celui présent dans le dossier Fichier du site Web", "Maison1"), this.W, this.H, data)
-        Datas.SauvegarderData();
+        if (l == 1)
+            data += l.toString();
+        else
+            data += l.toString() + "x" + v.toString();
+        return data;
     }
 
     /**
@@ -173,8 +238,7 @@ class TileMap
 
             if (Souris.Scroll != 0)
             {
-                this.Edit_SelectedTile = ((this.Edit_SelectedTile + Souris.Scroll + this.TilesLength + 1) % (this.TilesLength + 1) - 1);
-                console.log(this.Edit_SelectedTile)
+                this.Edit_SelectedTile = ((this.Edit_SelectedTile + Souris.Scroll / Math.abs(Souris.Scroll) + this.TilesLength + 2) % (this.TilesLength + 1) - 1);
             }
             if (Souris.BoutonClic(0))
             {
@@ -183,7 +247,7 @@ class TileMap
                 if (x >= 0 && y >= 0 && x < this.W && y < this.H)
                 {
                     this.Contenue[x + y * this.W] = this.Edit_SelectedTile;
-
+                    this.#LastRectangle = undefined;
                 }
             }
             if(Souris.BoutonJustClic(2))
@@ -279,10 +343,21 @@ class TileMap
      */
     CreerCanvasPartMap()
     {
+        // ignore la création du canvas si celui-ci est identique
+        if (JSON.stringify(this.RectDraw) === JSON.stringify(this.#LastRectangle) && this.#LastCanvas != undefined)
+        {
+            return this.#LastCanvas.canvas
+        }
+
+        // Création d'un canvas temporaire
+        if (this.#LastCanvas === undefined)
+        {
+            this.#LastCanvas = document.createElement("canvas").getContext("2d");
+        }
+
         // Creation du canvas indépendant
-        let imageCtx = document.createElement("canvas").getContext("2d"); // Création d'un canvas temporaire
-        imageCtx.canvas.width = this.RectDraw[4] * 2 * this.TailleTile; // Modification taille
-        imageCtx.canvas.height = this.RectDraw[4] * 2 * this.TailleTile; // Modification taille
+        this.#LastCanvas.canvas.width = this.RectDraw[4] * 2 * this.TailleTile; // Modification taille
+        this.#LastCanvas.canvas.height = this.RectDraw[4] * 2 * this.TailleTile; // Modification taille
 
         for (let y = this.RectDraw[1]; y < this.RectDraw[3]; y++) 
         {     
@@ -292,11 +367,12 @@ class TileMap
                 if (id >= 0 && x >= 0 && y >= 0 && x < this.W && y < this.H)
                 {
                     if (this.TileDepuisIndex(id).InCamera(x * this.TailleTile, - (1 + y) * this.TailleTile))
-                        this.TileDepuisIndex(id).Dessin(imageCtx, (x - this.RectDraw[0]) * this.TailleTile, (this.RectDraw[4] * 2 - y + this.RectDraw[1]) * this.TailleTile, id);
+                        this.TileDepuisIndex(id).Dessin(this.#LastCanvas, (x - this.RectDraw[0]) * this.TailleTile, (this.RectDraw[4] * 2 - y + this.RectDraw[1]) * this.TailleTile, id);
                 }
                 
             }
         }
-        return imageCtx.canvas
+        this.#LastRectangle = this.RectDraw;
+        return this.#LastCanvas.canvas
     }
 }

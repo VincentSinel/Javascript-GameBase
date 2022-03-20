@@ -12,8 +12,7 @@ class Lutin_SC extends Lutin
         super(X,Y,[Texture])
         this.Decoupage = Decoupage;
 
-        let t = this;
-        this.Image.onload = function (){t.Recalcul()};
+        this.Recalcul();
 
         this.CostumeActuel = Math.max(Math.min(IdCostum, this.MaxCostume),0);
     }

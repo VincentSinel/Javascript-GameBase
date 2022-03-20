@@ -24,10 +24,10 @@ var fade = 0.0; var fading = 0;
  */
  function Initialisation()
  {
-    console.clear();
     CreationCanvas();
     Datas.ChargerData();
     Sons.Initialisation();
+    Textures.Initialisation();
     InitEvenements();
  }
 

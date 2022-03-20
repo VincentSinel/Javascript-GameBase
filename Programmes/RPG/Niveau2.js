@@ -2,6 +2,7 @@ class Niveau2 extends Scene
 {
     static Joueur;
 
+
     constructor()
     {
         super();
@@ -17,10 +18,10 @@ class Niveau2 extends Scene
         Tiles.push(new Tile("Images/Tilemap/Water1.png", true))
         Tiles.push(new MultiTile("Images/Tilemap/Tile-exterieur.png", 32))
         this.Tilemap = new TileMap(0,0,200,200,Tiles)
-        this.Tilemap.Edit = true;
+        this.Tilemap.Edition();
         this.Tilemap.Charger("Maison1")
 
-        this.PNJ = new PNJ(200,200,["Images/Joueur/B_1.png"])
+        this.PNJ = new PNJ(200,200,["Images/Joueur/B_1.png"], Niveau2)
 
         this.ZObject.push(Niveau2.Joueur);
         this.ZObject.push(this.PNJ)

@@ -97,11 +97,11 @@ class Sons
     // Fonction caché pour créer une source de son
     static #CreerSource(Nom, volume, loop = false) 
     {
-      if (SonsBase.indexOf(Nom) >= 0)
+      if (Librairie_Sons.indexOf(Nom) >= 0)
       {
         var source = Sons.#context.createBufferSource();
         var gainNode = Sons.#context.createGain ? Sons.#context.createGain() : Sons.#context.createGainNode();
-        source.buffer = Sons.#buffer[SonsBase.indexOf(Nom)];
+        source.buffer = Sons.#buffer[Librairie_Sons.indexOf(Nom)];
         // Active la boucle du son
         source.loop = loop;
         // Ajout du gain à la source
@@ -175,11 +175,11 @@ class Sons
         window.AudioContext = window.AudioContext || window.webkitAudioContext;
         Sons.#context = new AudioContext();
 
-        LoadScreen.SonMax = SonsBase.length;
+        LoadScreen.SonMax = Librairie_Sons.length;
 
         Sons.#bufferLoader = new BufferLoader(
             Sons.#context,
-            SonsBase,
+            Librairie_Sons,
             Sons.#ChargementFichier
             );
 
@@ -235,6 +235,11 @@ class Sons
     static #ChargementFichier(bufferList) {
         Sons.#buffer = bufferList;
       }
+}
+//Permet de s'assurer que la variable Librairie_Sons est générer
+if (typeof Librairie_Sons === 'undefined')
+{
+  var Librairie_Sons = []
 }
 /**
  * Objet de charge des fichiers audio.

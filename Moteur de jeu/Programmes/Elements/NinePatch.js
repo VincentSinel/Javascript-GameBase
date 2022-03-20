@@ -24,8 +24,7 @@ class NinePatch
     constructor(Texture, Parametre = [0,0,0,0])
     {
         this.Texture = Texture;
-        this.Image = new Image();
-        this.Image.src = Texture;
+        this.Image = Textures.Charger(Texture);
         this.Parametre = Parametre
         this.Teinte = new Color(0,0,0,0)
 
@@ -48,7 +47,7 @@ class NinePatch
     ChangeTexture(Texture)
     {
         this.Texture = Texture;
-        this.Image.src = Texture;
+        this.Image = Textures.Charger(Texture);
     }
     
     Dessin(Context)

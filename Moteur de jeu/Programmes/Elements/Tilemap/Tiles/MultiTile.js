@@ -3,10 +3,7 @@ class MultiTile extends Tile
     constructor(Texture, TailleTile, Contact = false)
     {
         super(Texture, Contact, TailleTile)
-    }
 
-    ImageCharge()
-    {
         this.W = Math.floor(this.Image.width / this.TailleTile);
         this.Nombre = this.W * Math.floor(this.Image.height / this.TailleTile);
         if (this.TileMap)

@@ -17,7 +17,7 @@ class Niveau1
         this.Tilemap = new TileMap(0,0,200,200,Tiles)
         this.Tilemap.Edit = false;
 
-        this.PNJ = new PNJ(200,200,["Images/Joueur/B_1.png"])
+        this.PNJ = new PNJ(200,200,["Images/Joueur/B_1.png"], Niveau1)
     }
 
     Calcul(Delta)

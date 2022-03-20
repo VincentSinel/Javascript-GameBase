@@ -3,14 +3,28 @@
  */
 class LoadScreen
 {
-    static Chargement = 0;
-    static SonMax = 0;
-    static SonLoaded = 0;
+    static Chargement = [0,0];
+    static SonMax = 1;
+    static SonCharge = 0;
+    static TextureMax = 1;
+    static TextureCharge = 0;
 
     // Mise a jour des sons chargé
     static Update_Son()
     {
-        LoadScreen.SonLoaded += 1;
+        LoadScreen.SonCharge += 1;
+        if (LoadScreen.SonCharge >= LoadScreen.SonMax)
+            console.log("[INFO] - Banque de son chargé")
+        LoadScreen.Update();
+    }
+
+    
+    // Mise a jour des sons chargé
+    static Update_Texture()
+    {
+        LoadScreen.TextureCharge += 1;
+        if (LoadScreen.TextureCharge >= LoadScreen.TextureMax)
+            console.log("[INFO] - Banque d'image chargé")
         LoadScreen.Update();
     }
 
@@ -18,10 +32,12 @@ class LoadScreen
     // Mise a jour de l'écran de chargement
     static Update()
     {
-        LoadScreen.Chargement = LoadScreen.SonLoaded / LoadScreen.SonMax * 100.0;
-        console.log(LoadScreen.SonMax)
-        if (LoadScreen.Chargement >= 100 || LoadScreen.SonMax == 0)
+        LoadScreen.Chargement[0] = LoadScreen.SonCharge / LoadScreen.SonMax * 100.0
+        LoadScreen.Chargement[1] = LoadScreen.TextureCharge / LoadScreen.TextureMax * 100.0;
+        if ((LoadScreen.Chargement[0] >= 100 || LoadScreen.SonMax == 0) && 
+            (LoadScreen.Chargement[1] >= 100 || LoadScreen.TextureMax == 0))
         {
+            console.log("[INFO] - Lancement de la boucle principale")
             DemarrerBouclePrincipal();
         }
         LoadScreen.Dessin();
@@ -30,6 +46,12 @@ class LoadScreen
     // Rafraichissement de l'ecran.
     static Dessin()
     {
+        let c = 0;
+        for (let a = 0; a < LoadScreen.Chargement.length; a++) 
+        {
+            c += LoadScreen.Chargement[a];
+        }
+        c = c / LoadScreen.Chargement.length;
         let w = ctx.canvas.width / 2;
         let h = ctx.canvas.height / 2;
         ctx.fillStyle = "Black";
