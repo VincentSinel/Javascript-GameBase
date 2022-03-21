@@ -6,7 +6,7 @@ class TileMap
     static SauvegardeVersion = "1.0"
     /**
      * Création d'un lutin manipulable avec des fonction simple
-     * Mettre TileMap.Edit à true pour lancer l'édition du tilemap
+     * Utiliser TileMap.Edition() activer l'édition du tilemap
      * Utiliser TileMap.Sauvegarder() pour sauvegarder le contenue du tilemap en un fichier .json
      * Utiliser TileMap.Charger() pour charger le contenue depuis la base de donnée
      * @param {number} X Position X du lutin
@@ -45,19 +45,25 @@ class TileMap
         this.Teinte = new Color(0,0,0,0);
         this.RectDraw = [0,0,this.W, this.H]
 
-        this.Edit_SelectedTile = -1;
+        this.Edit_SelectedTile = [[12,13],[14,15]];
         this.RecalculTileLength();
 
         this.#LastCanvas = undefined;
         this.#LastRectangle = undefined;
     }
 
+    /**
+     * Lance l'édition du TileMap
+     */
     Edition()
     {
         this.Edit = true;
         this.EditUI = new MenuEditionTileMap(this);
     }
 
+    /**
+     * Recalcul le nombre de Tile total
+     */
     RecalculTileLength()
     {
         this.TilesLength = 0;
@@ -75,6 +81,11 @@ class TileMap
         this.#LastRectangle = undefined;
     }
 
+    /**
+     * Récupère un tile à partir d'un ID de texture
+     * @param {int} id ID de la texture à choisir
+     * @returns Tile contenant la texture avec l'id choisi
+     */
     TileDepuisIndex(id)
     {
         return this.Tiles[this.TilesNumber[id]];
@@ -202,6 +213,12 @@ class TileMap
     }
 
 
+    /**
+     * Convertie une position sur la camera en une position sur le tilemap.
+     * @param {float} X Position X sur la camera
+     * @param {float} Y Position Y sur la camera
+     * @returns Vecteur2 représentant la position en tille sur le tilemap
+     */
     PositionIndex(X,Y)
     {
         let x = Math.floor((X - this.X) / this.TailleTile);
@@ -209,22 +226,37 @@ class TileMap
         return new Vecteur2(x, y);
     }
 
-
+    /**
+     * Remplace un des tiles du tilemap 
+     * @param {int} X Position X sur le tilemap
+     * @param {int} Y Position Y sur le tilemap
+     * @param {int} Tile ID de la nouvelle texture
+     */
     ChangerTile(X,Y,Tile)
     {
         this.Contenue[X + Y * this.W]
     }
 
+    /**
+     * Permet de montrer le tilemap
+     */
     Montrer()
     {
         this.Visible = true;
     }
 
+    /**
+     * Permet de cacher le tilemap
+     */
     Cacher()
     {
         this.Visible = false;
     }
 
+    /**
+     * Lance les calculs lié au tilemap
+     * @param {float} Delta Nombre de frame depuis la dernière mise à jour.
+     */
     Calcul(Delta)
     {
         this.Time += Delta;
@@ -236,34 +268,91 @@ class TileMap
                 this.Sauvegarder();
             }
 
-            if (Souris.Scroll != 0)
-            {
-                this.Edit_SelectedTile = ((this.Edit_SelectedTile + Souris.Scroll / Math.abs(Souris.Scroll) + this.TilesLength + 2) % (this.TilesLength + 1) - 1);
-            }
-            if (Souris.BoutonClic(0))
+            if (Souris.BoutonClic(0) && Souris.CX > this.EditUI.W)
             {
                 let x = Math.floor((Souris.X - this.X) / this.TailleTile);
                 let y = Math.floor((Souris.Y - this.Y) / this.TailleTile);
                 if (x >= 0 && y >= 0 && x < this.W && y < this.H)
                 {
-                    this.Contenue[x + y * this.W] = this.Edit_SelectedTile;
+                    for(let j = 0; j < this.Edit_SelectedTile.length; j++)
+                    {
+                        for(let i = 0; i< this.Edit_SelectedTile[j].length; i++)
+                        {
+                            if (x + i < this.W && y - j >= 0 && this.Edit_SelectedTile[j][i] > -2)
+                                this.Contenue[x + i + (y - j) * this.W] = this.Edit_SelectedTile[j][i];
+                        }
+                    }
                     this.#LastRectangle = undefined;
                 }
             }
+            
+            let sx = Math.floor((Souris.X - this.X) / this.TailleTile);
+            let sy = Math.floor((Souris.Y - this.Y) / this.TailleTile + 1 );
+            this.PositionPreview = [sx,sy]
+
+
             if(Souris.BoutonJustClic(2))
             {
                 let x = Math.floor((Souris.X - this.X) / this.TailleTile);
                 let y = Math.floor((Souris.Y - this.Y) / this.TailleTile);
                 if (x >= 0 && y >= 0 && x < this.W && y < this.H)
                 {
-                    this.Edit_SelectedTile = this.Contenue[x + y * this.W];
+                    this.DragSelect = true;
+                    this.DragStart = [x,y];
+                    this.Edit_SelectedTile = [[-2]];
                 }
             }
+            else if (Souris.BoutonClic(2) && this.DragSelect && Souris.CX > this.EditUI.W)
+            {
+                let x = Math.min(this.W - 1,Math.max(0, Math.floor((Souris.X - this.X) / this.TailleTile)));
+                let y = Math.min(this.H - 1,Math.max(0, Math.floor((Souris.Y - this.Y) / this.TailleTile)));
+                let a = Math.min(this.DragStart[0], x)
+                let b = Math.max(this.DragStart[1], y)
+                let c = Math.abs(this.DragStart[0] - x) + 1
+                let d = Math.abs(this.DragStart[1] - y) + 1
+                this.PositionPreview = [a,b + 1];
+                this.Edit_SelectedTile = [];
+                for(let j = 0; j < d; j++)
+                {
+                    this.Edit_SelectedTile.push([]);
+                    for(let i = 0; i < c; i++)
+                    {
+                        this.Edit_SelectedTile[j].push(-2);
+                    }
+                }
+            }
+            else if (Souris.BoutonJustDeclic(2) && this.DragSelect && Souris.CX > this.EditUI.W)
+            {
+                let x = Math.min(this.W - 1,Math.max(0, Math.floor((Souris.X - this.X) / this.TailleTile)));
+                let y = Math.min(this.H - 1,Math.max(0, Math.floor((Souris.Y - this.Y) / this.TailleTile)));
+
+                let a = Math.min(this.DragStart[0], x)
+                let b = Math.max(this.DragStart[1], y)
+                let c = Math.abs(this.DragStart[0] - x) + 1
+                let d = Math.abs(this.DragStart[1] - y) + 1
+                this.Edit_SelectedTile = [];
+                for(let j = 0; j < d; j++)
+                {
+                    this.Edit_SelectedTile.push([]);
+                    for(let i = 0; i < c; i++)
+                    {
+                        this.Edit_SelectedTile[j].push(this.Contenue[a + i + (b - j) * this.W]);
+                    }
+                }
+                this.DragSelect = false;
+            }
+            else if (this.DragSelect)
+            {
+                this.DragSelect = false;
+                this.Edit_SelectedTile = [[-1]];
+
+            }
+
         }
 
         // Calcul de la partie visible pour limiter le cout en ressource lors de la phase dessin.
-        let dx = Math.floor((Camera.X - this.X) / this.TailleTile + 0.5);
-        let dy = Math.floor((Camera.Y + this.Y) / this.TailleTile + 0.5);
+        let dx = Math.floor((Camera.X - this.X) / this.TailleTile + 0.5)
+        let dy = Math.floor((Camera.Y - this.Y) / this.TailleTile + 0.5)
         let size = Math.max(5,Math.floor((Diagonal / (this.TailleTile * 2) + Math.sqrt(2)) * 100 / Camera.Zoom + 1));
         this.RectDraw = [dx - size, dy - size, dx + size, dy + size, size]
 
@@ -307,18 +396,34 @@ class TileMap
             let x = this.RectDraw[0] * this.TailleTile; // Position X de dessin de l'image dans le canvas principal
             let y = (-this.RectDraw[4] * 2 - this.RectDraw[1] - 1) * this.TailleTile; // Position Y de dessin de l'image dans le canvas principal
 
-            if (this.Edit && this.Edit_SelectedTile >= 0)
+            if (this.Edit)
             {
-                if (this.Edit_SelectedTile >= 0)
+                for(let j = 0; j < this.Edit_SelectedTile.length; j++)
                 {
-                    let sx = Math.floor((Souris.X - this.X) / this.TailleTile);
-                    let sy = Math.floor((Souris.Y - this.Y) / this.TailleTile + 1 );
-                    this.TileDepuisIndex(this.Edit_SelectedTile).Dessin(can, sx * this.TailleTile - x, -sy * this.TailleTile - y, this.Edit_SelectedTile)
+                    for(let i = 0; i< this.Edit_SelectedTile[j].length; i++)
+                    {
+                        let id = this.Edit_SelectedTile[j][i];
+                        let sx = this.PositionPreview[0];
+                        let sy = this.PositionPreview[1];
+                        if (id >= 0)
+                        {
+                            this.TileDepuisIndex(id).Dessin(can, (sx + i) * this.TailleTile - x, (-sy + j) * this.TailleTile - y, id)
+                        }
+                        else
+                        {
+                            if (id == -1)
+                            {
+                                can.fillStyle = "Black";
+                            }
+                            else if (id == -2)
+                            {
+                                can.fillStyle = Color.Couleur(0.2,0,7,1,0.1);
+                            }
+                            can.fillRect((sx + i) * this.TailleTile - x,(-sy + j) * this.TailleTile - y, this.TailleTile, this.TailleTile)
+                        }
+                    }
                 }
-                else
-                {
-                    can.fillRect(sx * this.TailleTile - x,-sy * this.TailleTile - y, this.TailleTile, this.TailleTile)
-                }
+                
                 this.#LastRectangle = undefined;
             }
 
@@ -375,8 +480,10 @@ class TileMap
                 let id = this.Contenue[x + y * this.W];
                 if (id >= 0 && x >= 0 && y >= 0 && x < this.W && y < this.H)
                 {
-                    if (this.TileDepuisIndex(id).InCamera(x * this.TailleTile, - (1 + y) * this.TailleTile))
-                        this.TileDepuisIndex(id).Dessin(this.#LastCanvas, (x - this.RectDraw[0]) * this.TailleTile, (this.RectDraw[4] * 2 - y + this.RectDraw[1]) * this.TailleTile, id);
+                    let nx = (x - this.RectDraw[0]) - this.RectDraw[4] + 0.5;
+                    let ny = (y - this.RectDraw[1]) - this.RectDraw[4] + 0.5;
+                    if ((nx*nx + ny*ny) < this.RectDraw[4] * this.RectDraw[4])
+                        this.TileDepuisIndex(id).Dessin(this.#LastCanvas, (x - this.RectDraw[0]) * this.TailleTile, (this.RectDraw[4] * 2 - 1 - (y - this.RectDraw[1])) * this.TailleTile, id);
                 }
                 
             }

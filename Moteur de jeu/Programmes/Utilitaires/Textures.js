@@ -1,3 +1,7 @@
+/**
+ * Module de gestion des Textures. Les fonctions principales sont :
+ * Textures.Charger("Nom fichier")
+ */
 class Textures
 {
     static #Buffer = {};
@@ -11,26 +15,39 @@ class Textures
 
         for (let im = 0; im < Librairie_Textures.length; im++) 
         {
-            Textures.AjoutBuffer(Librairie_Textures[im], Librairie_Textures[im])
+            Textures.#AjoutBuffer(Librairie_Textures[im], Librairie_Textures[im])
         }
-        Textures.AjoutBuffer("System/Bulle", "Moteur de jeu/Programmes/Elements/Lutin/Bulle.png");
+        Textures.#AjoutBuffer("System/Bulle", "Moteur de jeu/Programmes/Elements/Lutin/Bulle.png");
         
      }
 
-     static AjoutBuffer(Nom, Chemin)
+     /**
+      * Ajoute un élément à chargé dans la buffer de texture.
+      * @param {string} Nom Nom du fichier à enregistrer
+      * @param {string} Chemin Chemin d'accé relatif au dossier racine du site
+      */
+     static #AjoutBuffer(Nom, Chemin)
      {
         Textures.#Buffer[Nom] = new Image();
         Textures.#Buffer[Nom].onload = function(e) {Textures.ImageCharge(e)};
-        Textures.#Buffer[Nom].onerror = function(e) {throw "Le costume " + e.target.src + " n'a pas pu être chargé. Le fichier n'exsite pas ou est corrompu."};
+        Textures.#Buffer[Nom].onerror = function(e) {throw "Le costume " + e.target.src + " n'a pas pu être chargé. Le fichier n'existe pas ou est corrompu."};
         Textures.#Buffer[Nom].src = Chemin;
      }
 
+     /**
+      * S'execute lorsqu'une image a fini de chargé
+      * @param {loadEvent} e Evenement de chargement de fichier
+      */
      static ImageCharge(e)
      {
         LoadScreen.Update_Texture();
      }
 
-
+     /**
+      * Récupère l'une des images du buffer
+      * @param {string} Nom Nom du fichier (complet)
+      * @returns Image contenant la texture chargé
+      */
      static Charger(Nom)
      {
         if (Textures.#Buffer[Nom])

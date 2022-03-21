@@ -83,12 +83,12 @@ class Souris
         this.EtatBouton[3] = e.buttons % 16 >= 8;
         this.EtatBouton[4] = e.buttons >= 16;
     }
-
     static MouseScroll(e)
     {
         this.Scroll = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
     }
 
+    
     // Mise a jour de la position de la souris et des clics.
     static Update()
     {

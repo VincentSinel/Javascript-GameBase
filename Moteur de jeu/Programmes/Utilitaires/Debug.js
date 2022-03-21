@@ -16,6 +16,7 @@ class Debug
     static Vecteurs = []; // Les vecteur sont des vecteurs 4
     static Rectangles = [] // Les rectangles sont un tableau [X, Y, W, H]
     static Parametre = {Grille: false, Info: true, Cible: false, Vecteur: true, Camera: true, Rectangle: true}
+    static InfoPosition = 3; // Position des info de débuggage (0 haut gauche / 1 haut droit / 2 bas gauche / 3 bas droit)
     static UPDATE(Context, etape, Delta)
     {
         if (etape == "PreCalcul")
@@ -36,6 +37,7 @@ class Debug
         {
             if (Debug.Parametre.Info)
             {
+                // Calcul des FPS
                 Debug.FPS_Reel.push(FPS / Delta);
                 if (Debug.FPS_Reel.length > this.FPS_Mesure)
                     Debug.FPS_Reel.shift()
@@ -44,6 +46,7 @@ class Debug
                     total += Debug.FPS_Reel[a];
                 }
                 Debug.Textes.push("FPS : " + Math.round(total / Debug.FPS_Reel.length))
+
                 Debug.Textes.push("Camera X : " + Camera.X.toFixed(2))
                 Debug.Textes.push("Camera Y : " + Camera.Y.toFixed(2))
                 Debug.Textes.push("Camera O : " + Camera.Direction)
@@ -265,10 +268,39 @@ class Debug
     {
         Context.fillStyle = "white"
         Context.font = "12px Arial";
-        for (let index = 0; index < Texte.length; index++) 
+        if (Debug.InfoPosition == 0)
         {
-            Context.fillText(Texte[index], 5, 17 + 13 * index)
+            Context.textAlign = "start";
+            for (let index = 0; index < Texte.length; index++) 
+            {
+                Context.fillText(Texte[index], 5, 17 + 13 * index)
+            }
         }
+        else if (Debug.InfoPosition == 1)
+        {
+            Context.textAlign = "end";
+            for (let index = 0; index < Texte.length; index++) 
+            {
+                Context.fillText(Texte[index], Ecran_Largeur - 5, 17 + 13 * index)
+            }
+        }
+        else if (Debug.InfoPosition == 2)
+        {
+            Context.textAlign = "start";
+            for (let index = 0; index < Texte.length; index++) 
+            {
+                Context.fillText(Texte[index], 5, Ecran_Hauteur - 5 - 13 * (Texte.length - 1 - index))
+            }
+        }
+        else if (Debug.InfoPosition == 3)
+        {
+            Context.textAlign = "end";
+            for (let index = 0; index < Texte.length; index++) 
+            {
+                Context.fillText(Texte[index], Ecran_Largeur - 5, Ecran_Hauteur - 5 - 13 * (Texte.length - 1 - index))
+            }
+        }
+        
     }
 
     /**

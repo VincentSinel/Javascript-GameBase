@@ -25,6 +25,10 @@ class PNJ extends Lutin
                 this.Dire(this.Texte)
             }
         }
+        else
+        {
+            this.Parle = false
+        }
         
     }
 }

@@ -60,7 +60,7 @@ class NinePatch
         let rect = [this.X, this.Y, this.W, this.H];
         if (JSON.stringify(rect) === JSON.stringify(this.#Rect) && this.#TempCanvas != undefined)
         {
-            return this.#TempCanvas.canvas
+            Context.drawImage(this.#TempCanvas.canvas, this.X, this.Y);
         }
 
         // Création d'un canvas temporaire

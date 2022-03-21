@@ -165,7 +165,6 @@ class Liste extends UIElement
      DessinerContenue(Context)
      {
          
-        this.SelectionCouleur
         // Applique une teinte au lutin
         let imageCtx = document.createElement("canvas").getContext("2d"); // Création d'un canvas temporaire
         imageCtx.canvas.width = this.W - 6; // Modification taille
