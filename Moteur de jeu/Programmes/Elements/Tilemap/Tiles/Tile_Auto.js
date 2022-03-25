@@ -5,8 +5,19 @@ class Tile_Auto extends Tile
         super(Texture, Contact, TailleTile)
         this.Voisin = true
         this.Type = Type;
+        this.Frames = 3;
+        this.Frame = 0;
+        this.Vitesse = 5;
+        this.NextUpdate = 0;
+        this.Animation = false;
 
-        if (this.Type == "A2")
+        if (this.Type == "A1")
+        {
+            this.W = Math.floor(this.Image.width / (this.TailleTile * 8) * 2);
+            this.Nombre = this.W * Math.floor(this.Image.height / (this.TailleTile * 3));
+            this.Animation = true;
+        }
+        else if (this.Type == "A2")
         {
             this.W = Math.floor(this.Image.width / (this.TailleTile * 2));
             this.Nombre = this.W * Math.floor(this.Image.height / (this.TailleTile * 3));
@@ -25,32 +36,61 @@ class Tile_Auto extends Tile
 
     Calcul(Delta)
     {
+        super.Calcul(Delta)
 
+        if (this.Animation)
+        {
+            while(this.NextUpdate < TotalTime)
+            {
+                this.Frame = (this.Frame + 1) % this.Frames;
+                this.NextUpdate += 1 / this.Vitesse;
+                this.TileMap.NeedRefresh()
+            }
+        }
     }
 
     Dessin(Context, X, Y, index = 0, voisin = 0)
     {
         let x, y, t = [];
-        if (this.Type == "A2")
+        if (this.Type == "A1")
         {
             index = (index - this.OffSet)
-            x = index % this.W * this.TailleTile * 2;
+            x = (index % this.W) * this.TailleTile * 6 - Math.floor((index % this.W)  / 2) * this.TailleTile * 4;
+            if (index % 2 == 0)
+            {
+                x += this.Frame * this.TailleTile * 2
+            }
+            y = Math.floor(index / this.W) * this.TailleTile * 3;
+
+            if (index % 2 == 0 || (index == 1 && y == 0) || (index == 5 && y == this.TailleTile * 3))
+            {
+                t = this.CreerTileA124(voisin)
+            }
+            else
+            {
+                t = this.CreerTileA1(voisin)
+            }
+        }
+        else if (this.Type == "A2")
+        {
+            index = (index - this.OffSet)
+            x = (index % this.W) * this.TailleTile * 2;
             y = Math.floor(index / this.W) * this.TailleTile * 3;
 
             t = this.CreerTileA124(voisin)
         }
-        if (this.Type == "A3")
+        else if (this.Type == "A3")
         {
             index = (index - this.OffSet)
-            x = index % this.W * this.TailleTile * 2;
+            x = (index % this.W) * this.TailleTile * 2;
             y = Math.floor(index / this.W) * this.TailleTile * 2;
 
             t = this.CreerTileA34(voisin)
         }
-        if (this.Type == "A4")
+        else if (this.Type == "A4")
         {
             index = (index - this.OffSet)
-            x = index % this.W * this.TailleTile * 2;
+            x = (index % this.W) * this.TailleTile * 2;
             let y1 = Math.floor(index / this.W);
             y = y1 * this.TailleTile * 2 + Math.floor((y1 + 1) / 2) * this.TailleTile;
 
@@ -73,6 +113,37 @@ class Tile_Auto extends Tile
                 Y + this.TailleTile / 2 * (1 - Math.floor(i / 2)), 
                 this.TailleTile / 2, this.TailleTile / 2);
         }
+    }
+
+    CreerTileA1(Voisin)
+    {
+        let ti = [];
+
+        let d = (Voisin % 16) >= 8;
+        let e = (Voisin % 32) >= 16;
+
+        if (d)
+            ti.push(6 + this.Frame * 8)
+        else
+            ti.push(4 + this.Frame * 8)
+
+        if (e)
+            ti.push(5 + this.Frame * 8)
+        else
+            ti.push(7 + this.Frame * 8)
+            
+        if (d)
+            ti.push(2 + this.Frame * 8)
+        else
+            ti.push(0 + this.Frame * 8)
+
+        if (e)
+            ti.push(1 + this.Frame * 8)
+        else
+            ti.push(3 + this.Frame * 8)
+
+        
+        return ti; 
     }
 
     CreerTileA124(Voisin)

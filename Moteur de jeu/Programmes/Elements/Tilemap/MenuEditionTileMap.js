@@ -99,7 +99,7 @@ class MenuEditionTileMap extends Panneau
                         this.SelectionHover.push([]);
                         for(let i = 0; i < c; i++)
                         {
-                            let id = -1 + (a + i) + (b + j) * 8
+                            let id = 0 + (a + i) + (b + j) * 8
                             this.SelectionHover[j].push(id);
                             if (!this.SelectionHoverListe.includes(id))
                                 this.SelectionHoverListe.push(id);
@@ -177,11 +177,11 @@ class MenuEditionTileMap extends Panneau
 
 
         for (let e = 0; e <= this.T.TilesLength; e++) {
-            const element = this.T.TileDepuisIndex((e-1));
+            const element = this.T.TileDepuisIndex(e);
             let x = (e % 8) * this.T.TailleTile;
             let y = Math.floor(e / 8) * this.T.TailleTile
-            if (e > 0)
-                element.Dessin(imageCtx, x, y, (e-1));
+            if (e >= 0)
+                element.Dessin(imageCtx, x, y, e);
             else
             {
                 imageCtx.fillStyle = "Black"
@@ -191,12 +191,12 @@ class MenuEditionTileMap extends Panneau
                 imageCtx.font = "12px Arial";
                 imageCtx.fillText("Vide", x + this.T.TailleTile / 2,y + this.T.TailleTile / 2 + 5)
             }
-            if (this.SelectionHoverListe.includes(e-1))
+            if (this.SelectionHoverListe.includes(e))
             {
                 imageCtx.fillStyle = Color.Couleur(0,0,1,0.1)
                 imageCtx.fillRect(x, y, this.T.TailleTile, this.T.TailleTile);
             }
-            if (this.Selection.includes(e-1))
+            if (this.Selection.includes(e))
             {
                 imageCtx.fillStyle = Color.Couleur(0.2,0.7,1,0.2)
                 imageCtx.strokeStyle = Color.Couleur(0.2,0.7,1,1)

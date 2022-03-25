@@ -2,7 +2,7 @@ class Moto extends Lutin
 {
     constructor()
     {
-        super(0,0,["Images/Moto/Moto1.png"])
+        super(0,0,["Images/Moto/Moto2.png"])
 
         this.Vitesse = 1;
         this.Acceleration = 1.05;
@@ -33,16 +33,24 @@ class Moto extends Lutin
         // Test des touches
         this.X += this.Vitesse * Delta
 
+
+
         if(Clavier.ToucheBasse(" "))
         {        
+            this.Acceleration = Math.max(1 + 0.001 / Math.max(this.Vitesse,1), 1.15 - Math.pow(this.Vitesse / this.VitesseMax, 0.1) * 0.15);
             this.Vitesse = Math.max(1, this.Vitesse * this.Acceleration);
+            this.Acceleration = Math.max(Math.pow(this.Acceleration, 0.5), 1.02)
         }
         else
         {
-            this.Vitesse = (this.Vitesse - 0.1) * 0.99
+            this.Acceleration = 0.95     ;
+            if (this.Direction < 10)
+                this.Vitesse = (this.Vitesse - 0.1) * 0.995
         }
 
-        this.Vitesse = Math.max(0, Math.min(this.VitesseMax, this.Vitesse))
+        this.Vitesse = Math.max(0, this.Vitesse)
+
+        this.Parent.Aiguille.Direction = -30 + (this.Vitesse / this.VitesseMax) * 90
 
         if(Clavier.ToucheBasse("ArrowUp"))
         {
@@ -56,8 +64,8 @@ class Moto extends Lutin
         }
 
         // Calcul du cabrage
-        let coef = Math.max(this.Vitesse / this.VitesseMax * 100 - 20, 0) / 80 * 45
-        this.Direction = coef;
+        this.Direction = Math.max(this.Direction + (this.Acceleration - 1.0001) / 0.14 * 5, 0)
+        //this.Direction = coef;
 
         // Déplacement de la camera
         Camera.X = Math.max(this.X + 300, Ecran_Largeur / 2)
@@ -69,46 +77,13 @@ class Moto extends Lutin
         let H = (this.Zoom / 100) * this.Image.height;
 
         // Assignation de la coordonnée Z
-        let decalageX = this.CentreRotation.X * L;
         let decalageY = (1 - this.CentreRotation.Y) * H;
         this.Z = - this.Y + decalageY; 
 
-
-        this.ColRect = [this.X - decalageX, this.Y - decalageY + H/3, L, H/3]
-
-        Debug.AjoutVecteur(
-            new Vecteur2(this.X - decalageX, this.Y - decalageY + H/3), 
-            new Vecteur2(L,0)
-            )
-
-        Debug.AjoutVecteur(
-            new Vecteur2(this.X - decalageX + L, this.Y - decalageY + H/3), 
-            new Vecteur2(0,H/3)
-            )
-
-        Debug.AjoutVecteur(
-            new Vecteur2(this.X - decalageX, this.Y - decalageY), 
-            new Vecteur2(0,-H/3)
-            )
-
-        Debug.AjoutVecteur(
-            new Vecteur2(this.X - decalageX + L, this.Y - decalageY), 
-            new Vecteur2(-L,0)
-            )
-
-
-
-        //////////
-        //let decalageX = (53.5 /155) * (this.Zoom / 100) * this.Image.width;
-        //let IW =  this.Image.width * this.Zoom / 100;
-        //let IH =  this.Image.height * this.Zoom / 100;
-        //Debug.AjoutRectangle([this.X - decalageX, this.Y - decalageY + H / 3, IW, H / 3])
-
-        if (this.TestCollision() && this.Immortel <= 0)
+        if ((this.TestCollision() && this.Immortel <= 0) || this.Direction > 70)
         {
             this.Mort = true;
         }
-        this.Dire(this.TestCollision());
 
         this.Immortel -= 1
     }
@@ -118,15 +93,22 @@ class Moto extends Lutin
         if (this.Direction + 2 < 180)
         {
             this.Direction += 10 * Delta;
+            this.X += this.Vitesse * Delta
+            this.Vitesse = this.Vitesse * 0.99
             this.TempsStop = 60;
         }
         else if (this.TempsStop > 0)
         {
             this.TempsStop -= Delta;
+            this.X += this.Vitesse * Delta
+            this.Vitesse = this.Vitesse * 0.99
         }
         else{
             this.Mort = false;
             this.Immortel = 120;
+            this.Vitesse = 0
+            this.Acceleration = 0
+            this.Direction = 0
         }
     }
 

@@ -45,7 +45,7 @@ class TileMap
         this.Teinte = new Color(0,0,0,0);
         this.RectDraw = [0,0,this.W, this.H]
 
-        this.Edit_SelectedTile = [[12,13],[14,15]];
+        this.Edit_SelectedTile = [[-1]];
         this.RecalculTileLength();
 
         this.#LastCanvas = undefined;

@@ -30,6 +30,8 @@ var Librairie_Textures = [
     "Images/Moto/Route.jpg",
     "Images/Moto/Voiture.png",
     "Images/Moto/Roue.png",
+    "Images/Moto/Compteur.png",
+    "Images/Moto/Aiguille.png",
 
     "Images/Tilemap/Dirt1.png",
     "Images/Tilemap/Grass1.png",
@@ -38,6 +40,7 @@ var Librairie_Textures = [
     "Images/Tilemap/Snow1.png",
     "Images/Tilemap/Stone1.png",
     "Images/Tilemap/Tile-exterieur.png",
+    "Images/Tilemap/Tile-TileA1.png",
     "Images/Tilemap/Tile-TileA2.png",
     "Images/Tilemap/Tile-TileA3.png",
     "Images/Tilemap/Tile-TileA4.png",
