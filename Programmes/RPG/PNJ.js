@@ -4,6 +4,8 @@ class PNJ extends Lutin
     {
         super(X,Y,Costumes)
 
+        this.Phrases = ["Bonjour, quelle belle journée !", "Bonjour", "Comment allez-vous ?"];
+
         this.Texte = "Bonjour, quelle belle journée !"
         this.CentreRotation = new Vecteur2(0.5,1) //#####################
         this.Parent = Scene;
@@ -17,17 +19,17 @@ class PNJ extends Lutin
         let y = this.Parent.Joueur.Y - this.Y;
         let distance = Math.sqrt(x*x + y*y)
 
-
         if (distance < 60)
         {
+
             if(Clavier.ToucheJusteBasse("Enter"))
             {
-                this.Dire(this.Texte)
+                this.Dire(this.Phrases[EntierAleat(0,this.Phrases.length)])
             }
         }
         else
         {
-            this.Parle = false
+            this.Parle = false;
         }
         
     }

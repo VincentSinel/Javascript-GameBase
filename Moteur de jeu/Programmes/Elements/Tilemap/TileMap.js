@@ -88,6 +88,8 @@ class TileMap
      */
     TileDepuisIndex(id)
     {
+        if (id < 0 || id >= this.TilesNumber.length )
+            return this.Tiles[0];
         return this.Tiles[this.TilesNumber[id]];
     }
 
@@ -164,7 +166,7 @@ class TileMap
             else
             {
                 if (l == 1)
-                    data += l.toString() + ",";
+                    data += v.toString() + ",";
                 else
                     data += l.toString() + "x" + v.toString() + ",";
                 l = 1;
@@ -172,7 +174,7 @@ class TileMap
             }
         }
         if (l == 1)
-            data += l.toString();
+            data += v.toString();
         else
             data += l.toString() + "x" + v.toString();
         return data;
@@ -356,6 +358,11 @@ class TileMap
         let size = Math.max(5,Math.floor((Diagonal / (this.TailleTile * 2) + Math.sqrt(2)) * 100 / Camera.Zoom + 1));
         this.RectDraw = [dx - size, dy - size, dx + size, dy + size, size]
 
+        for (let t = 0; t < this.Tiles.length; t++) 
+        {
+            this.Tiles[t].Calcul(Delta);
+        }
+
         /* DEBUG CONTACT fort impact sur les FPS
         for (let y = 0; y < this.H; y++) 
         {     
@@ -373,6 +380,11 @@ class TileMap
             }
         }
         */
+    }
+
+    NeedRefresh()
+    {
+        this.#LastRectangle = undefined;
     }
 
     Dessin(Context)
@@ -394,7 +406,7 @@ class TileMap
             // Creation de la partie de map à dessiner
             let can = this.CreerCanvasPartMap()
             let x = this.RectDraw[0] * this.TailleTile; // Position X de dessin de l'image dans le canvas principal
-            let y = (-this.RectDraw[4] * 2 - this.RectDraw[1] - 1) * this.TailleTile; // Position Y de dessin de l'image dans le canvas principal
+            let y = (-this.RectDraw[4] * 2 - this.RectDraw[1]) * this.TailleTile; // Position Y de dessin de l'image dans le canvas principal
 
             if (this.Edit)
             {
@@ -483,12 +495,51 @@ class TileMap
                     let nx = (x - this.RectDraw[0]) - this.RectDraw[4] + 0.5;
                     let ny = (y - this.RectDraw[1]) - this.RectDraw[4] + 0.5;
                     if ((nx*nx + ny*ny) < this.RectDraw[4] * this.RectDraw[4])
-                        this.TileDepuisIndex(id).Dessin(this.#LastCanvas, (x - this.RectDraw[0]) * this.TailleTile, (this.RectDraw[4] * 2 - 1 - (y - this.RectDraw[1])) * this.TailleTile, id);
+                    {
+                        let tile = this.TileDepuisIndex(id);
+                        let v = 0;
+    
+                        if (tile.Voisin)
+                        {
+                            v = this.CalculVoisin(id, x, y);
+                        }
+                        tile.Dessin(this.#LastCanvas, (x - this.RectDraw[0]) * this.TailleTile, (this.RectDraw[4] * 2 - 1 - (y - this.RectDraw[1])) * this.TailleTile, id, v);
+                    }
                 }
                 
             }
         }
         this.#LastRectangle = this.RectDraw;
         return this.#LastCanvas
+    }
+
+    CalculVoisin(id, x, y)
+    {
+        let v = 0;
+        if (x - 1 < 0 || y - 1 < 0 ||
+            this.Contenue[x - 1 + (y - 1) * this.W] == id)
+            v += 1
+        if (y - 1 < 0 ||
+            this.Contenue[x + 0 + (y - 1) * this.W] == id)
+            v += 2
+        if (x + 1 >= this.W ||y - 1 < 0 ||
+            this.Contenue[x + 1 + (y - 1) * this.W] == id)
+            v += 4
+        if (x - 1 < 0 ||
+            this.Contenue[x - 1 + (y + 0) * this.W] == id)
+            v += 8
+        if (x + 1 >= this.W  ||
+            this.Contenue[x + 1 + (y + 0) * this.W] == id)
+            v += 16
+        if (x - 1 < 0 || y + 1 >= this.H ||
+            this.Contenue[x - 1 + (y + 1) * this.W] == id)
+            v += 32
+        if (y + 1 >= this.H ||
+            this.Contenue[x + 0 + (y + 1) * this.W] == id)
+            v += 64
+        if (x + 1 >= this.W  || y + 1 >= this.H ||
+            this.Contenue[x + 1 + (y + 1) * this.W] == id)
+            v += 128
+        return v;
     }
 }

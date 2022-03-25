@@ -1,1 +1,1 @@
-var DataBase = {"Tilemaps":{"Maison1":{"Nom":"Maison1","Largeur":200,"Hauteur":200,"Data":"203x0,4x1,196x0,4x1,195x0,1,4x1,196x0,4x1,39193x0","Version":"1.0"}}}
+var DataBase = {"Tilemaps":{"Maison1":{"Nom":"Maison1","Largeur":200,"Hauteur":200,"Data":"203x0,4x1,196x0,4x1,195x0,1,4x1,196x0,4x1,39193x0","Version":"1.0"},"TestMap1":{"Nom":"TestMap1","Largeur":200,"Hauteur":200,"Data":"203x0,4x1,196x0,4x1,195x0,5x1,196x0,4x1,18897x0,84,85,86,196x0,75,76,77,78,196x0,67,68,69,70,196x0,59,60,61,62,19693x0","Version":"1.0"}}}

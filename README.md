@@ -1,2 +1,4 @@
 # Javascript-GameBase
-Javascript Game engine use for my programming club at school.
+Moteur de Jeu en JavaScript utilisé au sein du club informatique de mon collège.
+
+

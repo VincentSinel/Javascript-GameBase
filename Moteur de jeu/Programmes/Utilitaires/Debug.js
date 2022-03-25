@@ -143,10 +143,10 @@ class Debug
     {
         Debug.Vecteurs.push(
             {
-                x0: centre.X, 
-                y0: centre.Y, 
-                x1: centre.X + direction.X, 
-                y1: centre.Y - direction.Y
+                x0: Camera.AdapteX(centre.X), 
+                y0: Camera.AdapteY(centre.Y), 
+                x1: Camera.AdapteX(centre.X + direction.X), 
+                y1: Camera.AdapteY(centre.Y - direction.Y)
             })
     }
 
@@ -183,7 +183,7 @@ class Debug
         Camera.DeplacerCanvas(Context)
 
         Context.fillStyle = Color.Couleur(255,0,0,0.2)
-        Context.fillRect(rect[0], rect[1], rect[2], rect[3])
+        Context.fillRect(Camera.AdapteX(rect[0]), Camera.AdapteY(rect[1]), rect[2], rect[3])
 
         Context.restore();
     }

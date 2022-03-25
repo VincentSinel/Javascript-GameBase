@@ -26,7 +26,9 @@ var Scripts = [
     "Programmes/Elements/Lutin/Lutin.js",
     "Programmes/Elements/Lutin/Lutin_SC.js",
     "Programmes/Elements/Tilemap/Tiles/Tile.js",
-    "Programmes/Elements/Tilemap/Tiles/MultiTile.js",
+    "Programmes/Elements/Tilemap/Tiles/Tile_Multi.js",
+    "Programmes/Elements/Tilemap/Tiles/Tile_Animation.js",
+    "Programmes/Elements/Tilemap/Tiles/Tile_Auto.js",
     "Programmes/Elements/Tilemap/TileMap.js",
     "Programmes/Elements/Tilemap/MenuEditionTileMap.js",
 

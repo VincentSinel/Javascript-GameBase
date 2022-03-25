@@ -53,68 +53,72 @@ class MenuEditionTileMap extends Panneau
                 }
             }
         }
-        else if (Souris.BoutonClic(0) && this.scrollsouris == true)
+        else if(Souris.CX < this.GX(true) + this.W)
         {
-            this.ScrollPosition = this.OldScrollPos - (this.MouseClic - Souris.CY) / (this.H-6) * this.HTotal
-            this.scrollsouris  = true;
-        }
-        else
-        {
-            this.scrollsouris = false;
-            let y = (Souris.CY - this.CY() - 3)
-            let x = (Souris.CX - this.CX() - 3)
-            if (x > 0 && x < this.W - 6 - MenuEditionTileMap.ScrollW && !this.SelectionDrag)
+            if (Souris.BoutonClic(0) && this.scrollsouris == true)
             {
-                if (y > 0 && y < this.H - 6)
-                {
-                    y += this.ScrollPosition;
-                    this.SelectionHover = [[-1 + Math.floor(x / this.T.TailleTile) + Math.floor(y / this.T.TailleTile) * 8]];
-                    this.SelectionHoverListe = this.SelectionHover[0];
-                }
+                this.ScrollPosition = this.OldScrollPos - (this.MouseClic - Souris.CY) / (this.H-6) * this.HTotal
+                this.scrollsouris  = true;
             }
-
-            if (Souris.BoutonJustClic(0))
+            else
             {
-                x = Math.floor(x / this.T.TailleTile)
-                y = Math.floor(y / this.T.TailleTile)
-                this.SelectionDrag = true;
-                this.SelectionDragStart = [x,y];
-            }
-            else if (Souris.BoutonClic(0) && this.SelectionDrag)
-            {
-                y += this.ScrollPosition;
-                x = Math.floor(x / this.T.TailleTile)
-                y = Math.floor(y / this.T.TailleTile)
-                let a = Math.min(this.SelectionDragStart[0], x)
-                let b = Math.min(this.SelectionDragStart[1], y)
-                let c = Math.abs(this.SelectionDragStart[0] - x) + 1
-                let d = Math.abs(this.SelectionDragStart[1] - y) + 1
-                this.PositionPreview = [a,b + 1];
-                this.SelectionHover = [];
-                this.SelectionHoverListe = [];
-                for(let j = 0; j < d; j++)
+                this.scrollsouris = false;
+                let y = (Souris.CY - this.CY() - 3)
+                let x = (Souris.CX - this.CX() - 3)
+                if (x > 0 && x < this.W - 6 - MenuEditionTileMap.ScrollW && !this.SelectionDrag)
                 {
-                    this.SelectionHover.push([]);
-                    for(let i = 0; i < c; i++)
+                    if (y > 0 && y < this.H - 6)
                     {
-                        let id = -1 + (a + i) + (b + j) * 8
-                        this.SelectionHover[j].push(id);
-                        if (!this.SelectionHoverListe.includes(id))
-                            this.SelectionHoverListe.push(id);
+                        y += this.ScrollPosition;
+                        this.SelectionHover = [[-1 + Math.floor(x / this.T.TailleTile) + Math.floor(y / this.T.TailleTile) * 8]];
+                        this.SelectionHoverListe = this.SelectionHover[0];
                     }
                 }
+
+                if (Souris.BoutonJustClic(0))
+                {
+                    x = Math.floor(x / this.T.TailleTile)
+                    y = Math.floor(y / this.T.TailleTile)
+                    this.SelectionDrag = true;
+                    this.SelectionDragStart = [x,y];
+                }
+                else if (Souris.BoutonClic(0) && this.SelectionDrag)
+                {
+                    y += this.ScrollPosition;
+                    x = Math.floor(x / this.T.TailleTile)
+                    y = Math.floor(y / this.T.TailleTile)
+                    let a = Math.min(this.SelectionDragStart[0], x)
+                    let b = Math.min(this.SelectionDragStart[1], y)
+                    let c = Math.abs(this.SelectionDragStart[0] - x) + 1
+                    let d = Math.abs(this.SelectionDragStart[1] - y) + 1
+                    this.PositionPreview = [a,b + 1];
+                    this.SelectionHover = [];
+                    this.SelectionHoverListe = [];
+                    for(let j = 0; j < d; j++)
+                    {
+                        this.SelectionHover.push([]);
+                        for(let i = 0; i < c; i++)
+                        {
+                            let id = -1 + (a + i) + (b + j) * 8
+                            this.SelectionHover[j].push(id);
+                            if (!this.SelectionHoverListe.includes(id))
+                                this.SelectionHoverListe.push(id);
+                        }
+                    }
+                }
+                else if (Souris.BoutonJustDeclic(0))
+                {
+                    this.T.Edit_SelectedTile = this.SelectionHover;
+                    this.SelectionDrag = false;
+                }
+                else if (this.SelectionDrag)
+                {
+                    this.DragSelect = false;
+                    this.Edit_SelectedTile = [[-1]];
+                    this.SelectionHoverListe = [];
+                }
             }
-            else if (Souris.BoutonJustDeclic(0))
-            {
-                this.T.Edit_SelectedTile = this.SelectionHover;
-                this.SelectionDrag = false;
-            }
-            else if (this.SelectionDrag)
-            {
-                this.DragSelect = false;
-                this.Edit_SelectedTile = [[-1]];
-                this.SelectionHoverListe = [];
-            }
+                
         }
 
         this.Selection = [];

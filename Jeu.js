@@ -15,7 +15,7 @@ function InitObjets()
 {
     // Ajouter ici les objets à creer
 
-    lutin = new Niveau2();
+    lutin = new Niveau1();
 
     Debug.Parametre.Camera = true;
     Debug.Parametre.Grille = false;
@@ -34,16 +34,8 @@ function InitObjets()
  */
 function Calcul(Delta)
 {
-    if (TotalFrame == 2)
-    {
-    }
     // Ajouter ici la mise a jour des calculs d'objets
     lutin.Calcul(Delta)
-
-    if (Clavier.ToucheJusteBasse("e"))
-    {
-        Datas.Charger();
-    }
 }
 
 

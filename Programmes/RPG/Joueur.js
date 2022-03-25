@@ -2,22 +2,7 @@ class Joueur extends Lutin_SC
 {
     constructor(X,Y)
     {
-        let Costumes =[
-            "Images/Joueur/B_0.png",
-            "Images/Joueur/B_1.png",
-            "Images/Joueur/B_2.png",
-            "Images/Joueur/D_0.png",
-            "Images/Joueur/D_1.png",
-            "Images/Joueur/D_2.png",
-            "Images/Joueur/G_0.png",
-            "Images/Joueur/G_1.png",
-            "Images/Joueur/G_2.png",
-            "Images/Joueur/H_0.png",
-            "Images/Joueur/H_1.png",
-            "Images/Joueur/H_2.png"
-        ]
-
-        super(X,Y, "Images/Perso.png", [32,32], 1); //Costumes)
+        super(X,Y, "Images/Joueur/Perso.png", [32,32], 1); //Costumes)
         this.Vue = 0
         this.CentreRotation = new Vecteur2(0.5,1) //#####################
     }

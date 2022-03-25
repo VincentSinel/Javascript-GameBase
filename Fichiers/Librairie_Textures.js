@@ -1,5 +1,36 @@
 var Librairie_Textures = [
     
+    "Images/Chat.png",
+
+    "Images/CasseBrique/Background.png",
+    "Images/CasseBrique/Balle.png",
+    "Images/CasseBrique/Brique1.png",
+    "Images/CasseBrique/Brique2.png",
+    "Images/CasseBrique/Brique3.png",
+    "Images/CasseBrique/Brique4.png",
+    "Images/CasseBrique/Brique5.png",
+    "Images/CasseBrique/Paddle.png",
+
+    "Images/Joueur/B_0.png",
+    "Images/Joueur/B_1.png",
+    "Images/Joueur/B_2.png",
+    "Images/Joueur/D_0.png",
+    "Images/Joueur/D_1.png",
+    "Images/Joueur/D_2.png",
+    "Images/Joueur/G_0.png",
+    "Images/Joueur/G_1.png",
+    "Images/Joueur/G_2.png",
+    "Images/Joueur/H_0.png",
+    "Images/Joueur/H_1.png",
+    "Images/Joueur/H_2.png",
+    "Images/Joueur/Perso.png",
+
+    "Images/Moto/Moto1.png",
+    "Images/Moto/Moto2.png",
+    "Images/Moto/Route.jpg",
+    "Images/Moto/Voiture.png",
+    "Images/Moto/Roue.png",
+
     "Images/Tilemap/Dirt1.png",
     "Images/Tilemap/Grass1.png",
     "Images/Tilemap/Grass2.png",
@@ -7,7 +38,9 @@ var Librairie_Textures = [
     "Images/Tilemap/Snow1.png",
     "Images/Tilemap/Stone1.png",
     "Images/Tilemap/Tile-exterieur.png",
+    "Images/Tilemap/Tile-TileA2.png",
+    "Images/Tilemap/Tile-TileA3.png",
+    "Images/Tilemap/Tile-TileA4.png",
     "Images/Tilemap/Water1.png",
-    "Images/Perso.png",
-    "Images/Joueur/B_1.png",
+    "Images/Tilemap/Water.png",
 ]

@@ -10,10 +10,12 @@ const Ecran_Hauteur = 9 * 64;
 const Diagonal = Math.sqrt(Ecran_Largeur * Ecran_Largeur + Ecran_Hauteur * Ecran_Hauteur)
 // Définition du nombre de FPS souhaité (Pour le calcul du temps nombre frame écoulé)
 const FPS = 60;
-const MAXFrameJump = 2;
+const MAXFrameJump = 60;
 // Variable lié au canvas;
 var canvas, ctx;
 var TotalFrame = 0;
+var TotalTime = 0;
+var DepartTime = 0;
 // Information supplémentaire;
 var dpi = window.devicePixelRatio;
 var TempsPrecedent = Date.now();
@@ -37,6 +39,7 @@ var fade = 0.0; var fading = 0;
  */
  function DemarrerBouclePrincipal()
  {
+    DepartTime = Date.now();
     InitObjets();
     window.requestAnimationFrame(BouclePrincipale);
  }
@@ -56,6 +59,7 @@ var fade = 0.0; var fading = 0;
     // dt ne peut pas depasser la variable MAXFrameJump pour eviter les problèmes de colission (a ajuster et tester)
     let now = Date.now();
     let dt = Math.min((now - TempsPrecedent) * FPS / 1000.0, MAXFrameJump);
+    TotalTime = (now - DepartTime) / 1000.0;
 
     // Creation d'un canvas temporaire (pour le dilater lors de la mise en plein ecran)
     let TempContext = document.createElement("canvas").getContext("2d");

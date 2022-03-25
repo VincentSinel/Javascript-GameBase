@@ -1,4 +1,4 @@
-class MultiTile extends Tile
+class Tile_Multi extends Tile
 {
     constructor(Texture, TailleTile, Contact = false)
     {
@@ -10,7 +10,7 @@ class MultiTile extends Tile
             this.TileMap.RecalculTileLength()
     }
 
-    Dessin(Context, X, Y, index = 0)
+    Dessin(Context, X, Y, index = 0, voisin = 0)
     {
         index = (index - this.OffSet)
         let x = index % this.W * this.TailleTile;

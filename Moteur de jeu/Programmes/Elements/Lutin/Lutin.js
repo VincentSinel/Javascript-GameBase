@@ -26,6 +26,7 @@ class Lutin
         this.Bulle = new BulleDialogue("", 0,0)
         this.CentreRotation = new Vecteur2(0.5,0.5)
         this.Velocite = new Vecteur2(0, 0);
+        this.Parent = undefined;
     }
 
     /**
