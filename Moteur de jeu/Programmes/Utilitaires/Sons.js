@@ -117,6 +117,8 @@ class Sons
       }
       else
       {
+        console.log(Librairie_Sons)
+        console.log(Nom)
           console.error("Aucun fichier portant ce nom n'est présent dans la base de son")
       }
     }
@@ -128,7 +130,7 @@ class Sons
      */
     static Jouer_Bruit(Nom, volume = false)
     {
-        Sons.#JouerSonCourt("././Sons/SE/" + Nom, volume || Sons.VolumeFondSonore)
+        Sons.#JouerSonCourt("Sons/SE/" + Nom, volume || Sons.VolumeFondSonore)
     }
     /**
      * Lance la lecture d'une musique courte.
@@ -137,7 +139,7 @@ class Sons
      */
     static Jouer_MusiqueCourte(Nom, volume = false)
     {
-        Sons.#JouerMusiqueCourte("././Sons/ME/" + Nom, volume || Sons.VolumeMusique)
+        Sons.#JouerMusiqueCourte("Sons/ME/" + Nom, volume || Sons.VolumeMusique)
     }
     /**
      * Lance la lecture d'un bruit de fond.
@@ -146,7 +148,7 @@ class Sons
      */
     static Jouer_BruitFond(Nom, volume = false)
     {
-        Sons.#JouerFondSonore("././Sons/BGS/" + Nom,  volume || Sons.VolumeSons)
+        Sons.#JouerFondSonore("Sons/BGS/" + Nom,  volume || Sons.VolumeSons)
     }
     /**
      * Lance la lecture d'une musique de fond
@@ -155,7 +157,7 @@ class Sons
      */
     static Jouer_MusiqueFond(Nom, volume = false)
     {
-        Sons.#JouerMusique("././Sons/BGM/" + Nom, volume || Sons.VolumeMusique)
+        Sons.#JouerMusique("Sons/BGM/" + Nom, volume || Sons.VolumeMusique)
     }
     /**
      * Lance la lecture d'un autre son.
@@ -164,7 +166,7 @@ class Sons
      */
     static Jouer_AutreSon(Nom, volume = false)
     {
-        Sons.#JouerSonCourt("././Sons/Autre/" + Nom, volume || Sons.VolumeSons)
+        Sons.#JouerSonCourt("Sons/Autre/" + Nom, volume || Sons.VolumeSons)
     }
 
     /**

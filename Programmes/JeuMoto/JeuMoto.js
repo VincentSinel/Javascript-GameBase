@@ -28,6 +28,8 @@ class JeuMoto extends Scene
             this.Voitures.push(voiture)
             this.ZObject.push(voiture)
         }
+
+        Sons.Jouer_MusiqueFond("Airship.ogg")
     }
 
     Calcul(Delta)
