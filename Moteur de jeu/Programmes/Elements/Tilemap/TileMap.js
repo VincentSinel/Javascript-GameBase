@@ -37,13 +37,14 @@ class TileMap
         {     
             for (let x = 0; x < W; x++) 
             {       
-                this.Contenue.push(0)//x % this.Tiles.length);
+                this.Contenue.push(-1)//x % this.Tiles.length);
             }
         }
 
         this.Edit = false
         this.Teinte = new Color(0,0,0,0);
         this.RectDraw = [0,0,this.W, this.H]
+        this.PositionPreview = [0,0]
 
         this.Edit_SelectedTile = [[-1]];
         this.RecalculTileLength();
@@ -57,8 +58,16 @@ class TileMap
      */
     Edition()
     {
-        this.Edit = true;
-        this.EditUI = new MenuEditionTileMap(this);
+        if (MenuEditionTileMap.Instance)
+        {
+            this.EditUI = MenuEditionTileMap.Instance;
+            MenuEditionTileMap.Instance.AjoutTilemap(this);
+        }
+        else
+        {
+            this.Edit = true;
+            this.EditUI = new MenuEditionTileMap(this);
+        }
     }
 
     /**
@@ -146,11 +155,11 @@ class TileMap
     /**
      * Sauvegarde le contenue du Tilemap en un fichier .json
      */
-    Sauvegarder()
+    Sauvegarder(Nom)
     {
         let data = this.#EncodeData();
 
-        Datas.AjoutTilemapData(prompt("Donner un nom à ce tilemap.\nAttention ce nom doit être unique, si un tilemap du même nom existe, il sera supprimé.\nLe fichier téléchargé ne doit lui pas changer de nom est vient remplacer celui présent dans le dossier Fichier du site Web", "Maison1"), this.W, this.H, data, TileMap.SauvegardeVersion)
+        Datas.AjoutTilemapData(Nom, this.W, this.H, data, TileMap.SauvegardeVersion)
         Datas.SauvegarderData();
     }
 
@@ -265,10 +274,6 @@ class TileMap
 
         if (this.Edit)
         {
-            if (Clavier.ToucheJusteBasse("p"))
-            {
-                this.Sauvegarder();
-            }
 
             if (Souris.BoutonClic(0) && Souris.CX > this.EditUI.W)
             {

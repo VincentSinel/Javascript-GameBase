@@ -15,7 +15,7 @@ function InitObjets()
 {
     // Ajouter ici les objets à creer
 
-    lutin = new Niveau1();
+    lutin = new JeuMoto();
 
     Debug.Parametre.Camera = true;
     Debug.Parametre.Grille = false;

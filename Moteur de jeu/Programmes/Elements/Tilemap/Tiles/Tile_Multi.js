@@ -6,8 +6,6 @@ class Tile_Multi extends Tile
 
         this.W = Math.floor(this.Image.width / this.TailleTile);
         this.Nombre = this.W * Math.floor(this.Image.height / this.TailleTile);
-        if (this.TileMap)
-            this.TileMap.RecalculTileLength()
     }
 
     Dessin(Context, X, Y, index = 0, voisin = 0)

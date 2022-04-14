@@ -25,6 +25,11 @@ class Niveau1 extends Scene
         this.Tilemap.Charger("TestMap1")
         this.Tilemap.Edition();
 
+        Tiles = [];
+        Tiles.push(new Tile_Auto("Images/Tilemap/Tile-exterieur.png", 32, "A5"))
+        this.Tilemap2 = new TileMap(-32 * 100,-32 * 100, 200, 200, Tiles)
+        this.Tilemap2.Edition();
+
         this.PNJ = new PNJ(200,200,["Images/Joueur/B_1.png"], Niveau1)
 
         this.ZObject.push(Niveau1.Joueur);
@@ -35,6 +40,7 @@ class Niveau1 extends Scene
     {
         super.Calcul(Delta)
         this.Tilemap.Calcul(Delta);
+        this.Tilemap2.Calcul(Delta);
         Niveau1.Joueur.Calcul(Delta);
         this.PNJ.Calcul(Delta);
 
@@ -50,6 +56,7 @@ class Niveau1 extends Scene
     Dessin(Context)
     {
         this.Tilemap.Dessin(Context);
+        this.Tilemap2.Dessin(Context);
         super.Dessin(Context);
     }
 }

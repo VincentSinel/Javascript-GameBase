@@ -32,6 +32,11 @@ class Tile_Auto extends Tile
             this.W = Math.floor(this.Image.width / (this.TailleTile * 2));
             this.Nombre = this.W * Math.floor(this.Image.height / (this.TailleTile * 5) * 2);
         }
+        else
+        {
+            this.W = Math.floor(this.Image.width / this.TailleTile);
+            this.Nombre = this.W * Math.floor(this.Image.height / this.TailleTile);
+        }
     }
 
     Calcul(Delta)
@@ -52,66 +57,94 @@ class Tile_Auto extends Tile
     Dessin(Context, X, Y, index = 0, voisin = 0)
     {
         let x, y, t = [];
-        if (this.Type == "A1")
+        if (this.Type == "A1" || 
+            this.Type == "A2" ||
+            this.Type == "A3" ||
+            this.Type == "A4")
         {
-            index = (index - this.OffSet)
-            x = (index % this.W) * this.TailleTile * 6 - Math.floor((index % this.W)  / 2) * this.TailleTile * 4;
-            if (index % 2 == 0)
+            if (this.Type == "A1")
             {
-                x += this.Frame * this.TailleTile * 2
-            }
-            y = Math.floor(index / this.W) * this.TailleTile * 3;
+                index = (index - this.OffSet)
+                x = (index % this.W) * this.TailleTile * 6 - Math.floor((index % this.W)  / 2) * this.TailleTile * 4;
+                if (index % 2 == 0)
+                {
+                    x += this.Frame * this.TailleTile * 2
+                }
+                y = Math.floor(index / this.W) * this.TailleTile * 3;
 
-            if (index % 2 == 0 || (index == 1 && y == 0) || (index == 5 && y == this.TailleTile * 3))
+                if (index % 2 == 0 || (index == 1 && y == 0) || (index == 5 && y == this.TailleTile * 3))
+                {
+                    t = this.CreerTileA124(voisin)
+                }
+                else
+                {
+                    t = this.CreerTileA1(voisin)
+                }
+            }
+            else if (this.Type == "A2")
             {
+                index = (index - this.OffSet)
+                x = (index % this.W) * this.TailleTile * 2;
+                y = Math.floor(index / this.W) * this.TailleTile * 3;
+
                 t = this.CreerTileA124(voisin)
             }
-            else
+            else if (this.Type == "A3")
             {
-                t = this.CreerTileA1(voisin)
-            }
-        }
-        else if (this.Type == "A2")
-        {
-            index = (index - this.OffSet)
-            x = (index % this.W) * this.TailleTile * 2;
-            y = Math.floor(index / this.W) * this.TailleTile * 3;
+                index = (index - this.OffSet)
+                x = (index % this.W) * this.TailleTile * 2;
+                y = Math.floor(index / this.W) * this.TailleTile * 2;
 
-            t = this.CreerTileA124(voisin)
-        }
-        else if (this.Type == "A3")
-        {
-            index = (index - this.OffSet)
-            x = (index % this.W) * this.TailleTile * 2;
-            y = Math.floor(index / this.W) * this.TailleTile * 2;
-
-            t = this.CreerTileA34(voisin)
-        }
-        else if (this.Type == "A4")
-        {
-            index = (index - this.OffSet)
-            x = (index % this.W) * this.TailleTile * 2;
-            let y1 = Math.floor(index / this.W);
-            y = y1 * this.TailleTile * 2 + Math.floor((y1 + 1) / 2) * this.TailleTile;
-
-            if (y1 % 2 == 1)
                 t = this.CreerTileA34(voisin)
-            else
-                t = this.CreerTileA124(voisin)
+            }
+            else if (this.Type == "A4")
+            {
+                index = (index - this.OffSet)
+                x = (index % this.W) * this.TailleTile * 2;
+                let y1 = Math.floor(index / this.W);
+                y = y1 * this.TailleTile * 2 + Math.floor((y1 + 1) / 2) * this.TailleTile;
+
+                if (y1 % 2 == 1)
+                    t = this.CreerTileA34(voisin)
+                else
+                    t = this.CreerTileA124(voisin)
+            }
+                    
+            for(let i = 0; i < 4; i++)
+            {
+                let ox = this.TailleTile / 2 * (t[i] % 4);
+                let oy = this.TailleTile / 2 * Math.floor(t[i] / 4);
+                Context.drawImage(this.Image, 
+                    x + ox, 
+                    y + oy, 
+                    this.TailleTile / 2, 
+                    this.TailleTile / 2, 
+                    X + this.TailleTile / 2 * (i % 2), 
+                    Y + this.TailleTile / 2 * (1 - Math.floor(i / 2)), 
+                    this.TailleTile / 2, this.TailleTile / 2);
+            }
         }
-                
-        for(let i = 0; i < 4; i++)
+        else
         {
-            let ox = this.TailleTile / 2 * (t[i] % 4);
-            let oy = this.TailleTile / 2 * Math.floor(t[i] / 4);
+            index = (index - this.OffSet)
+            if (index >= this.Nombre / 2)
+            {
+                x = ((this.W / 2) + (index % (this.W / 2))) * this.TailleTile;
+                y = Math.floor((index -  this.Nombre / 2) / (this.W / 2)) * this.TailleTile;
+            }
+            else
+            {
+                x = (index % (this.W / 2)) * this.TailleTile;
+                y = Math.floor(index / (this.W / 2)) * this.TailleTile;
+            }
             Context.drawImage(this.Image, 
-                x + ox, 
-                y + oy, 
-                this.TailleTile / 2, 
-                this.TailleTile / 2, 
-                X + this.TailleTile / 2 * (i % 2), 
-                Y + this.TailleTile / 2 * (1 - Math.floor(i / 2)), 
-                this.TailleTile / 2, this.TailleTile / 2);
+                x, 
+                y, 
+                this.TailleTile, 
+                this.TailleTile, 
+                X, 
+                Y, 
+                this.TailleTile, this.TailleTile);
         }
     }
 
