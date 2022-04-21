@@ -39,6 +39,7 @@ class MenuEditionTileMap extends Panneau
         for (let i = 0; i < this.T.length; i++) {
             this.T[i].Sauvegarder(name + "_" + i)
         }
+        Datas.SauvegarderData();
     }
 
     Calcul(Delta)
@@ -145,7 +146,7 @@ class MenuEditionTileMap extends Panneau
                 }
             }
         }
-        else if(Souris.CX < this.GX(true) + this.W && Souris.CY > this.GY(true) + this.H )
+        else if(Souris.CX < this.GX(true) + this.W && Souris.CY > this.GY(true) + this.H  && !this.scrollsouris)
         {
             if (Souris.BoutonClic(0))
             {

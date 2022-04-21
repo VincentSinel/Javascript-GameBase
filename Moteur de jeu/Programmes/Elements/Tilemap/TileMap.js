@@ -160,7 +160,6 @@ class TileMap
         let data = this.#EncodeData();
 
         Datas.AjoutTilemapData(Nom, this.W, this.H, data, TileMap.SauvegardeVersion)
-        Datas.SauvegarderData();
     }
 
     #EncodeData()
@@ -212,7 +211,7 @@ class TileMap
                     if (t.Y >= 0 && t.Y < this.H)
                     {
                         let id = this.Contenue[t.X + t.Y * this.W];
-                        if (id == -1 || this.TileDepuisIndex(id).Contact)
+                        if (id != -1 && this.TileDepuisIndex(id).Contact)
                         {
                             return true;
                         }
