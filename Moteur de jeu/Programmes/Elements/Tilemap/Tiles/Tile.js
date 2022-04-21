@@ -30,4 +30,12 @@ class Tile
     {
         Context.drawImage(this.Image, X, Y);
     }
+
+    EnContact()
+    {
+        if (!this.Contact)
+            return false;
+
+        
+    }
 }

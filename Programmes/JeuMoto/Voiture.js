@@ -1,20 +1,25 @@
 class Voiture extends Lutin
 {
-
-    constructor()
+    constructor(X, Y)
     {
-        //let X = Voiture.Test * 50;
-        //let Y = 100 - Voiture.Test;
-        let X = 1000 + Math.random() * 50000
-        let Y = Math.random() * 200 - 100
+        //let X = Math.random() * 500000
+        //let Y = Math.random() * 200 - 100
 
-        super(X,Y,["Images/Moto/Voiture.png"])
+        let textures = ["Images/Moto/Voiture1.png",
+        "Images/Moto/Voiture2.png",
+        "Images/Moto/Voiture3.png",
+        "Images/Moto/Voiture4.png"];
 
-        this.Vitesse = 1 + Math.random() * 5;
-        this.Zoom = 50;
 
+        super(X,Y,textures)
+
+        this.Vitesse = 3 +  Math.random()
+
+        this.BasculerCostume(Math.floor(Math.random() * textures.length))
 
         this.CentreRotation = new Vecteur2(0.5,1)
+
+        this.ColRect = [0,0,0,0]
     }
 
     Calcul(Delta)
@@ -24,16 +29,13 @@ class Voiture extends Lutin
         this.X -= this.Vitesse * Delta
 
         this.Z = - this.Y 
+       
         
-        let L =  this.Image.width * this.Zoom / 100;
-        let H =  this.Image.height * this.Zoom / 100;
-        Debug.AjoutRectangle([this.X - L / 2, this.Y + H / 2, L, H / 2])
-    }
-
-    Collision()
-    {
-        let L =  this.Image.width * this.Zoom / 100;
-        let H =  this.Image.height * this.Zoom / 100;
-        return [this.X - L / 2, this.Y + H / 2, L, H / 2]
+        let L = this.Image.width * this.Zoom / 100;
+        let H = this.Image.height * this.Zoom / 100;
+        let decalageX = L / 2;
+        let decalageY = 0;
+        
+        this.ColRect = [this.X - decalageX, this.Y - decalageY + H/3, L, H/3] 
     }
 }

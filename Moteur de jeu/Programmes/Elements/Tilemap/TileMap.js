@@ -13,7 +13,7 @@ class TileMap
      * @param {number} Y Position Y du lutin
      * @param {Array<Tile>} Tiles Liste des tiles composant notre tilemap
      */
-    constructor(X,Y, W, H, Tiles)
+    constructor(X, Y, W, H, Tiles)
     {
         this.X = X;
         this.Y = Y;
