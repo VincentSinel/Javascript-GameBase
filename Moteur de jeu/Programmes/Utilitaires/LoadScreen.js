@@ -38,7 +38,7 @@ class LoadScreen
             (LoadScreen.#Chargement[1] >= 100 || LoadScreen.TextureMax == 0))
         {
             console.log("[INFO] - Lancement de la boucle principale")
-            DemarrerBouclePrincipal();
+            Game.DemarrerBouclePrincipal();
         }
         LoadScreen.#Dessin();
     }

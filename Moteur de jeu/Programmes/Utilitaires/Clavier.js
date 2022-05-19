@@ -59,7 +59,9 @@ class Clavier
         {
             this.JustPressed.push(e.key);
             this.Pressed.push(e.key);
+            UIElement.SHandle_KeyJustDown(e);
         }
+        UIElement.SHandle_KeyDown(e);
     }
     static KeyUp(e)
     {
@@ -68,6 +70,7 @@ class Clavier
             this.Pressed.splice(index, 1);
         }
         this.JustReleased.push(e.key);
+        UIElement.SHandle_KeyJustUp(e);
     }
 
     /**

@@ -3,7 +3,7 @@
 //============================================================================================
 // Ajouter ici les variables à créer
 
-var lutin
+var Player
 
 //============================================================================================
 
@@ -15,17 +15,19 @@ function InitObjets()
 {
     // Ajouter ici les objets à creer
 
-    lutin = new JeuMoto();
+    Player = new Joueur(0,0);
+
+    Teleportation(Niveau1,0, 0)
 
     Debug.Parametre.Camera = true;
-    Debug.Parametre.Grille = false;
+    Debug.Parametre.Grille = true;
 
     
-    let UI = new Toggle(Ecran_Largeur - 60,0,60,25, "Grille");
+    let UI = new UI_Toggle(Ecran_Largeur - 60,0, 1000000000,60,25, "Grille");
     UI.ClicAction = function(){ Debug.Parametre.Grille = !Debug.Parametre.Grille }
     UI.Toggle = Debug.Parametre.Grille;
 
-    let UI2 = new Boutton(Ecran_Largeur - 130, 0, 60, 25, "Plein Ecran")
+    let UI2 = new UI_Button(Ecran_Largeur - 130, 0, 1000000000, 60, 25, "Plein Ecran")
     UI2.ClicAction = function(){ Camera.PleinEcran()};
 }
 
@@ -35,9 +37,7 @@ function InitObjets()
 function Calcul(Delta)
 {
     // Ajouter ici la mise a jour des calculs d'objets
-    lutin.Calcul(Delta)
 }
-
 
 /**
  * Mise a jour du visuel (Dessin dans le canvas)
@@ -45,5 +45,14 @@ function Calcul(Delta)
 function Dessin(Context)
 {
     // Ajouter ici la mise a jour des dessin d'objets
-    lutin.Dessin(Context)
+}
+
+function Teleportation(Scene, X,Y)
+{
+    if (SceneActuel)
+        SceneActuel.SupprimerEnfant(Player);
+    SceneActuel = new Scene()
+    Player.X = X
+    Player.Y = Y
+    SceneActuel.AjoutEnfant(Player)
 }

@@ -1,54 +1,38 @@
-class Niveau2 extends Scene
+class Niveau2 extends Scene 
 {
-    static Joueur;
-
     constructor()
     {
         super();
-        Niveau2.Joueur = new Joueur(0,0)
+        this.LoadTilemap();
 
-        let Tiles = [];
-        Tiles.push(new Tile("Images/Tilemap/Dirt1.png"))
-        Tiles.push(new Tile("Images/Tilemap/Grass1.png"))
-        Tiles.push(new Tile("Images/Tilemap/Grass2.png"))
-        Tiles.push(new Tile("Images/Tilemap/Sand1.png"))
-        Tiles.push(new Tile("Images/Tilemap/Snow1.png"))
-        Tiles.push(new Tile("Images/Tilemap/Stone1.png"))
-        Tiles.push(new Tile("Images/Tilemap/Water1.png", true))
-        this.Tilemap = new TileMap(0,0,200,200,Tiles)
-        this.Tilemap.Edit = false;
-        this.Tilemap.Charger("Maison1")
+        this.TileMap = this.AjoutEnfant(new TileMap(0, 0,50,50));
+        this.TileMap.Charger("Map1");
+        this.TileMap.Edition();
 
-        let Tiles2 = [new MultiTile("Images/Tilemap/Tile-exterieur.png", 32)]
-        this.Tilemap2 = new this.Tilemap(0,0,50,50,Tiles2)
-        this.Tilemap2.Edit = true;
-        
+        this.PNJ = this.AjoutEnfant(new PNJ(200,200,["Images/Joueur/B_1.png"]));
+    }
 
-        this.PNJ = new PNJ(200,200,["Images/Joueur/B_1.png"])
-
-        this.ZObject.push(Niveau2.Joueur);
-        this.ZObject.push(this.PNJ)
+    LoadTilemap()
+    {
+        Tilesets.Add_Auto("Images/Tilemap/A1_Eau1.png", "A1");
+        Tilesets.Add_Auto("Images/Tilemap/A1_Eau2.png", "A1");
+        Tilesets.Add_Auto("Images/Tilemap/A2_Extérieur2.png", "A2");
+        Tilesets.Add_Auto("Images/Tilemap/A3_Mur3.png", "A3");
+        Tilesets.Add_Auto("Images/Tilemap/A4_Mur3.png", "A4");
+        Tilesets.Add_Auto("Images/Tilemap/A5_Extérieur12.png", "A5");
+        Tilesets.Add_Auto("Images/Tilemap/A5_Extérieur8.png", "A5");
+        Tilesets.Add_Auto("Images/Tilemap/A5_Intérieur9.png", "A5");
+        Tilesets.Add_Auto("Images/Tilemap/A5_Donjon4.png", "A5");
+        Tilesets.Add_Auto("Images/Tilemap/A5_Extérieur6.png", "A5");
     }
 
     Calcul(Delta)
     {
-        super.Calcul(Delta)
-        this.Tilemap.Calcul(Delta);
-        Niveau2.Joueur.Calcul(Delta);
+        super.Calcul(Delta);
+
+        this.TileMap.Calcul(Delta);
+
         this.PNJ.Calcul(Delta);
-
-        Camera.X = Niveau2.Joueur.X;
-        Camera.Y = Niveau2.Joueur.Y;
-
-        this.PNJ.Z = -this.PNJ.Y;
-        Niveau2.Joueur.Z = -Niveau2.Joueur.Y
-
-        this.Tilemap.Contact_AABB(Niveau2.Joueur);
-    }
-
-    Dessin(Context)
-    {
-        this.Tilemap.Dessin(Context);
-        super.Dessin(Context);
+        Player.Calcul(Delta);
     }
 }

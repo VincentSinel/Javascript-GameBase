@@ -17,7 +17,7 @@ class Textures
         {
             Textures.#AjoutBuffer(Librairie_Textures[im], Librairie_Textures[im])
         }
-        Textures.#AjoutBuffer("System/Bulle", "Moteur de jeu/Programmes/Elements/Lutin/Bulle.png");
+        Textures.#AjoutBuffer("System/Bulle", "Moteur de jeu/Programmes/GameObject/Lutin/Bulle.png");
         
      }
 

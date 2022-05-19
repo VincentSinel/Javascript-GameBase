@@ -20,6 +20,8 @@ class Voiture extends Lutin
         this.CentreRotation = new Vecteur2(0.5,1)
 
         this.ColRect = [0,0,0,0]
+
+        this.MultiplicateurAjouté = false;
     }
 
     Calcul(Delta)

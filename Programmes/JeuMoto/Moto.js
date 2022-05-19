@@ -6,9 +6,9 @@ class Moto extends Lutin
     static VitesseFixe = 0.005; // Vitesse fixe constant permettant de dépasser la vitesse max sur le long terme
     static DecelationSol = 0.9; // Décélération lorsque la roue touche le sol
     static VitesseCabrage = 1; // Vitesse de cabrage lorsque l'on appuie sur l'accelerateur
-    static CoefficientChute = 2; // Vitesse de chute de la moto lorsque l'accelerateur n'est pas enfoncé
+    static CoefficientChute = 1.7; // Vitesse de chute de la moto lorsque l'accelerateur n'est pas enfoncé
 
-    constructor(Scene)
+    constructor()
     {
         super(0,0,["Images/Moto/Moto1.png"])
 
@@ -19,9 +19,7 @@ class Moto extends Lutin
         this.OldX = -200;
         this.OldY = 0;
 
-        this.CentreRotation = new Vecteur2(24/155, 67.5/93)
-
-        this.Scene = Scene;
+        this.CentreRotation = new Vector(24/155, 67.5/93);
 
         this.Mort = false;
         this.Immortel = 0;
@@ -72,6 +70,7 @@ class Moto extends Lutin
             this.Vitesse = 0;
             this.Acceleration = 0;
             this.Direction = 0;
+            this.TempsAppuie = 0;
         }
     }
 
@@ -100,7 +99,7 @@ class Moto extends Lutin
 
         this.Vitesse = (1 - Math.pow(Math.E, -this.Acceleration * Moto.CoefficientVMax)) * Moto.VitesseMax + this.Acceleration * Moto.VitesseFixe;
 
-        this.Scene.Aiguille.Direction = -30 + (this.Vitesse / Moto.VitesseMax) * 90 / 60 * Moto.VitesseMaxCompteur
+        JeuMoto.Aiguille.Direction = -30 + (this.Vitesse / Moto.VitesseMax) * 90 / 60 * Moto.VitesseMaxCompteur;
 
         if(Clavier.ToucheBasse("ArrowUp"))
         {
@@ -136,13 +135,13 @@ class Moto extends Lutin
 
     Contact()
     {
-        for (let v = 0; v < this.Scene.Voitures.length; v++) {
-            const element = this.Scene.Voitures[v].ColRect;
+        for (let v = 0; v < JeuMoto.Voitures.length; v++) {
+            const element = JeuMoto.Voitures[v].ColRect;
             if (Contacts.AABB(
-                new Vecteur2(this.ColRect[0], this.ColRect[1]),
-                new Vecteur2(this.ColRect[0] + this.ColRect[2], this.ColRect[1] + this.ColRect[3]),
-                new Vecteur2(element[0], element[1]),
-                new Vecteur2(element[0] + element[2], element[1] + element[3])
+                new Vector(this.ColRect[0], this.ColRect[1]),
+                new Vector(this.ColRect[0] + this.ColRect[2], this.ColRect[1] + this.ColRect[3]),
+                new Vector(element[0], element[1]),
+                new Vector(element[0] + element[2], element[1] + element[3])
             ))
                 return true;
         }

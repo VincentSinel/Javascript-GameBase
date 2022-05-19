@@ -3,34 +3,56 @@
 //=====================================================
 
 var Scripts = [
+    "Modules/Matter (RigidBody).js",
 
-    "Programmes/Base/Color.js",
-    "Programmes/Base/Polygone.js",
-    "Programmes/Base/Vecteur.js",
+    "Programmes/Class/Color.js",
+    "Programmes/Class/Polygone.js",
+    "Programmes/Class/Vector.js",
+    "Programmes/Class/Rectangle.js",
+    "Programmes/Class/Matrix.js",
+    //"Programmes/Class/Vecteur.js",
 
     "Jeu_Base.js",
 
-    "Programmes/Elements/UI/UIElement.js",
-    "Programmes/Elements/UI/Panneau.js",
-    "Programmes/Elements/UI/Toggle.js",
-    "Programmes/Elements/UI/Boutton.js",
-    "Programmes/Elements/UI/CheckBox.js",
-    "Programmes/Elements/UI/Slider.js",
-    "Programmes/Elements/UI/TextBox.js",
-    "Programmes/Elements/UI/TextBlock.js",
-    "Programmes/Elements/UI/Liste.js",
+    "Programmes/GameObject/GameObject.js",
+    "Programmes/GameObject/RootObject.js",
+    "Programmes/GameObject/Drawable.js",
+    "Programmes/GameObject/Scene.js",
 
-    "Programmes/Elements/NinePatch.js",
-    "Programmes/Elements/Scene.js",
-    "Programmes/Elements/Lutin/BulleDialogue.js",
-    "Programmes/Elements/Lutin/Lutin.js",
-    "Programmes/Elements/Lutin/Lutin_SC.js",
-    "Programmes/Elements/Tilemap/Tiles/Tile.js",
-    "Programmes/Elements/Tilemap/Tiles/Tile_Multi.js",
-    "Programmes/Elements/Tilemap/Tiles/Tile_Animation.js",
-    "Programmes/Elements/Tilemap/Tiles/Tile_Auto.js",
-    "Programmes/Elements/Tilemap/TileMap.js",
-    "Programmes/Elements/Tilemap/MenuEditionTileMap.js",
+    "Programmes/GameObject/UIElements (WIP)/UIElement.js",
+    "Programmes/GameObject/UIElements (WIP)/UI_Panel.js",
+    "Programmes/GameObject/UIElements (WIP)/UI_ScrollBar.js",
+    "Programmes/GameObject/UIElements (WIP)/UI_Button.js",
+    "Programmes/GameObject/UIElements (WIP)/UI_Label.js",
+    "Programmes/GameObject/UIElements (WIP)/UI_ListView.js",
+    "Programmes/GameObject/UIElements (WIP)/UI_CheckBox.js",
+    "Programmes/GameObject/UIElements (WIP)/UI_Toggle.js",
+    "Programmes/GameObject/UIElements (WIP)/UI_Slider.js",
+    "Programmes/GameObject/UIElements (WIP)/UI_Image.js",
+    "Programmes/GameObject/UIElements (WIP)/UI_TextBox.js",
+
+
+    "Programmes/GameObject/Tilemap/UI_EditionTileMap.js",
+    //"Programmes/GameObject/UI/Panneau.js",
+    //"Programmes/GameObject/UI/Toggle.js",
+    //"Programmes/GameObject/UI/Boutton.js",
+    //"Programmes/GameObject/UI/CheckBox.js",
+    //"Programmes/GameObject/UI/Slider.js",
+    //"Programmes/GameObject/UI/TextBox.js",
+    //"Programmes/GameObject/UI/TextBlock.js",
+    //"Programmes/GameObject/UI/Liste.js",
+
+    "Programmes/GameObject/NinePatch.js",
+    "Programmes/GameObject/Lutin/BulleDialogue.js",
+    "Programmes/GameObject/Lutin/Lutin.js",
+    "Programmes/GameObject/Lutin/Lutin_SC.js",
+    "Programmes/GameObject/Tilemap/Tiles/Tile.js",
+    "Programmes/GameObject/Tilemap/Tiles/Tile_Multi.js",
+    "Programmes/GameObject/Tilemap/Tiles/Tile_Animation.js",
+    "Programmes/GameObject/Tilemap/Tiles/Tile_Auto.js",
+    "Programmes/GameObject/Tilemap/Tiles/Tilesets.js",
+    "Programmes/GameObject/Tilemap/TileMap.js",
+    "Programmes/GameObject/Tilemap/TileMap_Layer.js",
 
     "Programmes/Utilitaires/Camera.js",
     "Programmes/Utilitaires/Clavier.js",
@@ -74,7 +96,7 @@ function InitMoteur()
     link.href = "Moteur de Jeu/Style.css"
     document.head.appendChild(link);
 
-    Initialisation();
+    Game.Initialisation();
 }
 
 function MainScriptLoaded(Name)

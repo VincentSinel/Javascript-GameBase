@@ -8,23 +8,9 @@
             "type": "pwa-chrome",
             "request": "launch",
             "name": "Launch Chrome against localhost",
-            "runtimeArgs": ["--allow-file-access-from-files"],
+            "runtimeArgs": ["--allow-file-access-from-files",
+            "--autoplay-policy=no-user-gesture-required"],
             "url": "${workspaceFolder}/index.html",
-            "webRoot": "${workspaceFolder}"
-        },
-        {
-            "name": "Launch index.html",
-            "type": "firefox",
-            "request": "launch",
-            "reAttach": true,
-            "file": "${workspaceFolder}/index.html"
-        },
-        {
-            "name": "Launch localhost",
-            "type": "firefox",
-            "request": "launch",
-            "reAttach": true,
-            "url": "http://localhost/index.html",
             "webRoot": "${workspaceFolder}"
         }
     ]

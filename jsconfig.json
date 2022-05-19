@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es6"
+  },
+  "exclude": ["Moteur de jeu/Moteur.js",
+  "Moteur de jeu/Programmes/GameObject/UI/*"],
+  "include": [
+    "Moteur de jeu/**/*", 
+    "Moteur de jeu/Modules/*", 
+    "Moteur de jeu/Programmes/*", 
+    "Moteur de jeu/Programmes/GameObject/*", 
+    "Moteur de jeu/Programmes/GameObject/UIElement/*", 
+    "Programmes/**/*"]
+}

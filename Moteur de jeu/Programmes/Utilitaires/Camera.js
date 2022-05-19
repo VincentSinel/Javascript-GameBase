@@ -12,10 +12,53 @@ class Camera
 {
     static X = 0;
     static Y = 0;
-    static Zoom = 100;
-    static Direction = 0;
+    static Z = 0;
+    static Zoom = 1.0;
+    static #Direction = 0;
+    static #Viewport = undefined;
+
+    static get Viewport()
+    {
+        if (Camera.#Viewport)
+        {
+            return Camera.#Viewport;
+        }
+        else
+        {
+            let p = new Vector(-Ecran_Largeur / 2 / this.Zoom, -Ecran_Hauteur / 2 / this.Zoom);
+            p = p.rotate(-Camera.#Direction).add(new Vector(Camera.X, Camera.Y));
+            Camera.#Viewport = new Rectangle(p, Ecran_Largeur / this.Zoom, Ecran_Hauteur / this.Zoom, -Camera.#Direction)
+            return Camera.#Viewport;
+        }
+    }
+
+    static get ViewPortZoomLess()
+    {
+        let p = new Vector(-Ecran_Largeur / 2, -Ecran_Hauteur / 2);
+        p = p.rotate(-Camera.#Direction).add(new Vector(Camera.X, Camera.Y));
+        return new Rectangle(p, Ecran_Largeur, Ecran_Hauteur, -Camera.#Direction)
+
+    }
 
     static FullScreen = false;
+
+
+    static get RadDirection()
+    {
+        return Camera.#Direction;
+    }
+
+    static get Direction()
+    {
+        return Camera.#Direction * 180 / Math.PI;
+    }
+
+    
+    static set Direction(value)
+    {
+        Camera.#Viewport = undefined;
+        Camera.#Direction = value * Math.PI / 180;
+    }
 
     /**
      * Adapte une position X à celle de la camera
@@ -24,7 +67,7 @@ class Camera
      */
     static AdapteX(posX)
     {
-        return posX - this.X;
+        return posX - Camera.X;
     }
     /**
      * Adapte une position Y à celle de la camera
@@ -33,16 +76,7 @@ class Camera
      */
     static AdapteY(posY)
     {
-        return - (posY - this.Y);
-    }
-    /**
-     * Adapte un Zoom à celui de la camera
-     * @param {number} posX 
-     * @returns Zoom vis à vis de la camera
-     */
-    static AdapteZoom(zoom)
-    {
-        return this.Zoom / 100.0 * zoom / 100.0
+        return posY - Camera.Y;
     }
 
     /**
@@ -51,49 +85,51 @@ class Camera
      */
     static DeplacerCanvas(Context)
     {
+        //// Sauvegarde la position actuel du canvas 
+        //Context.save();
         // Translate le canvas au centre de l'écran
         Context.translate(Ecran_Largeur / 2, Ecran_Hauteur / 2); 
         // Tourne le canvas de l'angle pour la camera
-        Context.rotate(Camera.Direction * Math.PI / 180);
+        Context.rotate(Camera.#Direction);
         // Zoom le canvas celon le zoom de camera
-        Context.scale(Camera.Zoom / 100.0, Camera.Zoom / 100.0)
+        Context.scale(Camera.Zoom, Camera.Zoom)
+        // Déplace la camera a son centre
+        Context.translate(-Camera.X, -Camera.Y);
     }
 
     /**
      * Transforme un point dans le repère de la camera en un point dans le repère du canvas.
-     * @param {Vecteur2} P Point à déplacer
+     * @param {Vector} P Point à déplacer
      * @returns Vecteur représentant la Position à l'écran dans le repère du canvas
      */
     static CameraVersEcran(P)
     {
-        let cos = Math.cos(- this.Direction * Math.PI / 180);
-        let sin = Math.sin(- this.Direction * Math.PI / 180);
-        let zoom = this.Zoom / 100.0;
-        let disX = P.X * zoom;
-        let disY = -P.Y * zoom;
-        let x = Ecran_Largeur / 2 + disX * cos - disY * sin;
-        let y = Ecran_Hauteur / 2 - disX * sin - disY * cos;
+        let cos = Math.cos(- Camera.#Direction);
+        let sin = Math.sin(- Camera.#Direction);
+        let disX = P.x * Camera.Zoom;
+        let disY = P.y * Camera.Zoom;
+        let x = Ecran_Largeur / 2 + disX * cos + disY * sin;
+        let y = Ecran_Hauteur / 2 - disX * sin + disY * cos;
 
-        return new Vecteur2(x,y)
+        return new Vector(x,y)
     }
 
     /**
      * Transforme un point dans le repère du canvas en un point dans le repère de la camera.
-     * @param {Vecteur2} P Point à déplacer
+     * @param {Vector} P Point à déplacer
      * @returns Vecteur représentant la Position dans le repère de la camera
      */
      static EcranVersCamera(P)
      {
-        let cos = Math.cos(this.Direction * Math.PI / 180);
-        let sin = Math.sin(this.Direction * Math.PI / 180);
-        let zoom = this.Zoom / 100.0;
-        let disX = (P.X - Ecran_Largeur / 2) / zoom;
-        let disY = (Ecran_Hauteur / 2 - P.Y) / zoom;
+        let cos = Math.cos(Camera.#Direction);
+        let sin = Math.sin(Camera.#Direction);
+        let disX = (P.x - Ecran_Largeur / 2) / Camera.Zoom;
+        let disY = (P.y - Ecran_Hauteur / 2) / Camera.Zoom;
 
-        let x = this.X + disX * cos - disY * sin;
-        let y = this.Y + disX * sin + disY * cos;
+        let x = Camera.X + disX * cos - disY * sin;
+        let y = Camera.Y + disX * sin + disY * cos;
  
-         return new Vecteur2(x,y)
+         return new Vector(x,y)
      }
 
      /**

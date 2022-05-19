@@ -15,7 +15,19 @@ class Debug
     static Textes = [];
     static Vecteurs = []; // Les vecteur sont des vecteurs 4
     static Rectangles = [] // Les rectangles sont un tableau [X, Y, W, H]
-    static Parametre = {Grille: false, Info: true, Cible: false, Vecteur: true, Camera: true, Rectangle: true}
+    static Parametre = {
+        Grille: false, 
+        Info: true, 
+        Cible: false, 
+        Vecteur: true, 
+        Camera: true, 
+        Rectangle: true,
+        TimeMesure: true,}
+    static #TimeMesures = [];
+    static #TimeMesureMax = 200;
+    static #StartTime = 0;
+    static #TimeMesureVMax = 0;
+    static #TimeMesureVMin = 0;
     static InfoPosition = 3; // Position des info de débuggage (0 haut gauche / 1 haut droit / 2 bas gauche / 3 bas droit)
     static UPDATE(Context, etape, Delta)
     {
@@ -23,7 +35,7 @@ class Debug
         {
             if (Debug.Parametre.Camera)
             {
-                Debug.#DeplaceCamera()
+                Debug.#DeplaceCamera(Delta)
             }
         }
         else if (etape == "Pre")
@@ -35,6 +47,31 @@ class Debug
         }
         else
         {
+
+            if (Debug.Parametre.Rectangle)
+            {
+                for (let v = 0; v < Debug.Rectangles.length; v++) 
+                {
+                    Debug.#DessinRectangle(Context, Debug.Rectangles[v]);
+                }
+                Debug.Rectangles = []
+            }
+    
+            if (Debug.Parametre.Vecteur)
+            {
+                for (let v = 0; v < Debug.Vecteurs.length; v++) 
+                {
+                    Debug.#Vecteur(Context, Debug.Vecteurs[v]);
+                }
+                Debug.Vecteurs = []
+            }
+    
+            if (Debug.Parametre.Cible)
+            {
+                this.#Cible(Context)
+            }
+
+
             if (Debug.Parametre.Info)
             {
                 // Calcul des FPS
@@ -49,79 +86,162 @@ class Debug
 
                 Debug.Textes.push("Camera X : " + Camera.X.toFixed(2))
                 Debug.Textes.push("Camera Y : " + Camera.Y.toFixed(2))
-                Debug.Textes.push("Camera O : " + Camera.Direction)
+                Debug.Textes.push("Camera O : " + Camera.Direction.toFixed(2))
                 Debug.Textes.push("Camera Z : " + Camera.Zoom.toFixed(2))
                 Debug.Textes.push("Souris X : " + Souris.X.toFixed(2))
                 Debug.Textes.push("Souris Y : " + Souris.Y.toFixed(2))
                 Debug.Textes.push("Grid Siz : " + Math.floor(Debug.GridSize))
                 this.#DessinInfo(Context, Debug.Textes)
-                Debug.Textes = [];
-            }
-    
-            if (Debug.Parametre.Cible)
-            {
-                this.#Cible(Context)
-            }
-    
-            if (Debug.Parametre.Vecteur)
-            {
-                for (let v = 0; v < Debug.Vecteurs.length; v++) 
-                {
-                    Debug.#Vecteur(Context, Debug.Vecteurs[v]);
-                }
-                Debug.Vecteurs = []
             }
 
-            if (Debug.Parametre.Rectangle)
+            if (Debug.Parametre.TimeMesure)
             {
-                for (let v = 0; v < Debug.Rectangles.length; v++) 
-                {
-                    Debug.#DessinRectangle(Context, Debug.Rectangles[v]);
-                }
-                Debug.Rectangles = []
+                Debug.#DrawTimeMesure(Context);
             }
+
+
+            Debug.Textes = [];
         }   
     }
 
 
-    static #DeplaceCamera()
+    static StartMesure()
+    {
+        Debug.#StartTime = Date.now();
+    }
+
+    static EndMesure()
+    {
+        let delta = Date.now() -Debug.#StartTime;
+        if (Debug.#TimeMesures.length == Debug.#TimeMesureMax)
+        {
+            Debug.#TimeMesures.shift();
+        }
+        Debug.#TimeMesures.push(delta);
+    }
+
+    static #DrawTimeMesure(Context)
+    {
+        if (Debug.#TimeMesures.length < 2)
+            return;
+        let total = 0;
+        let min = 0;
+        let max = Debug.#TimeMesures[0];
+        for (let a = 0; a < Debug.#TimeMesures.length; a++) {
+            let v = Debug.#TimeMesures[a]
+            total += v;
+            min = Math.min(v, min);
+            max = Math.max(v, max);
+        }
+        total = (total / Debug.#TimeMesures.length).toFixed(2);
+        min -= (max - min) * 0.1;
+        max += (max - min) * 0.1;
+
+        Debug.#TimeMesureVMax += (max - Debug.#TimeMesureVMax) * 0.01;
+        Debug.#TimeMesureVMin += (min - Debug.#TimeMesureVMin) * 0.01;
+
+        let w = 120;
+        let h = 30;
+        let y = 0;
+        let x = 0;
+
+        Context.fillStyle = "white"
+        Context.font = "12px Arial";
+        Context.textAlign = "start";
+        if (Debug.InfoPosition % 2 == 0)
+            x = 5;
+        else
+        {
+            x = Ecran_Largeur - 5;
+            Context.textAlign = "end";
+        }
+
+        if (Debug.InfoPosition > 1)
+            y = Ecran_Hauteur - 6 - 13 * (Debug.Textes.length) - h;
+        else
+            y = 15 + 13 * (Debug.Textes.length + 1);
+
+        Context.fillText(total, x, y);
+
+        if (Debug.InfoPosition % 2 == 1)
+            x -= w;
+
+        let imageCtx = document.createElement("canvas").getContext("2d"); // Création d'un canvas temporaire
+        imageCtx.canvas.width = w; // Modification taille
+        imageCtx.canvas.height = h; // Modification taille
+
+
+        imageCtx.fillStyle = "black"
+        imageCtx.fillRect(0,0,w,h);
+        imageCtx.fillStyle = Color.Couleur(0,255,0,0.2);
+        imageCtx.strokeStyle = Color.Couleur(0,255,0,1);
+        
+        let value = Debug.#TimeMesures[0];
+        let ox = 0
+        let oy = h * (1 - (value - Debug.#TimeMesureVMin) / (Debug.#TimeMesureVMax - Debug.#TimeMesureVMin))
+        imageCtx.beginPath();
+        imageCtx.moveTo(ox, oy);
+        for (let p = 0; p < Debug.#TimeMesures.length; p++) {
+            value = Debug.#TimeMesures[p];
+            ox = p * w / (Debug.#TimeMesures.length - 1)
+            oy = h * (1 - (value - Debug.#TimeMesureVMin) / (Debug.#TimeMesureVMax - Debug.#TimeMesureVMin))
+            imageCtx.lineTo(ox, oy);
+        }
+        imageCtx.stroke();
+        imageCtx.lineTo(w, h);
+        imageCtx.lineTo(0, h);
+        imageCtx.fill();
+
+        Context.drawImage(imageCtx.canvas, x, y);
+
+
+    }
+
+
+
+
+    static #DeplaceCamera(Delta)
     {
         if (Clavier.ToucheBasse("j"))
         {
-            Camera.Direction += 1
-            Camera.Direction = Camera.Direction % 360
+            Camera.Direction += Delta
         }
         if (Clavier.ToucheBasse("l"))
         {
-            Camera.Direction -= 1
-            Camera.Direction = Camera.Direction % 360
+            Camera.Direction -= Delta
         }
         if (Clavier.ToucheBasse("i"))
         {
-            Camera.Zoom += 3 * Camera.Zoom / 100
+            Camera.Zoom += Delta * 0.03 * Camera.Zoom
         }
         if (Clavier.ToucheBasse("k"))
         {
-            Camera.Zoom -= 3 * Camera.Zoom / 100
+            Camera.Zoom -= Delta * 0.03 * Camera.Zoom
             //Camera.Zoom = Math.max(Camera.Zoom, 0)
         }
 
+        let direction = Matrix.fromrotation(-Camera.RadDirection);
+        let vec = Vector.Zero;
         if (Clavier.ToucheBasse("q"))
         {
-            Camera.X -= 300 / Camera.Zoom;
+            vec.x -= 1;
         }
         if (Clavier.ToucheBasse("z"))
         {
-            Camera.Y += 300 / Camera.Zoom;
+            vec.y -= 1;
         }
         if (Clavier.ToucheBasse("d"))
         {
-            Camera.X += 300 / Camera.Zoom;
+            vec.x += 1;
         }
         if (Clavier.ToucheBasse("s"))
         {
-            Camera.Y -= 300 / Camera.Zoom;
+            vec.y += 1;
         }
+        let dir = direction.time(vec.normalize(Delta * 3 / Camera.Zoom));
+        Camera.X += dir.x;
+        Camera.Y += dir.y;
+
 
         if (Clavier.ToucheJusteBasse("a"))
         {
@@ -135,22 +255,6 @@ class Debug
     }
 
     /**
-     * Ajoute un vecteur dans la liste de dessin
-     * @param {Vecteur2} centre Point de départ du vecteur
-     * @param {Vecteur2} direction Sens de déplacement relatif au centre
-     */
-    static AjoutVecteur(centre,direction)
-    {
-        Debug.Vecteurs.push(
-            {
-                x0: Camera.AdapteX(centre.X), 
-                y0: Camera.AdapteY(centre.Y), 
-                x1: Camera.AdapteX(centre.X + direction.X), 
-                y1: Camera.AdapteY(centre.Y - direction.Y)
-            })
-    }
-
-    /**
      * Dessin 
      * @param {context} Context Context de dessin
      * @param {Array} vec Informations sur le vecteur à tracé
@@ -160,14 +264,15 @@ class Debug
         Context.save();
         Camera.DeplacerCanvas(Context)
 
-        Context.strokeStyle = "green"
+        Context.strokeStyle = vec.color;
+        Context.lineWidth = 2/Camera.Zoom;
 
         Context.beginPath();
-        Context.moveTo(vec.x0, vec.y0);
-        Context.lineTo(vec.x1, vec.y1);
+        Context.moveTo(vec.p1.x, vec.p1.y);
+        Context.lineTo(vec.p2.x, vec.p2.y);
         Context.stroke();
 
-        Context.strokeRect(vec.x1 - 1, vec.y1 - 1, 2, 2)
+        Context.strokeRect(vec.p2.x - 1, vec.p2.y - 1, 2, 2)
 
         Context.restore();
     }
@@ -182,8 +287,14 @@ class Debug
         Context.save();
         Camera.DeplacerCanvas(Context)
 
-        Context.fillStyle = Color.Couleur(255,0,0,0.2)
-        Context.fillRect(Camera.AdapteX(rect[0]), Camera.AdapteY(rect[1]), rect[2], rect[3])
+        
+        // Translate le canvas au centre de notre lutin 
+        Context.translate(rect[0].x, rect[0].y); 
+        // Tourne le canvas de l'angle souhaité
+        Context.rotate(rect[0].theta); 
+
+        Context.fillStyle = rect[1];
+        Context.fillRect(0, 0, rect[0].w, rect[0].h)
 
         Context.restore();
     }
@@ -223,10 +334,12 @@ class Debug
     {
         Context.save();
         Camera.DeplacerCanvas(Context)
+        // Déplace la camera a son centre
+        Context.translate(Camera.X, Camera.Y);
 
-        let maxsize = Math.sqrt(Ecran_Largeur * Ecran_Largeur + Ecran_Hauteur * Ecran_Hauteur) / (Camera.Zoom / 100.0)
+        let maxsize = Math.sqrt(Ecran_Largeur * Ecran_Largeur + Ecran_Hauteur * Ecran_Hauteur) / (Camera.Zoom)
         let BorderX = Camera.AdapteX(maxsize / 2);
-        let BorderY = Camera.AdapteY(- maxsize / 2);
+        let BorderY = Camera.AdapteY(maxsize / 2);
         let startX = BorderX % Size
         let startY = BorderY % Size
         while(startX < maxsize)
@@ -273,7 +386,7 @@ class Debug
             Context.textAlign = "start";
             for (let index = 0; index < Texte.length; index++) 
             {
-                Context.fillText(Texte[index], 5, 17 + 13 * index)
+                Context.fillText(Texte[index], 5, 15 + 13 * index)
             }
         }
         else if (Debug.InfoPosition == 1)
@@ -281,7 +394,7 @@ class Debug
             Context.textAlign = "end";
             for (let index = 0; index < Texte.length; index++) 
             {
-                Context.fillText(Texte[index], Ecran_Largeur - 5, 17 + 13 * index)
+                Context.fillText(Texte[index], Ecran_Largeur - 5, 15 + 13 * index)
             }
         }
         else if (Debug.InfoPosition == 2)
@@ -314,10 +427,26 @@ class Debug
 
     /**
      * Ajoute un rectangle à tracé dans la liste des rectangles
-     * @param {Array} rect Tableau avec X, Y, Largeur, Hauteur
+     * @param {Array} rect Tableau avec X, Y, Largeur, Hauteur (, Couleur) 
      */
-    static AjoutRectangle(rect)
+    static AjoutRectangle(rect, color = "#FF000033")
     {
-        Debug.Rectangles.push(rect);
+        Debug.Rectangles.push([rect, color]);
     }
+
+    /**
+     * Ajoute un vecteur dans la liste de dessin
+     * @param {Vector} centre Point de départ du vecteur
+     * @param {Vector} direction Sens de déplacement relatif au centre
+     * @param {string} color Couleur du vecteur
+     */
+     static AjoutVecteur(centre,direction, color = "green")
+     {
+         Debug.Vecteurs.push(
+             {
+                 p1: centre, 
+                 p2: centre.add(direction),
+                 color: color
+             })
+     }
 }
