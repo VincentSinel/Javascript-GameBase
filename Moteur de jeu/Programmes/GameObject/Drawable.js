@@ -1,7 +1,15 @@
 class Drawable extends GameObject
 {
+    // Rectangle contenant le rectangle de l'objet
     #BoundingBox = undefined;
 
+    /**
+     * Créer un Object avec une représentation visuel
+     * @constructor
+     * @param {float} X Position X
+     * @param {float} Y Position Y
+     * @param {float} Z Position Z
+     */
     constructor(X, Y, Z)
     {
         super(X, Y, Z)
@@ -15,44 +23,97 @@ class Drawable extends GameObject
         this.AllowRotation = true;
     }
 
-    PostSetParent()
-    {
-        if (this.Root)
-        {
-            if (!this.Root.DrawAbleObject.includes(this))
-                this.Root.DrawAbleObject.push(this);
-        }
-    }
+    //#region GETTER SETTER
 
 
+    /**
+     * Angle en radian.
+     * @override
+     * @type {float}
+     */
     set RadDirection(value)
     {
         this.#BoundingBox = undefined;
         super.RadDirection = value;
     }
+    get RadDirection()
+    {
+        return super.RadDirection
+    }
+    /**
+     * Angle en degré.
+     * @override
+     * @type {float}
+     */
     set Direction(value)
     {
         this.#BoundingBox = undefined;
         super.Direction = value;
     }
-    get RadDirection()
-    {
-        return super.RadDirection
-    }
     get Direction()
     {
         return super.Direction
     }
-
+    /**
+     * Largeur de l'objet à dessiner.
+     * @type {float}
+     */
     get TextWidth()
     {
         return 0;
     }
+    /**
+     * Hauteur de l'objet à dessiner.
+     * @type {float}
+     */
     get TextHeight()
     {
         return 0;
     }
-
+    /**
+     * Largeur de l'objet.
+     * @type {float}
+     */
+    get width()
+    {
+        return this.TextWidth * this.Zoom;
+    }
+    /**
+     * Hauteur de l'objet.
+     * @type {float}
+     */
+    get height()
+    {
+        return this.TextHeight * this.Zoom;
+    }
+    /**
+     * Taille de l'objet.
+     * @type {Vector}
+     */
+    get size()
+    {
+        return new Vector(this.width, this.height);
+    }
+    /**
+     * Rectangle contenant l'objet.
+     * @type {Rectangle}
+     */
+    get Rect()
+    {
+        return new Rectangle(this.TopLeftAngle, this.width, this.height, this.GRadDirection);
+    }
+    /**
+     * Rectangle de collision.
+     * @type {Rectangle}
+     */
+    get CollisionRect()
+    {
+        return this.Rect;
+    }
+    /**
+     * Récupère la position Haut Gauche de la zone de dessin.
+     * @type {Vector}
+     */
     get TopLeftAngle()
     {
         let x = this.width * this.CentreRotation.x;
@@ -65,60 +126,83 @@ class Drawable extends GameObject
             0)
     }
 
-    get width()
-    {
-        return this.TextWidth * this.Zoom;
-    }
-    get height()
-    {
-        return this.TextHeight * this.Zoom;
-    }
-    get size()
-    {
-        return new Vector(this.width, this.height);
-    }
 
-    get Rect()
-    {
-        return new Rectangle(this.TopLeftAngle, this.width, this.height, this.GRadDirection);
-    }
+    //#endregion
 
-    get CollisionRect()
-    {
-        return this.Rect;
-    }
 
+    /**
+     * Supprime l'objet enfant selectionné
+     * @override
+     * @param {GameObject} object Objet enfant à supprimer
+     */
+    RemoveChildren(object)
+    {
+        super.RemoveChildren(object)
+        this.Root.DeleteDrawable(object);
+    }
+    /**
+     * S'execute après l'assignation d'un parents pour ajouter l'object à la liste des objects de dessin d'un objet racine
+     * @override
+     */
+    PostSetRoot()
+    {
+        if (this.Root)
+        {
+            if (!this.Root.DrawAbleObject.includes(this))
+                this.Root.DrawAbleObject.push(this);
+            this.Root.SortDrawable();
+        }
+    }
+    /**
+     * Calcul le vecteur d'overlap d'un rectangle et de cette objet
+     * @param {Rectangle} rect Rectangle à tester
+     * @param {Vector} mouvement Direction de déplacement du rectangle à tester
+     * @returns {Vector} Vecteur représentant le déplacement à effectuer pour sortir de l'overlap
+     */
     GetOverlapVector(rect, mouvement)
     {
         return rect.collisionWithOverlap(this.CollisionRect);
     }
-
     /**
-     * Permet de montrer le tilemap
+     * Permet de montrer l'objet
      */
     Show()
     {
         this.Visible = true;
     }
- 
     /**
-     * Permet de cacher le tilemap
+     * Permet de cacher l'objet
      */
     Hide()
     {
         this.Visible = false;
     }
-
+    /**
+     * Detruit l'objet actuel
+     * @override
+     */
     Destroy()
     {
         super.Destroy()
-        this.Root.DrawAbleObject.splice(this.Root.DrawAbleObject.indexOf(this), 1);
+        if (this.Root)
+        {
+            this.Root.DrawAbleObject.splice(this.Root.DrawAbleObject.indexOf(this), 1);
+            this.Root.SortDrawable();
+        }
     }
-
+    /**
+     * Effectue le dessin de cette objet en prenant en compte la position de la camera, la rotation, la taille et la teinte
+     * @param {CanvasRenderingContext2D} Context Context de dessin
+     */
     Draw(Context)
     {
         if (this.Visible)
         {
+            // Sauvegarde la position actuel du canvas 
+            Context.save();
+            this.DessinSansCamera(Context);
+            Context.restore(); 
+
             // Sauvegarde la position actuel du canvas 
             Context.save();
 
@@ -160,11 +244,20 @@ class Drawable extends GameObject
             Context.restore(); 
         }
     }
-
+    /**
+     * Effectue le dessin voulue (a override)
+     * @param {CanvasRenderingContext2D} Context Contexte de dessin
+     */
     Dessin(Context)
     {
         // Override by element
     }
-
-    
+    /**
+     * Effectue le dessin voulue sans déplacement de camera (a override)
+     * @param {CanvasRenderingContext2D} Context Contexte de dessin
+     */
+    DessinSansCamera(Context)
+    {
+        // Override by element
+    }
 }

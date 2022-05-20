@@ -1,12 +1,13 @@
-class Combo
+class Combo extends Drawable
 {
     static Lettre = ["0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","!","?"," "];
 
-    constructor()
+    constructor(Scene)
     {
-        this.Multiplicateur = 1;
+        super(0,0,20000)
+        this.Multiplicateur = 20;
         this.Score = 0;
-        this.Flamme = new Lutin_SC(0, -235,"Images/Moto/FlammeAnimation.png", [200,70]);
+        this.Flamme = this.AddChildren(new Lutin_SC(0, 235,"Images/Moto/FlammeAnimation.png", [200,70]));
         this.Flamme.NextUpdate = 6;
         this.TMultiplicateur = Textures.Charger("Images/Moto/Multiplicateur.png");
         this.TScore = Textures.Charger("Images/Moto/Score.png");
@@ -14,6 +15,8 @@ class Combo
         this.ScoreGlobal = 0;
         this.LastScore = [];
         this.TimerAnimation = [];
+
+        this.Scene = Scene;
 
         this.Textes = ["bravo !", "incroyable !", "wow !", "super !", "genial !"];
         this.Message = "";
@@ -32,37 +35,37 @@ class Combo
             this.Flamme.CostumeSuivant();
         }
 
-        if (JeuMoto.Moto.Direction > 10 && !JeuMoto.Moto.Mort)
+        if (this.Scene.Moto.Direction > 10 && !this.Scene.Moto.Mort)
         {
             this.Score += this.Multiplicateur;
-            let xm = JeuMoto.Moto.ColRect[0];
-            for (let v = 0; v < JeuMoto.Voitures.length; v++) {
-                const element = JeuMoto.Voitures[v];
+            let xm = this.Scene.Moto.ColRect[0];
+            for (let v = 0; v < this.Scene.Voitures.length; v++) {
+                const element = this.Scene.Voitures[v];
                 if (!element.MultiplicateurAjouté)
                 {
-                    let h = element.ColRect[3] + JeuMoto.Moto.ColRect[3] + 100;
+                    let h = element.ColRect[3] + this.Scene.Moto.ColRect[3] + 100;
                     let y = element.ColRect[1] + element.ColRect[3] / 2 + h / 2;
-                    if (JeuMoto.Moto.Y <= y && JeuMoto.Moto.Y >= y - h)
+                    if (this.Scene.Moto.Y <= y && this.Scene.Moto.Y >= y - h)
                     {
-                        if ((xm + JeuMoto.Moto.ColRect[2]) >=  element.ColRect[0] && xm <= element.ColRect[0] + element.ColRect[2])
+                        if ((xm + this.Scene.Moto.ColRect[2]) >=  element.ColRect[0] && xm <= element.ColRect[0] + element.ColRect[2])
                         {
                             element.MultiplicateurAjouté = true;
                             this.Multiplicateur += 1
                             this.TimerMessage = 0
                             this.Message = this.Textes[Math.floor(Math.random() * this.Textes.length)];
-                            this.TailleMessage = 20 +  35 / Math.max(1, (Math.abs(JeuMoto.Moto.Y - (y - h/2))- 40) / 5);
+                            this.TailleMessage = 20 +  35 / Math.max(1, (Math.abs(this.Scene.Moto.Y - (y - h/2))- 40) / 5);
                             this.AngleMessage = Math.random() * 40 - 20
                         }
                     }
                 }
             }
         }
-        else if (JeuMoto.Moto.Mort)
+        else if (this.Scene.Moto.Mort)
         {
             this.Score = 0;
             this.Multiplicateur = 1;
         }
-        else if (JeuMoto.Moto.Direction == 0 && this.Score > 0)
+        else if (this.Scene.Moto.Direction == 0 && this.Score > 0)
         {
             this.LastScore.push(this.Score * this.Multiplicateur);
             this.TimerAnimation.push(0);
@@ -78,7 +81,10 @@ class Combo
         {
             if (this.Multiplicateur > 3)
             {
-                this.Flamme.Dessin(Context);
+                this.Flamme.Visible = true;
+            }
+            else{
+                this.Flamme.Visible = false;
             }
             this.DessinMultiplicateur(Context);
         }
@@ -87,7 +93,7 @@ class Combo
         let i = 0;
         while (i < this.LastScore.length)
         {
-            this.DessinScore(Context, this.LastScore[i], this.TimerAnimation[i]/3, 1 - this.TimerAnimation[i] / 180);
+            this.DessinScore(Context, this.LastScore[i], this.TimerAnimation[i]/3, 1 + this.TimerAnimation[i] / 180);
             this.TimerAnimation[i] += 1;
             if (this.TimerAnimation[i] >= 180)
             {
@@ -104,7 +110,7 @@ class Combo
         
         if (this.Message != "")
         {
-            this.DessinTexte(Context, this.Message, this.TimerMessage/3, this.TailleMessage, 1 - this.TimerMessage / 180);
+            this.DessinTexte(Context, this.Message, this.TimerMessage/3, this.TailleMessage, 1 + this.TimerMessage / 180);
             this.TimerMessage += 1;
             if (this.TimerMessage >= 180)
             {
@@ -118,10 +124,8 @@ class Combo
     {
         // Sauvegarde la position actuel du canvas 
         Context.save();
-        // Adapte la position à celle de la camera
-        Camera.DeplacerCanvas(Context)
         // Translate le canvas au centre de notre lutin 
-        Context.translate(Camera.AdapteX(this.Flamme.X), Camera.AdapteY(this.Flamme.Y));
+        //Context.translate(Camera.AdapteX(-this.Flamme.X), Camera.AdapteY(-this.Flamme.Y));
         // Déplace le canvas à l'angle haut droit de l'image
         Context.translate(-80, -35); 
 
@@ -164,7 +168,7 @@ class Combo
         // Adapte la position à celle de la camera
         Camera.DeplacerCanvas(Context)
         // Translate le canvas au centre de notre lutin 
-        Context.translate(Camera.AdapteX(JeuMoto.Moto.X + 40), Camera.AdapteY(JeuMoto.Moto.Y - 25 - position)); 
+        Context.translate(Camera.AdapteX(this.Scene.Moto.X + 40), Camera.AdapteY(this.Scene.Moto.Y - 25 - position)); 
         // Déplace le canvas à l'angle haut droit de l'image
         Context.translate(Math.max(-size * t.length / 2, 40 - Ecran_Largeur / 2), 0); 
         Context.globalAlpha = alpha;

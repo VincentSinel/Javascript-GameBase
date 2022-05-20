@@ -39,11 +39,17 @@ class Lutin extends Drawable
     
     get TextWidth()
     {
-        return this.Image.width;
+        if (this.Image)
+            return this.Image.width;
+        else
+            return 0;
     }
     get TextHeight()
     {
-        return this.Image.height;
+        if (this.Image)
+            return this.Image.height;
+        else
+            return 0;
     }
 
     ToucheSouris()
@@ -114,7 +120,8 @@ class Lutin extends Drawable
     Dessin(Context)
     {
         // Dessine le lutin
-        Context.drawImage(this.Image, 0, 0);  
+        if (this.Image)
+            Context.drawImage(this.Image, 0, 0);  
     /*
         if (this.Parle)
         {

@@ -8,7 +8,7 @@
 const Ecran_Largeur = 16 * 64;
 const Ecran_Hauteur = 9 * 64;
 const Diagonal = Math.sqrt(Ecran_Largeur * Ecran_Largeur + Ecran_Hauteur * Ecran_Hauteur)
-const CouleurFond = "black";
+var CouleurFond = "black";
 // Définition du nombre de FPS souhaité (Pour le calcul du temps nombre frame écoulé)
 const FPS = 60;
 const MAXFrameJump = 60;

@@ -13,8 +13,11 @@ var Player
  */
 function InitObjets()
 {
+    this.LoadTilemap();
+    
     // Ajouter ici les objets à creer
 
+    //SceneActuel = new JeuMoto()
     Player = new Joueur(0,0);
 
     Teleportation(Niveau1,0, 0)
@@ -29,6 +32,23 @@ function InitObjets()
 
     let UI2 = new UI_Button(Ecran_Largeur - 130, 0, 1000000000, 60, 25, "Plein Ecran")
     UI2.ClicAction = function(){ Camera.PleinEcran()};
+}
+
+/**
+ * Lance le chargement des tilemaps
+ */
+LoadTilemap()
+{
+    Tilesets.Add_Auto("Images/Tilemap/A1_Eau1.png", "A1");
+    Tilesets.Add_Auto("Images/Tilemap/A1_Eau2.png", "A1");
+    Tilesets.Add_Auto("Images/Tilemap/A2_Extérieur2.png", "A2");
+    Tilesets.Add_Auto("Images/Tilemap/A3_Mur3.png", "A3");
+    Tilesets.Add_Auto("Images/Tilemap/A4_Mur3.png", "A4");
+    Tilesets.Add_Auto("Images/Tilemap/A5_Extérieur12.png", "A5");
+    Tilesets.Add_Auto("Images/Tilemap/A5_Extérieur8.png", "A5");
+    Tilesets.Add_Auto("Images/Tilemap/A5_Intérieur9.png", "A5");
+    Tilesets.Add_Auto("Images/Tilemap/A5_Donjon4.png", "A5");
+    Tilesets.Add_Auto("Images/Tilemap/A5_Extérieur6.png", "A5");
 }
 
 /**
@@ -50,9 +70,9 @@ function Dessin(Context)
 function Teleportation(Scene, X,Y)
 {
     if (SceneActuel)
-        SceneActuel.SupprimerEnfant(Player);
+        SceneActuel.RemoveChildren(Player);
     SceneActuel = new Scene()
     Player.X = X
     Player.Y = Y
-    SceneActuel.AjoutEnfant(Player)
+    SceneActuel.AddChildren(Player)
 }

@@ -17,7 +17,7 @@ class Matrix
 
     /**
      * Créer une matrice de la taille donnée
-     * @class
+     * @constructor
      * @param {int} sizex Largeur de la matrice
      * @param {int} sizey Hauteur de la matrice
      */
@@ -117,6 +117,4 @@ class Matrix
             throw "L'objet n'est ni un vecteur ni une matrice"
         }
     }
-
-
 }

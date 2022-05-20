@@ -8,7 +8,7 @@ class Moto extends Lutin
     static VitesseCabrage = 1; // Vitesse de cabrage lorsque l'on appuie sur l'accelerateur
     static CoefficientChute = 1.7; // Vitesse de chute de la moto lorsque l'accelerateur n'est pas enfoncé
 
-    constructor()
+    constructor(Scene)
     {
         super(0,0,["Images/Moto/Moto1.png"])
 
@@ -18,6 +18,7 @@ class Moto extends Lutin
 
         this.OldX = -200;
         this.OldY = 0;
+        this.Scene = Scene
 
         this.CentreRotation = new Vector(24/155, 67.5/93);
 
@@ -35,10 +36,10 @@ class Moto extends Lutin
             this.AnimationMort(Delta)
             return;
         }
-
+ 
         this.Commande(Delta)
         
-        if((this.Contact() && this.Immortel <= 0) || this.Direction > 70)
+        if((this.Contact() && this.Immortel <= 0) || this.Direction < -70)
         {
             this.Mort = true;
         }
@@ -50,9 +51,9 @@ class Moto extends Lutin
 
     AnimationMort(Delta)
     {
-        if (this.Direction < 180)
+        if (this.Direction > -180)
         {
-            this.Direction += 10 * Delta;
+            this.Direction -= 10 * Delta;
             this.X += this.Vitesse * Delta;
             this.Vitesse = this.Vitesse * 0.99;
             this.TempsStop = 60;
@@ -90,7 +91,7 @@ class Moto extends Lutin
         else
         {
             this.TempsAppuie = Math.max(0, this.TempsAppuie - Delta * Moto.CoefficientChute);
-            if (this.Direction < 10)
+            if (this.Direction > -10)
             {
                 this.Acceleration = Math.max((this.Acceleration - 0.0001) * Moto.DecelationSol, 0);
             }
@@ -99,21 +100,21 @@ class Moto extends Lutin
 
         this.Vitesse = (1 - Math.pow(Math.E, -this.Acceleration * Moto.CoefficientVMax)) * Moto.VitesseMax + this.Acceleration * Moto.VitesseFixe;
 
-        JeuMoto.Aiguille.Direction = -30 + (this.Vitesse / Moto.VitesseMax) * 90 / 60 * Moto.VitesseMaxCompteur;
+        this.Scene.Aiguille.Direction = 30 - (this.Vitesse / Moto.VitesseMax) * 90 / 60 * Moto.VitesseMaxCompteur;
 
         if(Clavier.ToucheBasse("ArrowUp"))
-        {
-            this.Y += this.Vitesse / 2 * Delta
-            this.Y = Math.min(this.Y, 200)
-        }
-        if(Clavier.ToucheBasse("ArrowDown"))
         {
             this.Y -= this.Vitesse / 2 * Delta
             this.Y = Math.max(this.Y, -200)
         }
+        if(Clavier.ToucheBasse("ArrowDown"))
+        {
+            this.Y += this.Vitesse / 2 * Delta
+            this.Y = Math.min(this.Y, 200)
+        }
 
         
-        this.Direction = Math.max((this.TempsAppuie) * Moto.VitesseCabrage, 0)
+        this.Direction = Math.min(-(this.TempsAppuie) * Moto.VitesseCabrage, 0)
 
 
         Camera.X = Math.max(this.X + Ecran_Largeur / 2 * 5 / 6, Ecran_Largeur / 2);
@@ -126,7 +127,7 @@ class Moto extends Lutin
         let decalageX = (24 / 155) * L;
         let decalageY = (25.5 / 93) * H;
 
-        this.Z = -this.Y + decalageY;
+        this.Z = this.Y - decalageY;
 
         this.ColRect = [this.X - decalageX, this.Y - decalageY + H/3, L, H/3]
 
@@ -135,8 +136,8 @@ class Moto extends Lutin
 
     Contact()
     {
-        for (let v = 0; v < JeuMoto.Voitures.length; v++) {
-            const element = JeuMoto.Voitures[v].ColRect;
+        for (let v = 0; v < this.Scene.Voitures.length; v++) {
+            const element = this.Scene.Voitures[v].ColRect;
             if (Contacts.AABB(
                 new Vector(this.ColRect[0], this.ColRect[1]),
                 new Vector(this.ColRect[0] + this.ColRect[2], this.ColRect[1] + this.ColRect[3]),

@@ -8,7 +8,7 @@ class Color
 
     /**
      * Créer un nouvelle objet Color représentant une couleur.
-     * @class
+     * @constructor
      * @param {float} R Taux de rouge (valeur entre 0 et 1 ou entre 2 et 255)
      * @param {float} G Taux de vert  (valeur entre 0 et 1 ou entre 2 et 255)  
      * @param {float} B Taux de bleu  (valeur entre 0 et 1 ou entre 2 et 255)
@@ -30,7 +30,6 @@ class Color
         }
         this.A = A;
     }
-
     /**
      * Converti la couleur en string avec un alpha de 1 (opaque)
      * @returns {String} représentant la couleur pour un style CSS
@@ -47,7 +46,6 @@ class Color
     {
         return "rgba(" + this.R + "," + this.G + "," + this.B +"," + this.A + ")"
     }
-
     /**
      * Créer une couleur analogue avec un taux de luminosité différent
      * @param {float} p Pourcentage de luminosité
@@ -60,7 +58,6 @@ class Color
         let rgb = Color.HSL_RGB(hsl.H, hsl.S, hsl.L);
         return "rgba(" + rgb.R + "," + rgb.G + "," + rgb.B +"," + this.A + ")"
     }
-
     /**
      * Converti une couleur RGB en HSL
      * @param {int} r Taux de rouge entre 0 et 255

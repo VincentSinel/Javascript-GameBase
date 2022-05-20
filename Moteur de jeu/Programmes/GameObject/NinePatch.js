@@ -19,6 +19,7 @@ class NinePatch extends Drawable
     #TempCanvas
     /**
      * Création d'un NinePatch
+     * @constructor
      * @param {string} Texture Texture du rectangle
      * @param {Array<number>} Parametre Parametre de découpage (voir explication dans le fichier source)
      */

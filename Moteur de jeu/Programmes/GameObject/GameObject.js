@@ -1,8 +1,17 @@
 class GameObject
 {
+    // Angle de l'objet
     #Direction = 0;
+    // Racine des objets
     #Root = undefined;
 
+    /**
+     * Créer un GameObject a la position souhaité
+     * @constructor
+     * @param {float} X Position X
+     * @param {float} Y Position Y
+     * @param {float} Z Position Z
+     */
     constructor(X, Y, Z)
     {
         this.Position = new Vector(X,Y,Z);
@@ -16,13 +25,12 @@ class GameObject
         this.Destroyed = false;
     }
 
-    ChangeParent(parent)
-    { // TODO Remove previous parent child
-        this.Parent = Parent;
-        if (this.Parent)
-            this.Root = Parent.Root;
-    }
+    //#region  Getter Setter
 
+    /**
+     * Root GameObject of the Scene.
+     * @type {RootObject}
+     */
     get Root()
     {
         return this.#Root
@@ -30,12 +38,15 @@ class GameObject
     set Root(v)
     {
         this.#Root = v;
-        this.PostSetParent();
+        this.PostSetRoot();
         this.Children.forEach(element => {
             element.Root = v;
         });
     }
-
+    /**
+     * Position X.
+     * @type {float}
+     */
     get X()
     {
         return this.Position.x
@@ -44,6 +55,10 @@ class GameObject
     {
         this.Position.x = value
     }
+    /**
+     * Position Y.
+     * @type {float}
+     */
     get Y()
     {
         return this.Position.y
@@ -52,15 +67,24 @@ class GameObject
     {
         this.Position.y = value
     }
+    /**
+     * Position Z.
+     * @type {float}
+     */
     get Z()
     {
         return this.Position.z
     }
     set Z(value)
     {
-        this.Position.z = value
+        this.Position.z = value;
+        if (this.Root)
+            this.Root.SortDrawable();
     }
-
+    /**
+     * Angle en radian.
+     * @type {float}
+     */
     get RadDirection()
     {
         return this.#Direction;
@@ -69,6 +93,10 @@ class GameObject
     {
         this.#Direction = value;
     }
+    /**
+     * Angle en degré.
+     * @type {float}
+     */
     get Direction()
     {
         return this.#Direction * 180.0 / Math.PI;
@@ -77,37 +105,86 @@ class GameObject
     {
         this.#Direction = value * Math.PI / 180;
     }
-
+    /**
+     * Position Global dans la scene(vis à vis des objets parents).
+     * @type {Vector}
+     */
     get GPosition()
     {
         return new Vector(this.GX, this.GY, this.GZ);
     }
+    /**
+     * Position X Global dans la scene(vis à vis des objets parents).
+     * @type {float}
+     */
     get GX()
     {
         return this.Parent.GX + this.X * Math.cos(this.Parent.GRadDirection) - this.Y * Math.sin(this.Parent.GRadDirection);
     }
+    /**
+     * Position Y Global dans la scene(vis à vis des objets parents).
+     * @type {float}
+     */
     get GY()
     {
         return this.Parent.GY + this.X * Math.sin(this.Parent.GRadDirection) + this.Y * Math.cos(this.Parent.GRadDirection);
     }
+    /**
+     * Position Z Global dans la scene(vis à vis des objets parents).
+     * @type {float}
+     */
     get GZ()
     {
         return this.Z + this.Parent.GZ;
     }
+    /**
+     * Angle Global dans la scene en radian(vis à vis des objets parents).
+     * @type {float}
+     */
     get GRadDirection()
     {
         return this.Parent.GRadDirection + this.#Direction;
     }
 
+    /**
+     * Position X dans l'ecran (vis à vis de la camera).
+     * @type {float}
+     */
     get CX()
     {
         return Camera.AdapteX(this.GX)
     }
+    /**
+     * Position Y dans l'ecran (vis à vis de la camera).
+     * @type {float}
+     */
     get CY()
     {
         return Camera.AdapteX(this.CY)
     }
 
+    //#endregion
+
+    /**
+     * Change le parent actuel du GameObject
+     * @param {GameObject} parent Nouveau Parent
+     */
+     ChangeParent(parent)
+     {
+        if (this.Parent)
+        {
+            this.Parent.RemoveChildren(this);
+        }
+        this.Parent = Parent;
+        if (this.Parent)
+            this.Root = Parent.Root;
+     }
+
+    /**
+     * Ajoute un enfant à l'objet actuel
+     * @param {GameObject} object Enfant à ajouter
+     * @returns {GameObject} Objet créé
+     */
     AddChildren(object)
     {
         if (!(object instanceof GameObject))
@@ -119,30 +196,54 @@ class GameObject
         object.Root = this.Root;
         if (!this.Children.includes(object))
             this.Children.push(object);
-        object.PostSetParent();
-        return object
+        return object;
     }
 
-    PostSetParent()
+    /**
+     * Supprime l'objet enfant selectionné
+     * @param {GameObject} object Objet enfant à supprimer
+     * @return {boolean} Represente si l'action c'est effectué avec succés.
+     */
+    RemoveChildren(object)
+    {
+        if (object.Parent == this)
+        {
+            if (this.Children.includes(object))
+            {
+                this.Children.splice(this.Children.indexOf(object), 1);
+            }
+            object.Parent = undefined;
+            object.Root = undefined;
+            return true
+        }
+        return false
+    }
+
+    /**
+     * S'execute après l'assignation de la racine.
+     */
+    PostSetRoot()
     {
         // Add logic after parent set
     }
 
-    RemoveChildren(object)
-    {
-        if (this.Children.includes(object))
-        {
-            this.Children.splice(this.Children.indexOf(object), 1);
-        }
-        if (object.Parent == this)
-            object.Parent = undefined;
-    }
 
+    /**
+     * Supprime l'objet selectionné
+     */
     Destroy()
     {
         this.Parent.RemoveChildren(this);
+        while(this.Children.length > 0)
+        {
+            this.Children[0].Destroy();
+        }
     }
 
+    /**
+     * Mets à jour le GameObject ainsi que ces enfants
+     * @param {float} Delta Temps depuis la dernière frame
+     */
     Update(Delta)
     {
         this.Time += Delta;
@@ -152,6 +253,10 @@ class GameObject
         this.Calcul(Delta);
     }
 
+    /**
+     * Appel la mise à jour de l'utilisateur
+     * @param {float} Delta Temps depuis la dernière frame
+     */
     Calcul(Delta)
     {
         // Override by element

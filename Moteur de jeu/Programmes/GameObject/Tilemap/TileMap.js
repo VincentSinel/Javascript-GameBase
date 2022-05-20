@@ -340,7 +340,6 @@ class TileMap extends Drawable
     Calcul(Delta)
     {
         this.Time += Delta;
-
         // Calcul de la partie visible pour limiter le coût en ressource lors de la phase dessin.
 
         let newx = this.X - this.TextWidth * this.CentreRotation.x;

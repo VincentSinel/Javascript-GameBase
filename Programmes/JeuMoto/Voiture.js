@@ -17,7 +17,7 @@ class Voiture extends Lutin
 
         this.BasculerCostume(Math.floor(Math.random() * textures.length))
 
-        this.CentreRotation = new Vecteur2(0.5,1)
+        this.CentreRotation = new Vector(0.5,1)
 
         this.ColRect = [0,0,0,0]
 
@@ -30,7 +30,7 @@ class Voiture extends Lutin
 
         this.X -= this.Vitesse * Delta
 
-        this.Z = - this.Y 
+        this.Z = this.Y 
        
         
         let L = this.Image.width * this.Zoom / 100;

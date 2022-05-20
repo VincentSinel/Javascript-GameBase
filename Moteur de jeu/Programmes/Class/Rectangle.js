@@ -35,7 +35,7 @@ class Rectangle
 
     /**
      * Créer un Rectangle
-     * @class
+     * @constructor
      * @param {Vector} origin Vecteur représentant l'angle haut gauche du rectangle
      * @param {float} w Largeur du rectangle
      * @param {float} h Hauteur du rectangle
@@ -51,6 +51,8 @@ class Rectangle
         this.#_boundingbox = undefined;
     }
 
+    //#region GETTER SETTER
+
     /**
      * Bounding Box
      * @type {Rectangle}
@@ -65,36 +67,71 @@ class Rectangle
         }
         return this.#_boundingbox;
     }
-
+    /**
+     * Origine X
+     * @type {float}
+     */
     get x()
     {
         return this.origin.x;
     }
-
+    /**
+     * Origine Y
+     * @type {float}
+     */
     get y()
     {
         return this.origin.y;
     }
-
+    /**
+     * Centre X
+     * @type {float}
+     */
     get cx()
     {
         return this.x + this.w / 2
     }
+    /**
+     * Centre Y
+     * @type {float}
+     */
     get cy()
     {
         return this.y + this.h / 2
     }
+    /**
+     * Centre
+     * @type {Vector}
+     */
     get center()
     {
         return new Vector(this.cx, this.cy)
     }
 
+    //#endregion
+
+    /**
+     * Calcul l'aire du rectangle
+     * @returns {float} Aire du rectangle
+     */
     area()
     {
         return Math.abs(this.w * this.h);
     }
-
-    #computeBoundingBox() {
+    /**
+     * @typedef {Object} SimpleBox
+     * @property {number} x1 - The X Coordinate Top left
+     * @property {number} y1 - The Y Coordinate Top left
+     * @property {number} x2 - The X Coordinate Bottom Right
+     * @property {number} y2 - The Y Coordinate Bottom Right
+     */
+    /**
+     * Calcul la Bounding Box de ce rectangle
+     * @see {@link https://codereview.stackexchange.com/questions/267873/finding-the-minimum-bounding-box-of-a-rotated-rectangle}
+     * @returns {SimpleBox} Bounding Box.
+     */
+    #computeBoundingBox() 
+    {
         const x = this.origin.x;
         const y = this.origin.y;
         const result = (x1, x2, y1, y2) => ({x1, y1, x2, y2});
@@ -112,9 +149,18 @@ class Rectangle
             result(x + hx + wx, x,      y + hy,      y + wy) :
             result(x + wx,      x + hx, y + wy + hy, y);                
     }
-
-    
-    #computeAABBCenter(x, y, w, h, theta) {
+    /**
+     * Générer un BoundingBox d'un rectangle centré en XY
+     * @see {@link https://codereview.stackexchange.com/questions/267873/finding-the-minimum-bounding-box-of-a-rotated-rectangle}
+     * @param {float} x X Rectangle
+     * @param {float} y Y Rectangle
+     * @param {float} w Largeur Rectangle
+     * @param {float} h Hauteur Rectangle
+     * @param {float} theta Angle Rectangle (Radian)
+     * @returns {SimpleBox} Bounding Box.
+     */
+    #computeAABBCenter(x, y, w, h, theta) 
+    {
         const ux = Math.cos(theta) * 0.5; // half unit vector along w
         const uy = Math.sin(theta) * 0.5;
         const wx = w * ux, wy = w * uy; // vector along w
@@ -137,7 +183,11 @@ class Rectangle
           y2: Math.max(y1, y2, y3, y4),
         };
     }
-
+    /**
+     * Vérifie si il y a collision entre deux rectangle
+     * @param {Rectangle} rectangle Rectangle à tester vis à vis de celui-ci
+     * @returns {boolean} Représente si il y a collision
+     */
     collide(rectangle)
     {
         if (this.angle == 0 && rectangle.angle == 0)
@@ -146,12 +196,14 @@ class Rectangle
         }
         else
         {
-            return this.#rotatedRectanglesCollide(
-                this.x, this.y , this.w, this.h, this.theta,
-                rectangle.x, rectangle.y, rectangle.w, rectangle.h, rectangle.theta);
+            return this.#rotatedRectanglesCollide(this, rectangle);
         }
     }
-
+    /**
+     * Calcul le déplacement nécessaire à effectuer par le rectangle pour sortir de celui-ci
+     * @param {Rectangle} rectangle Rectangle à tester vis à vis de celui-ci
+     * @returns {Vector} Déplacement à effectuer
+     */
     collisionWithOverlap(rectangle)
     {
         if (this.collide(rectangle))
@@ -186,13 +238,35 @@ class Rectangle
         }
         return Vector.Zero;
     }
-
+    /**
+     * Test la collision de deux rectangle sans rotation 
+     * @param {Rectangle} R1 Rectangle 1
+     * @param {Rectangle} R2 Rectangle 2
+     * @returns {boolean} Booléan indiquant si il y a collision
+     */
     #AABB(R1, R2)//X1, Z1, X2, Z2)
     {
         return R1.x < R2.x + R2.w && R2.x > R1.x + R1.w && R1.y < R2.y + R2.h && R2.y > R1.y + R1.h
     }
+    /**
+     * Test le contact entre deux rectangle avec rotation
+     * @param {Rectangle} rect1 Rectangle 1
+     * @param {Rectangle} rect2 Rectangle 2
+     * @returns {boolean} Booléan indiquant si il y a collision
+     */
+    #rotatedRectanglesCollide(rect1, rect2) 
+    {
+        let r1X = rect1.x;
+        let r1Y = rect1.y;
+        let r1W = rect1.w;
+        let r1H = rect1.h;
 
-    #rotatedRectanglesCollide(r1X, r1Y, r1W, r1H, r1A, r2X, r2Y, r2W, r2H, r2A) {
+        let r2X = rect2.x;
+        let r2Y = rect2.y;
+        let r2W = rect2.w;
+        let r2H = rect2.h;
+        let r2A = rect2.theta;
+
         let r1HW = r1W / 2;
         let r1HH = r1H / 2;
         let r2HW = r2W / 2;
@@ -230,16 +304,23 @@ class Rectangle
       
         return r1X < r2BBX + r2BBW && r1X + r1W > r2BBX && r1Y < r2BBY + r2BBH && r1Y + r1H > r2BBY &&
                r2X < r1BBX + r1BBW && r2X + r2W > r1BBX && r2Y < r1BBY + r1BBH && r2Y + r2H > r1BBY;
-      }
-
-
+    }
+    /**
+     * Fait tourner un rectangle vis à vis d'un centre précis.
+     * @param {Vector} center Centre de rotation
+     * @param {float} angle Angle de rotation en radian
+     * @returns {Rectangle} Nouveau rectangle suite à la rotation
+     */
     rotate(center, angle)
     {
         let cto = this.origin.to(center);
         cto = Matrix.fromrotation(angle).time(cto);
         return new Rectangle(cto.add(center), this.w, this.h, angle + this.theta);
     }
-
+    /**
+     * Converti l'élément en texte
+     * @returns {string} Représentation en texte du rectangle
+     */
     toString()
     {
         return [this.x, this.y, this.w, this.h, this.theta].toString();
