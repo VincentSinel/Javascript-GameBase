@@ -1,3 +1,7 @@
+/**
+ * Objet dessinable
+ * @extends GameObject
+ */
 class Drawable extends GameObject
 {
     // Rectangle contenant le rectangle de l'objet
@@ -161,7 +165,7 @@ class Drawable extends GameObject
      */
     GetOverlapVector(rect, mouvement)
     {
-        return rect.collisionWithOverlap(this.CollisionRect);
+        return rect.collide_Overlap(this.CollisionRect);
     }
     /**
      * Permet de montrer l'objet

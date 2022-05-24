@@ -1,9 +1,15 @@
+/**
+ * Lutin acceptant un spritesheet comme texture au lieu d'une liste d'image
+ * @class
+ * @extends Lutin
+ */
 class Lutin_SC extends Lutin
 {
     #Decoupage
 
     /**
      * Création d'un lutin manipulable avec des fonction simple
+     * @constructor
      * @param {number} X Position X du lutin
      * @param {number} Y Position Y du lutin
      * @param {string} Texture Texture à utiliser;
@@ -17,15 +23,30 @@ class Lutin_SC extends Lutin
         this.CostumeActuel = Math.max(Math.min(IdCostum, this.MaxCostume),0);
     }
 
+    //#region GETTER SETTER
+
+    /**
+     * Largeur de la texture du lutin
+     * @override
+     * @type {float}
+     */
     get TextWidth()
     {
         return this.Decoupage[0];
     }
+    /**
+     * Hauteur de la texture du lutin
+     * @override
+     * @type {float}
+     */
     get TextHeight()
     {
         return this.Decoupage[1];
     }
-
+    /**
+     * Tableau de découpage de la texture
+     * @type {Array<number>}
+     */
     get Decoupage()
     {
         return this.#Decoupage;
@@ -36,68 +57,56 @@ class Lutin_SC extends Lutin
         this.Recalcul();
     }
 
+    //#endregion
+
+    /**
+     * Recalcul les paramètres du lutin lorsque la taille de découpage change
+     */
     Recalcul()
     {
         let w = this.Image.width / this.Decoupage[0]
         let h = this.Image.height / this.Decoupage[1]
         this.MaxCostume = w * h - 1;
     }
-
     /**
-     * Calcul et renvoie un tableau contenant la position relative à la camera des angles de notre lutin avec le costume actuel.
-     * @returns Liste des points définissant le rectangle de l'image
+     * Selectionne le costume suivant
+     * @override
      */
-     Rectangle()
-     {
-         let ar = [];
-         let offw = this.Zoom / 100.0 * this.Decoupage[0] * this.CentreRotation.X;
-         let offh = this.Zoom / 100.0 * this.Decoupage[1] * this.CentreRotation.Y;
-         let cos = Math.cos(this.Direction * Math.PI / 180);
-         let sin = Math.sin(this.Direction * Math.PI / 180);
-         ar.push(new Vecteur2(this.X + (-offw * cos - offh * sin), this.Y + (-offw * sin + offh * cos)));
-         ar.push(new Vecteur2(this.X + (+offw * cos - offh * sin), this.Y + (+offw * sin + offh * cos)));
-         ar.push(new Vecteur2(this.X + (+offw * cos + offh * sin), this.Y + (+offw * sin - offh * cos)));
-         ar.push(new Vecteur2(this.X + (-offw * cos + offh * sin), this.Y + (-offw * sin - offh * cos)));
-         return ar;
-     }
-
-     RectangleWH()
-    {
-        let ar = [];
-        let offw = this.Zoom / 100.0 * this.Decoupage[0] * this.CentreRotation.X;
-        let offh = this.Zoom / 100.0 * this.Decoupage[1] * this.CentreRotation.Y;
-        let cos = Math.cos(this.Direction * Math.PI / 180);
-        let sin = Math.sin(this.Direction * Math.PI / 180);
-        ar.push(new Vecteur2(this.X + (-offw * cos - offh * sin), this.Y + (-offw * sin + offh * cos)));
-        ar.push(this.Decoupage[0] * this.Zoom / 100.0);
-        ar.push(this.Decoupage[1] * this.Zoom / 100.0);
-        ar.push(this.Direction);
-        return ar;
-    }
-
-
     CostumeSuivant()
     {
         this.CostumeActuel = (this.CostumeActuel + 1) % this.MaxCostume
     }
-
+    /**
+     * Selectionne le costume précédent
+     * @override
+     */
     CostumePrecedent()
     {
         this.CostumeActuel = (this.CostumeActuel + this.MaxCostume - 1) % this.MaxCostume
     }
-
+    /**
+     * Selection le costume choisi
+     * @override
+     * @param {int} index Index du costume
+     */
     BasculerCostume(index)
     {
         this.CostumeActuel = Math.round(index) % this.MaxCostume
     }
-
-
-
+    /**
+     * Effectue les calculs lié au lutin
+     * @override
+     * @param {float} Delta Frame depuis la précédente mise à jour
+     */
     Calcul(Delta)
     {
         super.Calcul(Delta)
     }
-
+    /**
+     * Effecue le dessin du lutin
+     * @override
+     * @param {CanvasRenderingContext2D} Context Contexte de dessin
+     */
     Dessin(Context)
     {
         let x = this.Decoupage[0] * (this.CostumeActuel % (super.TextWidth / this.Decoupage[0]));

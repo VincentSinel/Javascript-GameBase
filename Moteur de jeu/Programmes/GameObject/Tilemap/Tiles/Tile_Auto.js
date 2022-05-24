@@ -1,12 +1,39 @@
+/**
+ * Tile auto type RPG Maker
+ * @class
+ * @extends Tile
+ */
 class Tile_Auto extends Tile
 {
     static #Frame = 0;
     static Frame = 0;
     static #NextUpdate = 0;
     static Vitesse = 5;
-    constructor(Texture, TailleTile, Type = "A2", Contact = false)
+
+    /**
+     * Mets à jour l'animation des autotiles
+     * @param {float} Delta Frame depuis la précédente mise à jour
+     */
+    static Calcul(Delta)
     {
-        super(Texture, Contact, TailleTile)
+        while(Tile_Auto.#NextUpdate < TotalTime)
+        {
+            Tile_Auto.#Frame = (Tile_Auto.#Frame + 1) % 4;
+            Tile_Auto.Frame = Tile_Auto.#Frame - Math.floor(Tile_Auto.#Frame / 3) * 2;
+            Tile_Auto.#NextUpdate += 1 / Tile_Auto.Vitesse;
+        }
+    }
+
+    /**
+     * Créer un nouveau auto tile
+     * @constructor
+     * @param {string} Texture Nom du fichier image
+     * @param {int} TailleTile Taille du tile
+     * @param {string} Type Type d'auto tile selon RPG Maker (A1,A2,A3,A4,A5)
+     */
+    constructor(Texture, TailleTile, Type = "A2")
+    {
+        super(Texture, TailleTile)
         this.Voisin = true
         this.Type = Type;
 
@@ -38,16 +65,15 @@ class Tile_Auto extends Tile
         }
     }
 
-    static Calcul(Delta)
-    {
-        while(Tile_Auto.#NextUpdate < TotalTime)
-        {
-            Tile_Auto.#Frame = (Tile_Auto.#Frame + 1) % 4;
-            Tile_Auto.Frame = Tile_Auto.#Frame - Math.floor(Tile_Auto.#Frame / 3) * 2;
-            Tile_Auto.#NextUpdate += 1 / Tile_Auto.Vitesse;
-        }
-    }
-
+    /**
+     * Effectue le dessin du tile à un emplacement précis du context
+     * @param {CanvasRenderingContext2D} Context Contexte de dessin
+     * @param {float} X Position X du tile
+     * @param {float} Y Position Y du tile
+     * @param {int} [index = 0] index dans l'autotile
+     * @param {int} [voisin = 0] Nombre binaire représentant la présence de voisin pour le calcul de l'autotile
+     * @param {int} [forceframe = -1] Force le choix d'une frame d'animation précise
+     */
     Dessin(Context, X, Y, index = 0, voisin = 0, forceframe = -1)
     {
         if (forceframe == -1)
@@ -143,7 +169,12 @@ class Tile_Auto extends Tile
                 this.TailleTile, this.TailleTile);
         }
     }
-
+    /**
+     * Récupère le tableau de découpage pour un tile type A1
+     * @param {Array<int>} Voisin Voisin du tiles
+     * @param {int} forceframe Frame à afficher
+     * @returns {Array<int>} Tableau de découpage
+     */
     CreerTileA1(Voisin, forceframe)
     {
         let ti = [];
@@ -174,7 +205,11 @@ class Tile_Auto extends Tile
         
         return ti; 
     }
-
+    /**
+     * Récupère le tableau de découpage pour un tile type A1 / A2 / A4
+     * @param {Array<int>} Voisin Voisin du tiles
+     * @returns {Array<int>} Tableau de découpage
+     */
     CreerTileA124(Voisin)
     {
         let ti = [];
@@ -234,7 +269,11 @@ class Tile_Auto extends Tile
 
         return ti;
     }
-
+    /**
+     * Récupère le tableau de découpage pour un tile type A3 / A4
+     * @param {Array<int>} Voisin Voisin du tiles
+     * @returns {Array<int>} Tableau de découpage
+     */
     CreerTileA34(Voisin)
     {
         let ti = [];

@@ -13,16 +13,14 @@ var Player
  */
 function InitObjets()
 {
-    this.LoadTilemap();
+    LoadTilemap();
     
     // Ajouter ici les objets à creer
+    //Player = new Joueur(0,0);
 
-    //SceneActuel = new JeuMoto()
-    Player = new Joueur(0,0);
+    Scene.ChangeScene(Scene1, 0, 0)
 
-    Teleportation(Niveau1,0, 0)
-
-    Debug.Parametre.Camera = true;
+    //Debug.Parametre.Camera = false;
     Debug.Parametre.Grille = true;
 
     
@@ -37,7 +35,7 @@ function InitObjets()
 /**
  * Lance le chargement des tilemaps
  */
-LoadTilemap()
+function LoadTilemap()
 {
     Tilesets.Add_Auto("Images/Tilemap/A1_Eau1.png", "A1");
     Tilesets.Add_Auto("Images/Tilemap/A1_Eau2.png", "A1");
@@ -65,14 +63,4 @@ function Calcul(Delta)
 function Dessin(Context)
 {
     // Ajouter ici la mise a jour des dessin d'objets
-}
-
-function Teleportation(Scene, X,Y)
-{
-    if (SceneActuel)
-        SceneActuel.RemoveChildren(Player);
-    SceneActuel = new Scene()
-    Player.X = X
-    Player.Y = Y
-    SceneActuel.AddChildren(Player)
 }

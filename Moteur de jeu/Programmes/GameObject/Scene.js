@@ -1,5 +1,67 @@
+/**
+ * Un scene gére les GameObject qui lui sont rattaché, effectue le dessin et le calcul
+ */
 class Scene
 {
+    static #Exiting = false
+    static #ChangingFunction = Scene.#WaitForExiting();
+
+    //static CurrentScene = new Scene("Main")
+    
+    /**
+     * Effectue le changement de scene (avec fade in et fade out)
+     * @param {Scene} scene Nouvelle Scene (instanciable)
+     * @param {float} X Nouvelle Position X camera
+     * @param {float} Y Nouvelle Position Y camera
+     */
+    static ChangeScene(scene, X = 0,Y = 0)
+    {
+        Scene.#Exiting = [scene, X, Y];
+    }
+
+    /**
+     * Gère la transition entre la scene actuel et la nouvelle
+     * @param {float} Delta Frame depuis la dernière mise à jour
+     */
+    static * #WaitForExiting(Delta)
+    {
+        while(true)
+        {
+            fading = 1;
+            if (SceneActuel)
+            {
+                while(fading != 0)
+                {
+                    yield 0;
+                }
+                SceneActuel.Exit();
+            }
+            else
+            {
+                fade = 1.0
+            }
+            SceneActuel = new Scene.#Exiting[0]()
+            SceneActuel.Enter(Scene.#Exiting[1],Scene.#Exiting[2]);
+            fading = -1;
+            while(fading != 0)
+            {
+                yield 0;
+            }
+            Scene.#Exiting = false;
+            yield 1;
+        }
+    }
+    /**
+     * Mets à jour global pour le changement de scene
+     * @param {float} Delta Nombre de frame depuis la dernière mise à jour
+     */
+    static Update(Delta)
+    {
+        if (Scene.#Exiting)
+        {
+            Scene.#ChangingFunction.next(Delta)
+        }
+    }
 
     /**
      * Créer une scene
@@ -10,6 +72,10 @@ class Scene
     {
         this.Root = new RootObject(this);
         this.Name = Name;
+        this.Pause = false;
+        this.KeepUpdating = false;
+
+        this.Exiting = false;
     }
     /**
      * Ajoute un GameObject dans la scene
@@ -36,8 +102,11 @@ class Scene
      */
     Update(Delta)
     {
-        this.Calcul(Delta);
-        this.Root.Update(Delta);
+        if (this.KeepUpdating || (fading == 0 && fade == 0) && !this.Pause)
+        {
+            this.Calcul(Delta);
+            this.Root.Update(Delta);
+        }
     }
     /**
      * Calcul dans la scene à override.
@@ -55,4 +124,28 @@ class Scene
     {
         this.Root.Draw(Context);
     }
+
+    /**
+     * S'execute lorsque la scene est sur le point d'être quitté
+     */
+    Exit()
+    {
+        // Override by element
+    }
+
+    /**
+     * S'execute lorsque la scene est chargé
+     * @param {Float} X Nouvelle position X Camera
+     * @param {float} Y Nouvelle position Y Camera
+     */
+    Enter(X, Y)
+    {
+        Camera.X = X;
+        Camera.Y = Y;
+    }
+
+    // * #LocalWaitForExiting()
+    // {
+
+    // }
 }

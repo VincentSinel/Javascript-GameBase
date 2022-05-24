@@ -3,8 +3,10 @@
  * Un NinePatch est un style de rectangle, défini par une texture divisé en 9 partie. 
  * Cela permet de créer un rectangle au proportion quelconque sans déformer la texture de base.
  * 
- *              Largeur 1           Largeur 2
- *              <------->           <------->
+ * @see {@link https://medium.com/flobiz-blog/create-resizable-bitmaps-9-patch-files-48c774db4526}
+ * 
+ *             Largeur 1           Largeur 2
+ *             <───────>│         │<───────>
  *  Hauteur  ↑ █████████│█████████│█████████
  *     1     ↓ █████████│█████████│█████████
  *             ─────────┼─────────┼─────────
@@ -21,7 +23,7 @@ class NinePatch extends Drawable
      * Création d'un NinePatch
      * @constructor
      * @param {string} Texture Texture du rectangle
-     * @param {Array<number>} Parametre Parametre de découpage (voir explication dans le fichier source)
+     * @param {Array<number>} [Parametre = [0,0,0,0]] Parametre de découpage (voir explication dans le fichier source)
      */
     constructor(X,Y,Texture, Parametre = [0,0,0,0])
     {
@@ -34,6 +36,10 @@ class NinePatch extends Drawable
         this.Reajuster(0,0);
     }
 
+    /**
+     * Canvas temporaire
+     * @type {CanvasRenderingContext2D}
+     */
     get TempCanvas()
     {
         return this.#TempCanvas;
@@ -50,13 +56,18 @@ class NinePatch extends Drawable
         this.H = Math.max(height, this.Parametre[2] + this.Parametre[3]);
         this.ResizeDessin();
     }
-
+    /**
+     * Change la texture du 9 patch
+     * @param {string} Texture Texture à appliquer
+     */
     ChangeTexture(Texture)
     {
         this.Texture = Texture;
         this.Image = Textures.Charger(Texture);
     }
-
+    /**
+     * Redessine la boite lorsque les dimensions change
+     */
     ResizeDessin()
     {
         this.#TempCanvas = document.createElement("canvas").getContext("2d");
@@ -102,7 +113,10 @@ class NinePatch extends Drawable
         this.#TempCanvas.drawImage(this.Image, this.Parametre[0], this.Parametre[2], this.Image.width - w, this.Image.height - h,
             x2, y2, w2, h2);
     }
-    
+    /**
+     * Dessine la 9-Patch sur le context fournis
+     * @param {CanvasRenderingContext2D} Context Context de dessin
+     */
     Dessin(Context)
     {
         Context.drawImage(this.#TempCanvas.canvas, 0, 0);

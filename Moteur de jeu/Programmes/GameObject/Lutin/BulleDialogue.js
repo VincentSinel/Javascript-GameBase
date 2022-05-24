@@ -1,5 +1,7 @@
 /**
  * Bulle de dialogue avec ajustement automatique de la taille.
+ * @class
+ * @extends NinePatch
  */
 class BulleDialogue extends NinePatch
 {
@@ -8,6 +10,7 @@ class BulleDialogue extends NinePatch
     #FontSize
     /**
      * Création d'une bulle de dialogue contenant un texte précis.
+     * @constructor
      * @param {string} Texte Texte à afficher
      * @param {number} X Position X de l'origine de la bulle
      * @param {number} Y Position Y de l'origine de la bulle
@@ -27,6 +30,12 @@ class BulleDialogue extends NinePatch
         this.AllowScaling = false;
     }
 
+    //#region GETTER SETTER
+
+    /**
+     * Texte à afficher
+     * @type {string}
+     */
     get Texte()
     {
         return this.#Texte
@@ -36,6 +45,10 @@ class BulleDialogue extends NinePatch
         this.#Texte = v;
         this.CalculTailleBulle()
     }
+    /**
+     * Font du texte
+     * @type {string}
+     */
     get Font()
     {
         return this.#Font
@@ -46,6 +59,10 @@ class BulleDialogue extends NinePatch
         this.TempCanvas.font = this.FontSize + "px " + this.Font;
         this.CalculTailleBulle()
     }
+    /**
+     * Taille du texte
+     * @type {float}
+     */
     get FontSize()
     {
         return this.#FontSize
@@ -56,20 +73,31 @@ class BulleDialogue extends NinePatch
         this.TempCanvas.font = this.FontSize + "px " + this.Font;
         this.CalculTailleBulle()
     }
-
+    /**
+     * Largeur de la texture
+     * @override
+     * @type {float}
+     */
     get TextWidth()
     {
         return this.W;
     }
+    /**
+     * Hauteur de la texture
+     * @override
+     * @type {float}
+     */
     get TextHeight()
     {
         return this.H;
     }
 
+    //#endregion
+
     /**
      * Prépare le contenue et la bulle pour l'affichage d'un texte. Un contexte de canvas est nécessaire pour effectuer les mesures.
      * La largeur maximal de la bulle est 250 px par default
-     * @param {context} Context Context d'un canvas
+     * @param {CanvasRenderingContext2D} Context Context d'un canvas
      * @param {number} MaxW Largeur maximum de la bulle de dialogue
      */
     CalculTailleBulle(MaxW = 250)
@@ -139,7 +167,9 @@ class BulleDialogue extends NinePatch
         }
         this.CentreRotation = new Vector(34 / this.W, 1);
     }
-
+    /**
+     * Recréer la bulle en cas de modification de taille ou de texte
+     */
     ResizeDessin()
     {
         super.ResizeDessin();
@@ -152,5 +182,4 @@ class BulleDialogue extends NinePatch
             }
         }
     }
-
 }

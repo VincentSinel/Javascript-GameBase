@@ -5,7 +5,7 @@ class Moto extends Lutin
     static CoefficientVMax = 0.02; // Acceleration jusqu'a vitesse max
     static VitesseFixe = 0.005; // Vitesse fixe constant permettant de dépasser la vitesse max sur le long terme
     static DecelationSol = 0.9; // Décélération lorsque la roue touche le sol
-    static VitesseCabrage = 1; // Vitesse de cabrage lorsque l'on appuie sur l'accelerateur
+    static VitesseCabrage = 1.2; // Vitesse de cabrage lorsque l'on appuie sur l'accelerateur
     static CoefficientChute = 1.7; // Vitesse de chute de la moto lorsque l'accelerateur n'est pas enfoncé
 
     constructor(Scene)
@@ -76,11 +76,12 @@ class Moto extends Lutin
     }
 
     Commande(Delta)
-    {
+    {   
         this.X = this.OldX;
         this.Y = this.OldY;
 
 
+        
         this.X += this.Vitesse * Delta
 
         if(Clavier.ToucheBasse(" "))
@@ -122,28 +123,22 @@ class Moto extends Lutin
         this.OldX = this.X;
         this.OldY = this.Y;
 
-        let L = (this.Zoom / 100) * this.Image.width;
-        let H = (this.Zoom / 100) * this.Image.height;
+        let L = this.Zoom * this.Image.width;
+        let H = this.Zoom * this.Image.height;
         let decalageX = (24 / 155) * L;
         let decalageY = (25.5 / 93) * H;
 
-        this.Z = this.Y - decalageY;
+        this.Z = this.Y + decalageY;
 
-        this.ColRect = [this.X - decalageX, this.Y - decalageY + H/3, L, H/3]
-
+        this.ColRect = Rectangle.FromPosition(this.X - decalageX, this.Y + decalageY - H/3, L, H/3)
+        //Debug.AjoutRectangle(this.ColRect, "green")
     }
 
 
     Contact()
     {
         for (let v = 0; v < this.Scene.Voitures.length; v++) {
-            const element = this.Scene.Voitures[v].ColRect;
-            if (Contacts.AABB(
-                new Vector(this.ColRect[0], this.ColRect[1]),
-                new Vector(this.ColRect[0] + this.ColRect[2], this.ColRect[1] + this.ColRect[3]),
-                new Vector(element[0], element[1]),
-                new Vector(element[0] + element[2], element[1] + element[3])
-            ))
+            if (this.ColRect.collide(this.Scene.Voitures[v].ColRect))
                 return true;
         }
         return false;

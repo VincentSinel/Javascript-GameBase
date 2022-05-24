@@ -1,3 +1,7 @@
+/**
+ * Représente un tilemap
+ * @class
+ */
 class TileMap extends Drawable
 {
 
@@ -5,14 +9,14 @@ class TileMap extends Drawable
     #H;
 
     static SauvegardeVersion = "2.0"
+
     /**
-     * Création d'un lutin manipulable avec des fonction simple
-     * Utiliser TileMap.Edition() activer l'édition du tilemap
-     * Utiliser TileMap.Sauvegarder() pour sauvegarder le contenue du tilemap en un fichier .json
-     * Utiliser TileMap.Charger() pour charger le contenue depuis la base de donnée
-     * @param {number} X Position X du lutin
-     * @param {number} Y Position Y du lutin
-     * @param {Array<Tile>} Tiles Liste des tiles composant notre tilemap
+     * Création d'un tilemap modifiable
+     * @constructor
+     * @param {float} X Position X du lutin
+     * @param {float} Y Position Y du lutin
+     * @param {int} W Largeur en tile du tilemap
+     * @param {int} H hauteur en tile du tilemap
      */
     constructor(X, Y, W, H)
     {
@@ -21,17 +25,12 @@ class TileMap extends Drawable
         this.#W = W;
         this.#H = H;
 
-        this.Layers = {collision: new TileMap_Layer(TileMap_Layer.CollisionMaskName, this, 1000000000)};
+        this.Layers = {};
+        this.Layers[TileMap_Layer.CollisionMaskName] = this.AddChildren(new TileMap_Layer(TileMap_Layer.CollisionMaskName, this, 1000000000));
 
         this.Edit = false;
         this.Teinte = new Color(0,0,0,0);
         this.RectDraw;
-    }
-
-    PostSetParent()
-    {
-        super.PostSetParent()
-        this.AddChildren(this.Layers.collision)
     }
 
     get TextWidth()
@@ -60,6 +59,12 @@ class TileMap extends Drawable
     get CollisionRect()
     {
         return Rectangle.FromPosition(0,0,0,0);
+    }
+
+    PostSetParent()
+    {
+        super.PostSetParent()
+        this.AddChildren(this.Layers.collision)
     }
 
     GetOverlapVector(rect, mouvement)

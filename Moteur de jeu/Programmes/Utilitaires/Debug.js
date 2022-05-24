@@ -14,14 +14,17 @@ class Debug
     static GridSize = 32;
     static Textes = [];
     static Vecteurs = []; // Les vecteur sont des vecteurs 4
-    static Rectangles = [] // Les rectangles sont un tableau [X, Y, W, H]
+    static Rectangles = []
+    static Circles = []
+    static Polygones = []
+
     static Parametre = {
         Grille: false, 
         Info: true, 
         Cible: false, 
         Vecteur: true, 
         Camera: true, 
-        Rectangle: true,
+        Shape: true,
         TimeMesure: true,}
     static #TimeMesures = [];
     static #TimeMesureMax = 200;
@@ -48,13 +51,23 @@ class Debug
         else
         {
 
-            if (Debug.Parametre.Rectangle)
+            if (Debug.Parametre.Shape)
             {
                 for (let v = 0; v < Debug.Rectangles.length; v++) 
                 {
                     Debug.#DessinRectangle(Context, Debug.Rectangles[v]);
                 }
                 Debug.Rectangles = []
+                for (let v = 0; v < Debug.Circles.length; v++) 
+                {
+                    Debug.#DessinCercle(Context, Debug.Circles[v]);
+                }
+                Debug.Circles = []
+                for (let v = 0; v < Debug.Polygones.length; v++) 
+                {
+                    Debug.#DessinPolygone(Context, Debug.Polygones[v]);
+                }
+                Debug.Polygones = []
             }
     
             if (Debug.Parametre.Vecteur)
@@ -299,6 +312,56 @@ class Debug
         Context.restore();
     }
 
+    /**
+     * Dessine le cercle voulu sur le canvas en prenant en compte la position de la camera
+     * @param {context} Context Context de dessin
+     * @param {Array} circle Cercle à dessiner.
+     */
+    static #DessinCercle(Context, circle)
+    {
+        Context.save();
+        Camera.DeplacerCanvas(Context)
+
+        
+        // Translate le canvas au centre de notre lutin 
+        Context.translate(circle[0].x, circle[0].y); 
+
+        Context.fillStyle = circle[1];
+        Context.beginPath();
+        Context.arc(0, 0, circle[0].radius, 0, 2 * Math.PI);
+        Context.fill();
+
+        Context.restore();
+    }
+
+    /**
+     * Dessine le polygone voulu sur le canvas en prenant en compte la position de la camera
+     * @param {context} Context Context de dessin
+     * @param {Array} poly Polygone à dessiner.
+     */
+    static #DessinPolygone(Context, poly)
+    {
+        Context.save();
+        Camera.DeplacerCanvas(Context)
+
+        let x = poly[0].x;
+        let y = poly[0].y;
+        let vertices = poly[0].getTransformedVerts();
+        // Translate le canvas au centre de notre lutin 
+        Context.translate(x, y);
+
+        Context.fillStyle = poly[1];
+        Context.beginPath();
+        Context.moveTo(vertices[0].x, vertices[0].y)
+        for (let v = 1; v < vertices.length; v++) {
+            Context.lineTo(vertices[v].x, vertices[v].y)
+        }
+        Context.lineTo(vertices[0].x, vertices[0].y)
+        Context.fill();
+
+        Context.restore();
+    }
+
 
     /**
      * Créer une cible au centre de l'écran
@@ -427,7 +490,23 @@ class Debug
 
     /**
      * Ajoute un rectangle à tracé dans la liste des rectangles
-     * @param {Array} rect Tableau avec X, Y, Largeur, Hauteur (, Couleur) 
+     * @param {Rectangle} rect Tableau avec X, Y, Largeur, Hauteur (, Couleur) 
+     */
+    static AjoutCercle(circle, color = "#FF000033")
+    {
+        Debug.Circles.push([circle, color]);
+    }
+    /**
+     * Ajoute un rectangle à tracé dans la liste des rectangles
+     * @param {Polygon} rect Tableau avec X, Y, Largeur, Hauteur (, Couleur) 
+     */
+    static AjoutPolygone(polygon, color = "#FF000033")
+    {
+        Debug.Polygones.push([polygon, color]);
+    }
+    /**
+     * Ajoute un rectangle à tracé dans la liste des rectangles
+     * @param {Rectangle} rect Tableau avec X, Y, Largeur, Hauteur (, Couleur) 
      */
     static AjoutRectangle(rect, color = "#FF000033")
     {

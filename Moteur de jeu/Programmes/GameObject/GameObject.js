@@ -1,3 +1,6 @@
+/**
+ * Objet du jeu
+ */
 class GameObject
 {
     // Angle de l'objet
@@ -6,7 +9,7 @@ class GameObject
     #Root = undefined;
 
     /**
-     * Créer un GameObject a la position souhaité
+     * Créer un GameObject à la position souhaitée
      * @constructor
      * @param {float} X Position X
      * @param {float} Y Position Y

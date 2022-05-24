@@ -1,3 +1,7 @@
+/**
+ * Objet Représentant un Vecteur (ou un point)
+ * @class
+ */
 class Vector 
 {
 
@@ -206,6 +210,36 @@ class Vector
     rotate(angle)
     {
         return  Matrix.fromrotation(angle).time(this);
+    }
+    /**
+     * Clone ce vecteur
+     * @returns {Vector} Clone
+     */
+    clone()
+    {
+        return new Vector(this.x, this.y, this.z);
+    }
+    /**
+     * Calcul l'angle de rebond avec une surface ayant pour normal ce vecteur
+     * @param {float} angle Angle d'arrivé en radian
+     * @returns {float} Angle de renvoie en radian
+     */
+    bounceDirection(angle)
+    {
+        let v = Vector.FromAngle(angle)
+        let u = this.normalize(this.dot(v))
+        let w = u.to(v);
+        return Math.atan2(w.y - u.y,w.x - u.x)
+    }
+    /**
+     * Determine la position relative d'un point vis à vis d'un segment orienté.
+     * @param {Vector} v1 Point de début de segment
+     * @param {Vector} v2 Point de fin du segment
+     * @returns {float} Nombre > 0 si à gauche du segment; Nombre < 0 si à droite du segment; 0 si sur le segment
+     */
+    leftto(v1,v2)
+    {
+        return (v2.x - v1.x) * (this.y - v1.y) - (this.x - v1.x) * (v2.y - v1.y);
     }
 }
 /**

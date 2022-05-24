@@ -1,14 +1,30 @@
+/**
+ * MultiTile depuis un spritesheet
+ * @class
+ * @extends Tile
+ */
 class Tile_Multi extends Tile
 {
-    constructor(Texture, TailleTile, Contact = false)
+    /**
+     * Créer un nouveau multi-tile
+     * @param {string} Texture Nom du fichier image
+     * @param {int} TailleTile Taille du tile
+     */
+    constructor(Texture, TailleTile)
     {
-        super(Texture, Contact, TailleTile)
+        super(Texture, TailleTile)
 
         this.W = Math.floor(this.Image.width / this.TailleTile);
         this.Nombre = this.W * Math.floor(this.Image.height / this.TailleTile);
     }
-
-    Dessin(Context, X, Y, index = 0, voisin = 0)
+    /**
+     * Effectue le dessin du tile à un emplacement précis du context
+     * @param {CanvasRenderingContext2D} Context Contexte de dessin
+     * @param {float} X Position X du tile
+     * @param {float} Y Position Y du tile
+     * @param {int} [index = 0] index du tile dans le spritesheet
+     */
+    Dessin(Context, X, Y, index = 0)
     {
         index = (index - this.OffSet)
         let x = index % this.W * this.TailleTile;

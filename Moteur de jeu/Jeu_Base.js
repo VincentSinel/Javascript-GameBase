@@ -20,7 +20,7 @@ var DepartTime = 0;
 // Information supplémentaire;
 var dpi = window.devicePixelRatio;
 var TempsPrecedent = Date.now();
-var fade = 0.0; var fading = 0;
+var fade = 1.0; var fading = 0;
 var SceneActuel;
 var Pause = false;
 
@@ -85,8 +85,11 @@ class Game
         Debug.UPDATE(Game.#TempContext, "PreCalcul", dt);
 
         Tilesets.Update(dt);
+
+        Scene.Update(dt)
         // Lancement de la boucle de calcul;
-        SceneActuel.Update(dt);
+        if (SceneActuel)
+            SceneActuel.Update(dt);
         //Calcul(dt);
         UIElement.Calcul(dt);
 

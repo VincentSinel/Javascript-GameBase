@@ -1,5 +1,6 @@
 /**
  * Interface d'édition de tilemap
+ * @extends UIElement
  */
 class UI_EditionTileMap extends UIElement
 {

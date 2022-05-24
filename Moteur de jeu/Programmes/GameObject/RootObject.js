@@ -1,3 +1,7 @@
+/**
+ * Objet racine d'une scene
+ * @augments GameObject
+ */
 class RootObject extends GameObject
 {
     /**
@@ -83,14 +87,10 @@ class RootObject extends GameObject
         object.Children.forEach(element => {
             this.DeleteDrawable(element);
         });
-        console.log(this.DrawAbleObject)
         if (this.DrawAbleObject.includes(object))
         {
-            console.log("remove")
             this.DrawAbleObject.splice(this.DrawAbleObject.indexOf(object), 1);
         }
-        console.log(object)
-        console.log(this.DrawAbleObject)
         this.SortDrawable()
     }
     /**

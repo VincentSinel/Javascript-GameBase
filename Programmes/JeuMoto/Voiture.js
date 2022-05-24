@@ -19,7 +19,7 @@ class Voiture extends Lutin
 
         this.CentreRotation = new Vector(0.5,1)
 
-        this.ColRect = [0,0,0,0]
+        this.ColRect = Rectangle.FromPosition(0,0,0,0)
 
         this.MultiplicateurAjouté = false;
     }
@@ -33,11 +33,11 @@ class Voiture extends Lutin
         this.Z = this.Y 
        
         
-        let L = this.Image.width * this.Zoom / 100;
-        let H = this.Image.height * this.Zoom / 100;
+        let L = this.Image.width * this.Zoom;
+        let H = this.Image.height * this.Zoom;
         let decalageX = L / 2;
-        let decalageY = 0;
+        let decalageY = 10;
         
-        this.ColRect = [this.X - decalageX, this.Y - decalageY + H/3, L, H/3] 
+        this.ColRect = Rectangle.FromPosition(this.X - decalageX, this.Y - decalageY - H/3, L, H/3)
     }
 }

@@ -1,3 +1,7 @@
+/**
+ * Couche de texture d'un tilemap
+ * @extends Drawable
+ */
 class TileMap_Layer extends Drawable
 {
     static #PartMaxSize = 1024;
@@ -10,6 +14,13 @@ class TileMap_Layer extends Drawable
     #Parts;
     #HasAnimation;
 
+    /**
+     * Créer une nouvelle couche de tilemap
+     * @param {string} Name Nom de la couche
+     * @param {TileMap} Tilemap Tilemap Parent
+     * @param {float} Z Position Z
+     * @param {int} [fill = -1] Tile de remplissage par default
+     */
     constructor(Name,Tilemap,Z = 0,fill = -1)
     {
         super(0,0,Z)
@@ -62,41 +73,78 @@ class TileMap_Layer extends Drawable
         }
     }
 
+    //#region GETTER SETTER
+
+    /**
+     * Largeur du tilemap
+     * @type {int}
+     */
     get W()
     {
         return this.Tilemap.W;
     }
+    /**
+     * Hauteur du tilemap
+     * @type {int}
+     */
     get H()
     {
         return this.Tilemap.H;
     }
+    /**
+     * Position du modificateur d'édition
+     * @type {Vector}
+     */
     get PositionPreview()
     {
         return UI_EditionTileMap.Instance.PositionPreview;
     }
+    /**
+     * Tableau des tiles selectionné
+     * @type {Array<Array<int>>}
+     */
     get Edit_TileToDraw()
     {
         return UI_EditionTileMap.Instance.Edit_SelectedTile;
     }
-
-    
+    /**
+     * Largeur de la texture de dessin
+     * @override
+     * @type {float}
+     */
     get TextWidth()
     {
         return this.Tilemap.TextWidth;
     }
+    /**
+     * Hauteur de la texture de dessin
+     * @override
+     * @type {float}
+     */
     get TextHeight()
     {
         return this.Tilemap.TextHeight;
     }
+    /**
+     * Position du centre de rotation
+     * @override
+     * @type {Vector}
+     */
     get CentreRotation()
     {
         return this.Tilemap.CentreRotation
     }
-    set CentreRotation(value)
-    {
-        super.CentreRotation = value;
-    }
+    //set CentreRotation(value)
+    //{
+    //    super.CentreRotation = value;
+    //}
 
+    //#endregion
+
+    /**
+     * Encode le contenue du layer pour la sauvegarde
+     * @returns {string} donnée du layer
+     */
     EncodeData()
     {
         let l = 1;
@@ -122,7 +170,10 @@ class TileMap_Layer extends Drawable
             data += l.toString() + "x" + v.toString();
         return [this.Name, this.Z, data];
     }
-
+    /**
+     * Charge les donnée à partir d'un texte
+     * @param {string} data Donnée à décoder
+     */
     Load(data)
     {
         let datas = data.split(",");
@@ -149,7 +200,11 @@ class TileMap_Layer extends Drawable
             this.#RedrawAllParts();
         }
     }
-
+    /**
+     * Récupère l'index du tile à la position choisie
+     * @param {Vector} vector Vecteur cible (relatif au tile)
+     * @returns {int} index du tile
+     */
     GetTileAt(vector)
     {
         if (this.PointIn(vector.x,vector.y))
@@ -157,12 +212,22 @@ class TileMap_Layer extends Drawable
         else
             return -1;
     }
-
+    /**
+     * Teste si un point est dans le tilemap
+     * @param {float} X Position X à tester (relatif au tile)
+     * @param {float} Y Position Y à tester (relatif au tile)
+     * @returns {boolean} Vrai si dedans, faux sinon
+     */
     PointIn(X,Y)
     {
         return X >= 0 && X < this.W && Y >= 0 && Y < this.H;
     }
-
+    /**
+     * Change un tile à l'emplacement voulu (et recalcul les autotiles)
+     * @param {int} X Position X du tile (relatif au tile)
+     * @param {int} Y Position Y du tile (relatif au tile)
+     * @param {int} TileID Index du tile
+     */
     ChangerTile(X,Y,TileID)
     {
         this.Contenue[X + Y * this.W] = TileID;
@@ -178,7 +243,9 @@ class TileMap_Layer extends Drawable
             }
         }
     }
-
+    /**
+     * Créer des canvas partie du tilemap
+     */
     #CutPart()
     {
         TileMap_Layer.#PartSize = Math.floor(TileMap_Layer.#PartMaxSize / Tilesets.TileSize);
@@ -206,7 +273,9 @@ class TileMap_Layer extends Drawable
             }      
         }
     }
-
+    /**
+     * Redessine le contenue de chacune des partie du layer
+     */
     #RedrawAllParts()
     {
         let news = TileMap_Layer.#PartSize * Tilesets.TileSize;
@@ -229,7 +298,11 @@ class TileMap_Layer extends Drawable
         }
 
     }
-
+    /**
+     * Redessine un tile à l'emplacement voulue sur les canvas temporaires
+     * @param {int} x position X (relative au layer)
+     * @param {int} y position Y (relative au layer)
+     */
     #RedrawTile(x,y)
     {
         let cpx = Math.floor(x / TileMap_Layer.#PartSize);
@@ -280,7 +353,13 @@ class TileMap_Layer extends Drawable
             }
         }
     }
-
+    /**
+     * Vérifie la présence de voisins
+     * @param {int} id Index du tile
+     * @param {int} x Position X à tester
+     * @param {int} y Position Y à tester
+     * @returns {int} Représentation de la présence de voisin (binaire)
+     */
     #CalculVoisin(id, x, y)
     {
         let v = 0;
@@ -310,7 +389,10 @@ class TileMap_Layer extends Drawable
             v += 4
         return v;
     }
-
+    /**
+     * Mets à jour du layer
+     * @param {float} Delta Frame depuis la précédentes mise à jour
+     */
     Calcul(Delta)
     {
         if (this.Animation)
@@ -322,7 +404,10 @@ class TileMap_Layer extends Drawable
             }
         }
     }
-
+    /**
+     * Effectue le dessin du layer
+     * @param {CanvasRenderingContext2D} Context Contexte de dessin
+     */
     Dessin(Context)
     { 
         if (this.Name == TileMap_Layer.CollisionMaskName)
@@ -527,5 +612,4 @@ class TileMap_Layer extends Drawable
         }
         
     }
-
 }

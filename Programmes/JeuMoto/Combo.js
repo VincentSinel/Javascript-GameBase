@@ -7,8 +7,9 @@ class Combo extends Drawable
         super(0,0,20000)
         this.Multiplicateur = 20;
         this.Score = 0;
-        this.Flamme = this.AddChildren(new Lutin_SC(0, 235,"Images/Moto/FlammeAnimation.png", [200,70]));
+        this.Flamme = this.AddChildren(new Lutin_SC(270 - Ecran_Largeur / 2, 235,"Images/Moto/FlammeAnimation.png", [200,70]));
         this.Flamme.NextUpdate = 6;
+        this.Flamme.Z = -2;
         this.TMultiplicateur = Textures.Charger("Images/Moto/Multiplicateur.png");
         this.TScore = Textures.Charger("Images/Moto/Score.png");
 
@@ -27,27 +28,29 @@ class Combo extends Drawable
 
     Calcul(Delta)
     {
+        this.X = Camera.X;
+        this.Y = Camera.Y;
+
         this.Flamme.Calcul(Delta);
-        this.Flamme.X = Camera.X - Ecran_Largeur / 2 + 270;
         if (this.Flamme.NextUpdate < this.Flamme.Time)
         {
             this.Flamme.NextUpdate += 6;
             this.Flamme.CostumeSuivant();
         }
 
-        if (this.Scene.Moto.Direction > 10 && !this.Scene.Moto.Mort)
+        if (this.Scene.Moto.Direction < -10 && !this.Scene.Moto.Mort)
         {
             this.Score += this.Multiplicateur;
-            let xm = this.Scene.Moto.ColRect[0];
+            let xm = this.Scene.Moto.ColRect.x;
             for (let v = 0; v < this.Scene.Voitures.length; v++) {
                 const element = this.Scene.Voitures[v];
                 if (!element.MultiplicateurAjouté)
                 {
-                    let h = element.ColRect[3] + this.Scene.Moto.ColRect[3] + 100;
-                    let y = element.ColRect[1] + element.ColRect[3] / 2 + h / 2;
+                    let h = element.ColRect.h + this.Scene.Moto.ColRect.h + 100;
+                    let y = element.ColRect.y + element.ColRect.h / 2 + h / 2;
                     if (this.Scene.Moto.Y <= y && this.Scene.Moto.Y >= y - h)
                     {
-                        if ((xm + this.Scene.Moto.ColRect[2]) >=  element.ColRect[0] && xm <= element.ColRect[0] + element.ColRect[2])
+                        if ((xm + this.Scene.Moto.ColRect.w) >=  element.ColRect.x && xm <= element.ColRect.x + element.ColRect.w)
                         {
                             element.MultiplicateurAjouté = true;
                             this.Multiplicateur += 1
@@ -73,19 +76,20 @@ class Combo extends Drawable
             this.Score = 0;
             this.Multiplicateur = 1;
         }
+
+        if (this.Multiplicateur > 3)
+        {
+            this.Flamme.Show();
+        }
+        else{
+            this.Flamme.Hide();
+        }
     }
 
     Dessin(Context)
     {
         if (this.Multiplicateur > 1)
         {
-            if (this.Multiplicateur > 3)
-            {
-                this.Flamme.Visible = true;
-            }
-            else{
-                this.Flamme.Visible = false;
-            }
             this.DessinMultiplicateur(Context);
         }
 
@@ -93,7 +97,7 @@ class Combo extends Drawable
         let i = 0;
         while (i < this.LastScore.length)
         {
-            this.DessinScore(Context, this.LastScore[i], this.TimerAnimation[i]/3, 1 + this.TimerAnimation[i] / 180);
+            this.DessinScore(Context, this.LastScore[i], this.TimerAnimation[i]/3, 1 - this.TimerAnimation[i] / 180);
             this.TimerAnimation[i] += 1;
             if (this.TimerAnimation[i] >= 180)
             {
@@ -110,7 +114,7 @@ class Combo extends Drawable
         
         if (this.Message != "")
         {
-            this.DessinTexte(Context, this.Message, this.TimerMessage/3, this.TailleMessage, 1 + this.TimerMessage / 180);
+            this.DessinTexte(Context, this.Message, this.TimerMessage/3, this.TailleMessage, 1 - this.TimerMessage / 180);
             this.TimerMessage += 1;
             if (this.TimerMessage >= 180)
             {
@@ -122,31 +126,22 @@ class Combo extends Drawable
 
     DessinMultiplicateur(Context)
     {
-        // Sauvegarde la position actuel du canvas 
-        Context.save();
-        // Translate le canvas au centre de notre lutin 
-        //Context.translate(Camera.AdapteX(-this.Flamme.X), Camera.AdapteY(-this.Flamme.Y));
-        // Déplace le canvas à l'angle haut droit de l'image
-        Context.translate(-80, -35); 
-
         let size = 40 + 30 * Math.min(this.Multiplicateur, 8) / 6;
-        let x = 0;
+        let x = this.Flamme.X - 100;
+        let y = this.Flamme.Y - 35;
         let bx = (Math.random() - 0.5) * Math.min(10, (this.Multiplicateur - 1));
         let by = (Math.random() - 0.5) * Math.min(10, (this.Multiplicateur - 1));
         Context.drawImage(this.TMultiplicateur, 0, 0, 90, 90, 
-            x + bx, by, size, size);
+            x + bx, y + by, size, size);
         x += size;
         let t = this.Multiplicateur.toString();
         for (let i = 0; i < t.length; i++) {
             let posx = (parseInt(t[i]) + 1) * 90;
             Context.drawImage(this.TMultiplicateur, posx, 0, 90, 90, 
-                x + bx, by, size, size);
+                x + bx, y + by, size, size);
             x += size;
             
         }
-
-        // Retourne à la position initiale du canvas
-        Context.restore(); 
     }
 
     DessinScore(Context, value, position = 0, alpha = 1.0)
@@ -163,27 +158,18 @@ class Combo extends Drawable
             by = move * (Math.random() - 0.5) * 5;
         }
 
-        // Sauvegarde la position actuel du canvas 
-        Context.save();
-        // Adapte la position à celle de la camera
-        Camera.DeplacerCanvas(Context)
-        // Translate le canvas au centre de notre lutin 
-        Context.translate(Camera.AdapteX(this.Scene.Moto.X + 40), Camera.AdapteY(this.Scene.Moto.Y - 25 - position)); 
-        // Déplace le canvas à l'angle haut droit de l'image
-        Context.translate(Math.max(-size * t.length / 2, 40 - Ecran_Largeur / 2), 0); 
+        let x = Camera.AdapteX(this.Scene.Moto.X + 40) + Math.max(-size * t.length / 2, 40 - Ecran_Largeur / 2);
+        let y = Camera.AdapteY(this.Scene.Moto.Y + 25 + position)
         Context.globalAlpha = alpha;
 
-
-        let x = 0;
         for (let i = 0; i < t.length; i++) {
             let posx = ((parseInt(t[i])) % 6) * 54;
             let posy = Math.floor((parseInt(t[i])) / 6) * 54;
             Context.drawImage(this.TScore, posx, posy, 54, 54, 
-                x + bx, 0 + by, size, size);
+                x + bx, y + by, size, size);
             x += size;
         }
-        // Retourne à la position initiale du canvas
-        Context.restore(); 
+        Context.globalAlpha = 1;
     }
 
     DessinTexte(Context, txt, position = 0, taille = 0, alpha = 1.0, tremblement = 0)
@@ -193,30 +179,33 @@ class Combo extends Drawable
         let bx = tremblement * (Math.random() - 0.5);
         let by = tremblement * (Math.random() - 0.5);
         // Sauvegarde la position actuel du canvas 
-        Context.save();
+        //Context.save();
         // Adapte la position à celle de la camera
-        Camera.DeplacerCanvas(Context)
+        //Camera.DeplacerCanvas(Context)
         // Translate le canvas au centre de notre lutin 
-        Context.translate(Camera.AdapteX(Camera.X + Ecran_Largeur / 2 - 200 - position), Camera.AdapteY(Camera.Y)); 
+        //Context.translate(Camera.AdapteX(Camera.X + Ecran_Largeur / 2 - 200 - position), Camera.AdapteY(Camera.Y)); 
         // Tourne le canvas de l'angle souhaité
-        Context.rotate(-this.AngleMessage * Math.PI / 180);  
+        //Context.save();
+        //Context.rotate(-this.AngleMessage * Math.PI / 180);  
         // Déplace le canvas à l'angle haut droit de l'image
-        Context.translate(-w/2, -taille/2); 
+        //Context.translate(-w/2, -taille/2); 
 
         Context.globalAlpha = alpha;
 
 
-        let x = 0;
+        let x = Camera.AdapteX(Camera.X + Ecran_Largeur / 2 - 200 - position) - w/2;
+        let y = 0
         for (let i = 0; i < txt.length; i++) {
             let id = Combo.Lettre.indexOf(txt[i]);
             let posx = (id % 6) * 54;
             let posy = Math.floor(id / 6) * 54;
             Context.drawImage(this.TScore, posx, posy, 54, 54, 
-                x + bx, 0 + by, taille, taille);
+                x + bx, y + by, taille, taille);
             x += taille;
         }
+        Context.globalAlpha = 1;
         // Retourne à la position initiale du canvas
-        Context.restore(); 
+        //Context.restore(); 
     }
 
     DessinScoreGeneral(Context)
@@ -225,27 +214,28 @@ class Combo extends Drawable
         let t = this.ScoreGlobal.toString();
 
         // Sauvegarde la position actuel du canvas 
-        Context.save();
+        //Context.save();
         // Adapte la position à celle de la camera
-        Camera.DeplacerCanvas(Context)
+        //Camera.DeplacerCanvas(Context)
         // Translate le canvas au centre de notre lutin 
-        Context.translate(Camera.AdapteX(Camera.X - Ecran_Largeur / 2 + 50), Camera.AdapteY(Camera.Y + Ecran_Hauteur / 2 - 10));
+        //Context.translate(Camera.AdapteX(Camera.X - Ecran_Largeur / 2 + 50), Camera.AdapteY(Camera.Y + Ecran_Hauteur / 2 - 10));
 
-        let x = 0;
+        let x = -Ecran_Largeur / 2;
+        let y = -Ecran_Hauteur / 2;
         Context.drawImage(this.TScore, 54 * 4, 54 * 4, 54, 54, //S
-            x, 0, size, size);
+            x, y, size, size);
         x += size;
         Context.drawImage(this.TScore, 0, 54 * 2, 54, 54, //C
-            x, 0, size, size);
+            x, y, size, size);
         x += size;
         Context.drawImage(this.TScore, 0, 54 * 4, 54, 54, //O
-            x, 0, size, size);
+            x, y, size, size);
         x += size;
         Context.drawImage(this.TScore, 54 * 3, 54 * 4, 54, 54, //R 
-            x, 0, size, size);
+            x, y, size, size);
         x += size;
         Context.drawImage(this.TScore, 54 * 2, 54 * 2, 54, 54, //E
-            x, 0, size, size);
+            x, y, size, size);
         x += size;
         x += size;
         x += size;
@@ -254,10 +244,10 @@ class Combo extends Drawable
             let posx = ((parseInt(t[i])) % 6) * 54;
             let posy = Math.floor((parseInt(t[i])) / 6) * 54;
             Context.drawImage(this.TScore, posx, posy, 54, 54, 
-                x, 0, size, size);
+                x, y, size, size);
             x += size;
         }
         // Retourne à la position initiale du canvas
-        Context.restore(); 
+        //Context.restore(); 
     }
 }

@@ -6,11 +6,14 @@ var Scripts = [
     //"Modules/Matter (RigidBody).js",
 
     "Programmes/Class/Color.js",
-    "Programmes/Class/Polygone.js",
     "Programmes/Class/Vector.js",
-    "Programmes/Class/Rectangle.js",
     "Programmes/Class/Matrix.js",
-    //"Programmes/Class/Vecteur.js",
+
+    "Programmes/Class/2DShape/SAT.js",
+    "Programmes/Class/2DShape/Shape.js",
+    "Programmes/Class/2DShape/Polygon.js",
+    "Programmes/Class/2DShape/Rectangle.js",
+    "Programmes/Class/2DShape/Circle.js",
 
     "Jeu_Base.js",
 
@@ -19,28 +22,21 @@ var Scripts = [
     "Programmes/GameObject/Drawable.js",
     "Programmes/GameObject/Scene.js",
 
-    "Programmes/GameObject/UIElements (WIP)/UIElement.js",
-    "Programmes/GameObject/UIElements (WIP)/UI_Panel.js",
-    "Programmes/GameObject/UIElements (WIP)/UI_ScrollBar.js",
-    "Programmes/GameObject/UIElements (WIP)/UI_Button.js",
-    "Programmes/GameObject/UIElements (WIP)/UI_Label.js",
-    "Programmes/GameObject/UIElements (WIP)/UI_ListView.js",
-    "Programmes/GameObject/UIElements (WIP)/UI_CheckBox.js",
-    "Programmes/GameObject/UIElements (WIP)/UI_Toggle.js",
-    "Programmes/GameObject/UIElements (WIP)/UI_Slider.js",
-    "Programmes/GameObject/UIElements (WIP)/UI_Image.js",
-    "Programmes/GameObject/UIElements (WIP)/UI_TextBox.js",
+    "Programmes/GameObject/UIElements/UIElement.js",
+    "Programmes/GameObject/UIElements/UI_Panel.js",
+    "Programmes/GameObject/UIElements/UI_ScrollBar.js",
+    "Programmes/GameObject/UIElements/UI_Button.js",
+    "Programmes/GameObject/UIElements/UI_Label.js",
+    "Programmes/GameObject/UIElements/UI_ListView.js",
+    "Programmes/GameObject/UIElements/UI_CheckBox.js",
+    "Programmes/GameObject/UIElements/UI_Toggle.js",
+    "Programmes/GameObject/UIElements/UI_Slider.js",
+    "Programmes/GameObject/UIElements/UI_Image.js",
+    "Programmes/GameObject/UIElements/UI_TextBox.js",
 
 
     "Programmes/GameObject/Tilemap/UI_EditionTileMap.js",
-    //"Programmes/GameObject/UI/Panneau.js",
-    //"Programmes/GameObject/UI/Toggle.js",
-    //"Programmes/GameObject/UI/Boutton.js",
-    //"Programmes/GameObject/UI/CheckBox.js",
-    //"Programmes/GameObject/UI/Slider.js",
-    //"Programmes/GameObject/UI/TextBox.js",
-    //"Programmes/GameObject/UI/TextBlock.js",
-    //"Programmes/GameObject/UI/Liste.js",
+
 
     "Programmes/GameObject/NinePatch.js",
     "Programmes/GameObject/Lutin/BulleDialogue.js",
@@ -65,7 +61,6 @@ var Scripts = [
     "Programmes/Utilitaires/LoadScreen.js",
     "Programmes/Utilitaires/Textures.js",
 
-    
 ]
 
 //=====================================================

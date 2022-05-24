@@ -1,5 +1,6 @@
 /**
- * Module de représentation de couleur
+ * Objet représentant d'une couleur
+ * @class
  */
 class Color
 {

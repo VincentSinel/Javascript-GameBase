@@ -1,4 +1,9 @@
-class Rectangle
+/**
+ * Objet représentant un Rectangle
+ * @class
+ * @extends Shape
+ */
+class Rectangle extends Shape
 {
     /**
      * Créer un rectangle à partir de l'angle HG, BD et de la rotation du rectangle
@@ -31,7 +36,7 @@ class Rectangle
     }
 
     #refreshboundingbox = true;
-    #_boundingbox = undefined
+    #_boundingbox = undefined;
 
     /**
      * Créer un Rectangle
@@ -43,6 +48,7 @@ class Rectangle
      */
     constructor(origin,w, h, theta = 0)
     {
+        super()
         this.origin = origin;
         this.w = w;
         this.h = h;
@@ -112,9 +118,9 @@ class Rectangle
 
     /**
      * Calcul l'aire du rectangle
-     * @returns {float} Aire du rectangle
+     * @type {float} Aire du rectangle
      */
-    area()
+    get area()
     {
         return Math.abs(this.w * this.h);
     }
@@ -183,12 +189,60 @@ class Rectangle
           y2: Math.max(y1, y2, y3, y4),
         };
     }
+    
+    /**
+     * Vérifie si il y a collision entre ce rectangle et un cercle
+     * @override
+     * @param {Circle} circle Cercle à tester
+     * @returns {boolean} Représente si il y a collision
+     */
+    collide_Circle(circle)
+    {
+        return !SAT.test(this,circle);
+    }
+    /**
+     * Calcul le déplacement nécessaire à effectuer par le rectangle pour sortir d'un cercle
+     * @override
+     * @param {Circle} circle Cercle à tester
+     * @returns {Vector} Déplacement à effectuer pour sortir
+     */
+    collide_CircleOverlap(circle)
+    {
+        let r = SAT.test(this,circle)
+        if (r)
+            return r.separation;
+        return Vector.Zero; 
+    }
+    /**
+     * Vérifie si il y a collision entre ce rectangle et un polygone
+     * @override
+     * @param {Polygon} polygon Polygon à tester
+     * @returns {boolean} Représente si il y a collision
+     */
+    collide_Polygon(polygon)
+    {
+        return !SAT.test(this,polygon);
+    }
+    /**
+     * Calcul le déplacement nécessaire à effectuer par le rectangle pour sortir d'un polygon
+     * @override
+     * @param {Polygon} polygon Polygon à tester
+     * @returns {Vector} Déplacement à effectuer pour sortir
+     */
+    collide_PolygonOverlap(polygon)
+    {
+        let r = SAT.test(this,polygon)
+        if (r)
+            return r.separation;
+        return Vector.Zero; 
+    }
     /**
      * Vérifie si il y a collision entre deux rectangle
+     * @override
      * @param {Rectangle} rectangle Rectangle à tester vis à vis de celui-ci
      * @returns {boolean} Représente si il y a collision
      */
-    collide(rectangle)
+    collide_Rectangle(rectangle)
     {
         if (this.angle == 0 && rectangle.angle == 0)
         {
@@ -201,10 +255,11 @@ class Rectangle
     }
     /**
      * Calcul le déplacement nécessaire à effectuer par le rectangle pour sortir de celui-ci
+     * @override
      * @param {Rectangle} rectangle Rectangle à tester vis à vis de celui-ci
-     * @returns {Vector} Déplacement à effectuer
+     * @returns {Vector} Déplacement à effectuer pour sortir
      */
-    collisionWithOverlap(rectangle)
+    collide_RectangleOverlap(rectangle)
     {
         if (this.collide(rectangle))
         {
@@ -246,7 +301,7 @@ class Rectangle
      */
     #AABB(R1, R2)//X1, Z1, X2, Z2)
     {
-        return R1.x < R2.x + R2.w && R2.x > R1.x + R1.w && R1.y < R2.y + R2.h && R2.y > R1.y + R1.h
+        return R1.x < R2.x + R2.w && R2.x < R1.x + R1.w && R1.y < R2.y + R2.h && R2.y < R1.y + R1.h
     }
     /**
      * Test le contact entre deux rectangle avec rotation
@@ -260,6 +315,7 @@ class Rectangle
         let r1Y = rect1.y;
         let r1W = rect1.w;
         let r1H = rect1.h;
+        let r1A = rect1.theta;
 
         let r2X = rect2.x;
         let r2Y = rect2.y;
@@ -324,5 +380,26 @@ class Rectangle
     toString()
     {
         return [this.x, this.y, this.w, this.h, this.theta].toString();
+    }
+    /**
+     * Test si un point est dans le rectangle
+     * @param {Vector} v Position à tester
+     * @returns {boolean} Vrai si le point est dans ce rectangle, faux sinon
+     */
+    pointIn(v)
+    {
+        return this.x <= v.x && this.x + this.w >= v.x && this.y <= v.y && this.y + this.h >= v.y
+    }
+
+    toPolygon()
+    {
+        let vert = [];
+        vert.push(Vector.Zero);
+        vert.push(new Vector(this.w,0));
+        vert.push(new Vector(this.w,this.h));
+        vert.push(new Vector(0,this.h));
+        let p = new Polygon(this.origin, vert);
+        p.rotation = this.theta;
+        return p;
     }
 }

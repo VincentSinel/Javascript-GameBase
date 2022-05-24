@@ -1,3 +1,7 @@
+/**
+ * Objet représentant une Matrice
+ * @class
+ */
 class Matrix
 {
     /**

@@ -9,31 +9,32 @@
  * Contacts.rotatedRectanglesCollide(r1X, r1Y, r1W, r1H, r1A, r2X, r2Y, r2W, r2H, r2A)
  * Contacts.AABB(X1, Y1, Z1, X2, Y2, Z2)
  * Contacts.AngleRebond(Normal, Direction)
+ * @deprecated
  */
 class Contacts
 {
     /**
      * Test si un point est à l'intérieur d'un triangle
      * 
-     * @param {Vecteur2} A Premier point
-     * @param {Vecteur2} B Second point
-     * @param {Vecteur2} C Troisième point
-     * @param {Vecteur2} P Point à tester
+     * @param {Vector} A Premier point
+     * @param {Vector} B Second point
+     * @param {Vector} C Troisième point
+     * @param {Vector} P Point à tester
      * @returns Vrai si le point est dans le triangle, faux sinon
      */
     static PointDansTriangle(A, B, C, P)
     {
         // Compute vectors        
-        let v0 = Vecteur2.AVersB(A,C);
-        let v1 = Vecteur2.AVersB(A,B);
-        let v2 = Vecteur2.AVersB(A,P);
+        let v0 = A.to(C);
+        let v1 = A.to(B);
+        let v2 = A.to(P);
 
         // Compute dot products
-        let dot00 = Vecteur2.Dot(v0, v0);
-        let dot01 = Vecteur2.Dot(v0, v1);
-        let dot02 = Vecteur2.Dot(v0, v2);
-        let dot11 = Vecteur2.Dot(v1, v1);
-        let dot12 = Vecteur2.Dot(v1, v2);
+        let dot00 = v0.dot(v0);
+        let dot01 = v0.dot(v1);
+        let dot02 = v0.dot(v2);
+        let dot11 = v1.dot(v1);
+        let dot12 = v1.dot(v2);
 
         // Compute barycentric coordinates
         let invDenom = 1 / (dot00 * dot11 - dot01 * dot01);
@@ -47,24 +48,24 @@ class Contacts
 
     /**
      * Test si un point est à l'intérieur d'un rectangle (avec rotation)
-     * 
-     * @param {Vecteur2} X Angle Haut Gauche du rectangle
-     * @param {Vecteur2} Y Angle Haut Droit du rectangle
-     * @param {Vecteur2} Z Angle Bas Droit du rectangle
-     * @param {Vecteur2} W Angle Bas Gauche du rectangle
-     * @param {Vecteur2} P Point à tester
+     * @deprecated
+     * @param {Vector} X Angle Haut Gauche du rectangle
+     * @param {Vector} Y Angle Haut Droit du rectangle
+     * @param {Vector} Z Angle Bas Droit du rectangle
+     * @param {Vector} W Angle Bas Gauche du rectangle
+     * @param {Vector} P Point à tester
      * @returns Vrai si le point est dans le rectangle, faux sinon
      */
     static PointDansRectangle(X, Y, Z, W, P)
     {
-        return (P.AGauche(X, Y) <= 0 && P.AGauche(Y, Z) <= 0 && P.AGauche(Z, W) <= 0 && P.AGauche(W, X) <= 0);
+        return (P.leftto(X, Y) <= 0 && P.leftto(Y, Z) <= 0 && P.leftto(Z, W) <= 0 && P.leftto(W, X) <= 0);
     }
 
     /**
      * Test si un point est à l'intérieur d'un polygone
      * 
-     * @param {Array<Vecteur2>} Poly Liste des sommets du polygone
-     * @param {Vecteur2} P Point à tester
+     * @param {Vector[]} Poly Liste des sommets du polygone
+     * @param {Vector} P Point à tester
      * @returns Vraie si le point est à l'intérieur du polygone, faux sinon
      */
     static PointDansPolygone(Poly, P)
@@ -72,7 +73,7 @@ class Contacts
         for (let index = 0; index < Poly.length; index++) {
             let d = Poly[index];
             let e = Poly[(index + 1) % Poly.length];
-            if (P.AGauche(d,e) < 0)
+            if (P.leftto(d,e) < 0)
                 return false;
         }
         return true;
@@ -83,8 +84,8 @@ class Contacts
      * Fonction permettant de determiner si deux polygone se croisent à partir de la liste de leur sommet
      * Utilise le Separating Axis Theorem
      * 
-     * @param {Array<Vecteur2>} a Tableau de Vecteur2 formant un Polygone
-     * @param {Array<Vecteur2>} b Tableau de Vecteur2 formant un Polygone
+     * @param {Vector} a Tableau de Vecteur2 formant un Polygone
+     * @param {Array<Vector>} b Tableau de Vecteur2 formant un Polygone
      * @returns Vraie si les 2 polygone se croisent, faux sinon
      */
     static PolygonesIntersection (a, b) {
@@ -104,13 +105,13 @@ class Contacts
                 var p2 = polygon[i2];
 
                 // find the line perpendicular to this edge
-                var normal = { x: p2.Y - p1.Y, y: p1.X - p2.X };
+                var normal = { x: p2.y - p1.y, y: p1.x - p2.x };
 
                 minA = maxA = undefined;
                 // for each vertex in the first shape, project it onto the line perpendicular to the edge
                 // and keep track of the min and max of these values
                 for (j = 0; j < a.length; j++) {
-                    projected = normal.x * a[j].X + normal.y * a[j].Y;
+                    projected = normal.x * a[j].x + normal.y * a[j].y;
                     if (isUndefined(minA) || projected < minA) {
                         minA = projected;
                     }
@@ -123,7 +124,7 @@ class Contacts
                 // and keep track of the min and max of these values
                 minB = maxB = undefined;
                 for (j = 0; j < b.length; j++) {
-                    projected = normal.x * b[j].X + normal.y * b[j].Y;
+                    projected = normal.x * b[j].x + normal.y * b[j].y;
                     if (isUndefined(minB) || projected < minB) {
                         minB = projected;
                     }
@@ -146,55 +147,55 @@ class Contacts
 
     /**
      * Test la collision entre un rectangle avec rotation et un cercle
-     * @param {Vecteur2} X Position angle haut gauche
-     * @param {Vecteur2} Y Position angle haut droit
-     * @param {Vecteur2} Z Position angle bas droit
-     * @param {Vecteur2} W Position angle bas gauche
-     * @param {Vecteur2} P Centre du cercle
+     * @param {Vector} X Position angle haut gauche
+     * @param {Vector} Y Position angle haut droit
+     * @param {Vector} Z Position angle bas droit
+     * @param {Vector} W Position angle bas gauche
+     * @param {Vector} P Centre du cercle
      * @param {float} Radius rayon du cercle
      * @returns Vrai si il y a contact, faux sinon
      */
     static CercleContreRectangle(X,Y,Z,W, P, Radius)
     {
-        let a = Vecteur2.AVersB(X,Y).Normaliser(Radius);
-        let b = Vecteur2.AVersB(X,W).Normaliser(Radius);
-        let NX = new Vecteur2(X.X - a.X - b.X, X.Y - a.Y - b.Y);
-        let NY = new Vecteur2(Y.X + a.X - b.X, Y.Y + a.Y - b.Y);
-        let NZ = new Vecteur2(Z.X + a.X + b.X, Z.Y + a.Y + b.Y);
-        let NW = new Vecteur2(W.X - a.X + b.X, W.Y - a.Y + b.Y);
+        let a = X.to(Y).normalize(Radius);
+        let b = X.to(W).normalize(Radius);
+        let NX = new Vector(X.x - a.x - b.x, X.y - a.y - b.y);
+        let NY = new Vector(Y.x + a.x - b.x, Y.y + a.y - b.y);
+        let NZ = new Vector(Z.x + a.x + b.x, Z.y + a.y + b.y);
+        let NW = new Vector(W.x - a.x + b.x, W.y - a.y + b.y);
         if (Contacts.PointDansRectangle(NX, NY, NZ, NW, P))
         {
-            if ((P.AGauche(X,Y) > 0) && (P.AGauche(W,X) > 0))           //0
+            if ((P.leftto(X,Y) > 0) && (P.leftto(W,X) > 0))           //0
             {
-                return new Vecteur2(NX.X - X.X, NX.Y - X.Y)
+                return new Vector(NX.x - X.x, NX.y - X.y)
             }
-            else if (P.AGauche(X,Y) > 0 && P.AGauche(Y,Z) > 0)      //1
+            else if (P.leftto(X,Y) > 0 && P.leftto(Y,Z) > 0)      //1
             {
-                return new Vecteur2(NY.X - Y.X, NY.Y - Y.Y)
+                return new Vector(NY.x - Y.x, NY.y - Y.y)
             }
-            else if (P.AGauche(X,Y) > 0)                            //2
+            else if (P.leftto(X,Y) > 0)                            //2
             {
-                return new Vecteur2((NY.X + NX.X - Y.X - X.X) / 2, (NY.Y + NX.Y - Y.Y - X.Y) / 2)
+                return new Vector((NY.x + NX.x - Y.x - X.x) / 2, (NY.y + NX.y - Y.y - X.y) / 2)
             }
-            else if (P.AGauche(W,X) > 0 && P.AGauche(Z,W) > 0)      //3
+            else if (P.leftto(W,X) > 0 && P.leftto(Z,W) > 0)      //3
             {
-                return new Vecteur2(NW.X - W.X, NW.Y - W.Y)
+                return new Vector(NW.x - W.x, NW.y - W.y)
             }
-            else if (P.AGauche(W,X) > 0)                            //4
+            else if (P.leftto(W,X) > 0)                            //4
             {
-                return new Vecteur2((NW.X + NX.X - W.X - X.X) / 2, (NW.Y + NX.Y - W.Y - X.Y) / 2)
+                return new Vector((NW.x + NX.x - W.x - X.x) / 2, (NW.y + NX.y - W.y - X.y) / 2)
             }
-            else if (P.AGauche(Y,Z) > 0 && P.AGauche(Z,W) > 0)      //5
+            else if (P.leftto(Y,Z) > 0 && P.leftto(Z,W) > 0)      //5
             {
-                return new Vecteur2(NZ.X - Z.X, NZ.Y - Z.Y)
+                return new Vector(NZ.x - Z.x, NZ.y - Z.y)
             }
-            else if (P.AGauche(Z,W) > 0)                            //6
+            else if (P.leftto(Z,W) > 0)                            //6
             {
-                return new Vecteur2((NW.X + NZ.X - W.X - Z.X) / 2, (NW.Y + NZ.Y - W.Y - Z.Y) / 2)
+                return new Vector((NW.x + NZ.x - W.x - Z.x) / 2, (NW.y + NZ.y - W.y - Z.y) / 2)
             }
-            else if (P.AGauche(Y, Z) > 0)                           //7
+            else if (P.leftto(Y, Z) > 0)                           //7
             {
-                return new Vecteur2((NY.X + NZ.X - Y.X - Z.X) / 2, (NY.Y + NZ.Y - Y.Y - Z.Y) / 2)
+                return new Vector((NY.x + NZ.x - Y.x - Z.x) / 2, (NY.y + NZ.y - Y.y - Z.y) / 2)
             }
         }
         return 0;
@@ -202,23 +203,23 @@ class Contacts
 
     /**
      * Test si deux rectangle avec une rotation sont en collision.
-     * @param {Vecteur2} X1 Position angle haut gauche du rectangle 1
-     * @param {Vecteur2} Y1 Position angle haut droit du rectangle 1
-     * @param {Vecteur2} W1 Position angle bas gauche du rectangle 1
-     * @param {Vecteur2} X2 Position angle haut gauche du rectangle 2
-     * @param {Vecteur2} Y2 Position angle haut droit du rectangle 2
-     * @param {Vecteur2} W2 Position angle bas gauche du rectangle 2
+     * @param {Vector} X1 Position angle haut gauche du rectangle 1
+     * @param {Vector} Y1 Position angle haut droit du rectangle 1
+     * @param {Vector} W1 Position angle bas gauche du rectangle 1
+     * @param {Vector} X2 Position angle haut gauche du rectangle 2
+     * @param {Vector} Y2 Position angle haut droit du rectangle 2
+     * @param {Vector} W2 Position angle bas gauche du rectangle 2
      * @returns Vrai si les deux rectangle sont en collision, faux sinon
      */
     static RectContreRect(X1,Y1,W1,X2,Y2,W2)
     {
-        let w1 = Math.sqrt((X1.X-Y1.X) * (X1.X-Y1.X) + (X1.Y-Y1.Y) * (X1.Y-Y1.Y))
-        let h1 = Math.sqrt((X1.X-W1.X) * (X1.X-W1.X) + (X1.Y-W1.Y) * (X1.Y-W1.Y))
-        let a1 = Math.atan2((X1.X-Y1.X), (X1.Y-Y1.Y))
-        let w2 = Math.sqrt((X2.X-Y2.X) * (X2.X-Y2.X) + (X2.Y-Y2.Y) * (X2.Y-Y2.Y))
-        let h2 = Math.sqrt((X2.X-W2.X) * (X2.X-W2.X) + (X2.Y-W2.Y) * (X2.Y-W2.Y))
-        let a2 = Math.atan2((X2.X-Y2.X), (X2.Y-Y2.Y))
-        return rotatedRectanglesCollide(X1.X, X1.Y, w1, h1, a1, X2.X, X2.Y, w2, h2, a2)
+        let w1 = Math.sqrt((X1.x-Y1.x) * (X1.x-Y1.x) + (X1.y-Y1.y) * (X1.y-Y1.y))
+        let h1 = Math.sqrt((X1.x-W1.x) * (X1.x-W1.x) + (X1.y-W1.y) * (X1.y-W1.y))
+        let a1 = Math.atan2((X1.x-Y1.x), (X1.y-Y1.y))
+        let w2 = Math.sqrt((X2.x-Y2.x) * (X2.x-Y2.x) + (X2.y-Y2.y) * (X2.y-Y2.y))
+        let h2 = Math.sqrt((X2.x-W2.x) * (X2.x-W2.x) + (X2.y-W2.y) * (X2.y-W2.y))
+        let a2 = Math.atan2((X2.x-Y2.x), (X2.y-Y2.y))
+        return rotatedRectanglesCollide(X1.x, X1.y, w1, h1, a1, X2.x, X2.y, w2, h2, a2)
     }
 
     /**
@@ -290,16 +291,16 @@ class Contacts
 
     /**
      * Calcul l'angle de rebond avec une surface
-     * @param {Vecteur2} Normal Vecteur Normal à la collision
+     * @param {Vector} Normal Vecteur Normal à la collision
      * @param {Float} Direction Angle d'arrivé
      * @returns Angle de renvoie
      */
     static AngleRebond(Normal, Direction)
     {
-        let v = Vecteur2.AngleVersVecteur(Direction)
-        let u = Normal.Normaliser(Vecteur2.Dot(v, Normal))
-        let w = Vecteur2.AVersB(u,v);
-        return Math.atan2(w.Y - u.Y,w.X - u.X) * 180 / Math.PI
+        let v = Vector.FromAngle(Direction * Math.PI / 180)
+        let u = Normal.normalize(v.dot(Normal))
+        let w = u.to(v);
+        return Math.atan2(w.y - u.y,w.x - u.x) * 180 / Math.PI
     }
 
 }

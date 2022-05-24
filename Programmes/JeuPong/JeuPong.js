@@ -1,4 +1,4 @@
-class JeuPong
+class JeuPong extends Scene
 {
     static JeuLargeur;
     static JeuHauteur;
@@ -22,7 +22,7 @@ class JeuPong
             {
                 let posX = marge + (x + 0.5) * w / (colonne);
                 let posY = Ecran_Hauteur / 2 + (y + 0.5) * h / (line)
-                this.Briques.push(new Brique(posX,posY))
+                this.Briques.push(this.AddChildren(new Brique(posX,posY)))
             }
         }
 
@@ -30,9 +30,9 @@ class JeuPong
         Camera.X = Ecran_Largeur / 2 - this.BordL;
         Camera.Y = Ecran_Hauteur / 2;
 
-        this.Background = new Lutin(Camera.X,Camera.Y, ["Images/CasseBrique/Background.png"])
-        this.Balle = new Balle()
-        this.Paddle = new Paddle(JeuPong.JeuLargeur / 2, 60)
+        this.Background = this.AddChildren(new Lutin(Camera.X,Camera.Y, ["Images/CasseBrique/Background.png"]));
+        this.Balle = this.AddChildren(new Balle());
+        this.Paddle = this.AddChildren(new Paddle(JeuPong.JeuLargeur / 2, 60));
     }
 
 

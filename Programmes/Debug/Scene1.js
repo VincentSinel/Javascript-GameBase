@@ -4,21 +4,27 @@ class Scene1 extends Scene
     {
         super("Scene Test");
 
-        this.LoadTilemap()
-
-        let lutin = new Lutin(0,0, ["Images/Moto/Moto1.png"]);
-        this.Lutin3 = this.AjoutEnfant(lutin);
+        let lutin = new Lutin(0,0, ["Images/Chat.png"]);
+        this.Lutin3 = this.AddChildren(lutin);
         this.Lutin3.CentreRotation = new Vector(0.5,1);
         this.Lutin3.Dire("Long text avec de multiple ligne qui permet de tester la génération de taille ")
+
+        let v = [new Vector(0,0), new Vector(60,0), new Vector(100,60), new Vector(80,120), new Vector(50,120)]
+
+        this.shape1 = new Circle(new Vector(0,0),50);
+        this.shape3 = Polygon.Regular(new Vector(200,-200),6,100)//new Polygon(new Vector(200,-200), v)
+        this.shape2 = Rectangle.FromPosition(200,200,50,50,Math.PI / 9)
+
+
         //this.Lutin3.Direction = Math.random() * 360;
 
-        let tilemap = new TileMap( 0, 0, 50, 50);
-        this.Tilemap = this.AjoutEnfant(tilemap);
-        this.Tilemap.Charger("Terrain1");
-        this.Tilemap.Edition();
+        //let tilemap = new TileMap( 0, 0, 50, 50);
+        //this.Tilemap = this.AddChildren(tilemap);
+        //this.Tilemap.Charger("Terrain1");
+        //this.Tilemap.Edition();
 
 
-        new UI_Slider(200,200,1,200,30,0,100);
+        //new UI_Slider(200,200,1,200,30,0,100);
         //new UI_Button(400,400,2,200,200,"test");
 
         //for (let test = 0; test < 40; test++) {
@@ -65,22 +71,28 @@ class Scene1 extends Scene
             }
         } */
 
-        Camera.Zoom = 0.2;
+        Camera.Zoom = 1.5;
 
-        this.lutins = [];
-        for (let i = 0; i < 0; i++) 
-        {
-            let x = 300//(Math.random() - 0.5) * 1000;
-            let y = 0//(Math.random() - 0.5) * 1000;
-            let d = 0//Math.random() * 360;
-            const lut = new LutinTest(x,y);
-            lut.Direction = d;
-            this.lutins.push(lut);
-            if (i > 0)
-                this.lutins[i-1].AddChildren(lut);
-            else
-                this.Lutin3.AddChildren(this.lutins[0]);
-        }
+        this.Triangle = [
+            new Vector(Math.random() * 500,Math.random() * 500), 
+            new Vector(Math.random() * 500,Math.random() * 500), 
+            new Vector(Math.random() * 500,Math.random() * 500)
+        ]
+
+        //this.lutins = [];
+        //for (let i = 0; i < 0; i++) 
+        //{
+        //    let x = 300//(Math.random() - 0.5) * 1000;
+        //    let y = 0//(Math.random() - 0.5) * 1000;
+        //    let d = 0//Math.random() * 360;
+        //    const lut = new LutinTest(x,y);
+        //    lut.Direction = d;
+        //    this.lutins.push(lut);
+        //    if (i > 0)
+        //        this.lutins[i-1].AddChildren(lut);
+        //    else
+        //        this.Lutin3.AddChildren(this.lutins[0]);
+        //}
 
         //this.Lutin1 = this.AjoutEnfant(new LutinTest(200,200));
         //this.Lutin2 = this.AjoutEnfant(new LutinTest(-200,-200));
@@ -89,41 +101,32 @@ class Scene1 extends Scene
         //this.Lutin2.Zoom = 20;
     }
 
-
-    LoadTilemap()
-    {
-        Tilesets.Add_Auto("Images/Tilemap/A1_Eau1.png", "A1");
-        Tilesets.Add_Auto("Images/Tilemap/A2_Extérieur2.png", "A2");
-        Tilesets.Add_Auto("Images/Tilemap/A3_Mur1.png", "A3");
-        Tilesets.Add_Auto("Images/Tilemap/A4_Mur1.png", "A4");
-        Tilesets.Add_Auto("Images/Tilemap/A5_Extérieur7.png", "A5");
-        Tilesets.Add_Auto("Images/Tilemap/A5_Intérieur8.png", "A5");
-        Tilesets.Add_Animation("Images/Tilemap/Water.png");
-    }
-
     Calcul(Delta)
     {
         super.Calcul(Delta)
-        if(Clavier.ToucheBasse("ArrowUp"))
-        {
-            this.Lutin3.Y += 2
-        }
-        if(Clavier.ToucheBasse("ArrowDown"))
-        {
-            this.Lutin3.Y -= 2
-        }
-        if(Clavier.ToucheBasse("ArrowLeft"))
-        {
-            this.Lutin3.X -= 2
-        }
-        if(Clavier.ToucheBasse("ArrowRight"))
-        {
-            this.Lutin3.X += 2
-        }
-        if(Clavier.ToucheJusteBasse("p"))
-        {
-            console.log(this.lutins[0])
-        }
+        // if(Clavier.ToucheBasse("ArrowUp"))
+        // {
+        //     this.Lutin3.Y -= speed
+        // }
+        // if(Clavier.ToucheBasse("ArrowDown"))
+        // {
+        //     this.Lutin3.Y += 2
+        // }
+        // if(Clavier.ToucheBasse("ArrowLeft"))
+        // {
+        //     this.Lutin3.X -= 2
+        // }
+        // if(Clavier.ToucheBasse("ArrowRight"))
+        // {
+        //     this.Lutin3.X += 2
+        // }
+        // if(Clavier.ToucheJusteBasse("p"))
+        // {
+        //     console.log(this.lutins[0])
+        // }
+        this.shape1.x = Camera.X;
+        this.shape1.y = Camera.Y;
+
         //this.Lutin3.Z = -this.Lutin3.Y;
         //this.Lutin3.Direction += 2
 
@@ -131,8 +134,33 @@ class Scene1 extends Scene
        // {
         //    this.lutins[l].Direction += 0.1 * Delta;
         //}
-
-        //Debug.AjoutVecteur(this.Lutin1.TopLeftAngle, this.Lutin1.size)
+        
+        Debug.AjoutCercle(this.shape1, "RED")
+        let a = this.shape1.collide_Overlap(this.shape2)
+        let b = this.shape1.collide_Overlap(this.shape3)
+        let color = "Magenta"
+        if (a.x != 0 || a.y != 0)
+        {
+            color = "Green"
+            Camera.X -= a.x;
+            Camera.Y -= a.y;
+            this.shape1.x = Camera.X;
+            this.shape1.y = Camera.Y;
+        }
+        Debug.AjoutRectangle(this.shape2, color)
+        color = "Blue"
+        if (b.x != 0 || b.y != 0)
+        {
+            color = "cyan"
+            Camera.X -= b.x;
+            Camera.Y -= b.y;
+            this.shape1.x = Camera.X;
+            this.shape1.y = Camera.Y;
+        }
+        Debug.AjoutPolygone(this.shape3, color)
+        //Debug.AjoutVecteur(this.Triangle[0], this.Triangle[0].to(this.Triangle[1]),color)
+        //Debug.AjoutVecteur(this.Triangle[1], this.Triangle[1].to(this.Triangle[2]),color)
+        //Debug.AjoutVecteur(this.Triangle[2], this.Triangle[2].to(this.Triangle[0]),color)
         //Debug.AjoutVecteur(this.Lutin2.TopLeftAngle, this.Lutin2.size)
         //Debug.AjoutVecteur(this.Lutin3.TopLeftAngle, this.Lutin3.size)
         //if (this.Lutin3.Children.length > 0)
