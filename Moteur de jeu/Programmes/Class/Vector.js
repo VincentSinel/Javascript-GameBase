@@ -229,7 +229,7 @@ class Vector
         let v = Vector.FromAngle(angle)
         let u = this.normalize(this.dot(v))
         let w = u.to(v);
-        return Math.atan2(w.y - u.y,w.x - u.x)
+        return Math.atan2(w.y - u.y,w.x - u.x)  
     }
     /**
      * Determine la position relative d'un point vis à vis d'un segment orienté.

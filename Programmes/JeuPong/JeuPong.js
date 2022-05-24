@@ -3,17 +3,21 @@ class JeuPong extends Scene
     static JeuLargeur;
     static JeuHauteur;
 
+    static BordL = 200
+
     constructor()
     {
-        this.BordL = 200;
+        super("Pong")
         this.Briques = [];
 
-
-        let colonne = 15;
-        let line = 15;
-        JeuPong.JeuLargeur = Ecran_Largeur - 2 * this.BordL;
+        JeuPong.JeuLargeur = Ecran_Largeur - 2 * JeuPong.BordL;
         JeuPong.JeuHauteur = Ecran_Hauteur;
-        let marge = 50;
+
+        // Création des briques
+        let colonne = 15; // Nombre de colonne
+        let line = 15; // Nombre de ligne
+        let marge = 50; // Marge au bord de l'écran
+
         let w = JeuPong.JeuLargeur - marge * 2;
         let h = Ecran_Hauteur / 2 - 10;
         for (let y = 0; y < line; y++) 
@@ -21,87 +25,97 @@ class JeuPong extends Scene
             for (let x = 0; x < colonne; x++) 
             {
                 let posX = marge + (x + 0.5) * w / (colonne);
-                let posY = Ecran_Hauteur / 2 + (y + 0.5) * h / (line)
+                let posY = -Ecran_Hauteur / 2 - (y + 0.5) * h / (line)
                 this.Briques.push(this.AddChildren(new Brique(posX,posY)))
             }
         }
 
-
-        Camera.X = Ecran_Largeur / 2 - this.BordL;
-        Camera.Y = Ecran_Hauteur / 2;
-
-        this.Background = this.AddChildren(new Lutin(Camera.X,Camera.Y, ["Images/CasseBrique/Background.png"]));
+        this.Background = this.AddChildren(new Lutin(Ecran_Largeur / 2 - JeuPong.BordL, -Ecran_Hauteur / 2, ["Images/CasseBrique/Background.png"]));
+        this.Background.Z = -500
         this.Balle = this.AddChildren(new Balle());
-        this.Paddle = this.AddChildren(new Paddle(JeuPong.JeuLargeur / 2, 60));
+        this.Paddle = this.AddChildren(new Paddle(JeuPong.JeuLargeur / 2, -60));
+
+        this.bruit = 0;
     }
 
 
     Calcul(Delta)
     {
-        this.Balle.Calcul(Delta);
-        this.Paddle.Calcul(Delta);
+        this.Background.X = Camera.X + (JeuPong.JeuLargeur / 2 - this.Paddle.X) / 50;
+        this.Background.Y = Camera.Y;
+
+        Camera.X = Ecran_Largeur / 2 - JeuPong.BordL + (Math.random() - 0.5) * this.bruit;
+        Camera.Y =  -Ecran_Hauteur / 2 + (Math.random() - 0.5) * this.bruit;
+
+        if (this.bruit > 0)
+        {
+            this.bruit -= Delta * 0.2;
+        }
+        else
+        {
+            this.bruit = 0;
+        }
+
+        let v = Vector.Zero;
         for (let b = 0; b < this.Briques.length; b++) 
         {
-            this.Briques[b].Calcul(Delta);
-        }
+            let c = this.Balle.CercleCollision.collide_Overlap(this.Briques[b].CollisionRect)
 
-        this.Balle.Avancer(-this.Balle.Vitesse * Delta)
-        for (let step = 0; step < (this.Balle.Vitesse * Delta); step++) 
+             // Permet de limiter les angles faibles et donc le blocage de la balle en déplacement horizontal
+            if (c.x != 0)
+                c.x = c.x / Math.abs(c.x) // Remet la coordonée x à 1 ou -1
+            if (c.y != 0)
+                c.y = c.y / Math.abs(c.y) // Remet la coordonée y à 1 ou -1
+
+
+            v = v.add(c) // Ajout du déplacement générale
+            if (c.x != 0 || c.y != 0)
+            {
+                let a = this.Briques.splice(b,1) // Suppression de la brique
+                this.RemoveChildren(a[0]);
+                b -= 1;
+                this.bruit = 5;
+            }
+        }
+        if (v.x != 0 || v.y != 0)
         {
-            if (step == Math.floor(this.Balle.Vitesse * Delta))
-                this.Balle.Avancer((this.Balle.Vitesse * Delta) % 1)
-            else
-                this.Balle.Avancer(1)
-            let balpos = new Vecteur2(this.Balle.X, this.Balle.Y)
-            for (let b = 0; b < this.Briques.length; b++) 
-            {
-                this.Briques[b].Calcul();
-                let val = this.Briques[b].Rectangle();
-                let con = Contacts.CercleContreRectangle(val[0],val[1],val[2],val[3], balpos, this.Balle.Radius)
-                if (con != 0)
-                {
-                    if (Vecteur2.Dot(con, this.Balle.VecteurDirection()) < 0)
-                    {
-                        this.Balle.Direction = Contacts.AngleRebond(con.Normaliser(), this.Balle.Direction)
-
-                        
-                        this.Briques.splice(b,1)
-                        b -= 1;
-                    }
-                }
-            }
-
-            let val = this.Paddle.Rectangle();
-            let con = Contacts.CercleContreRectangle(val[0],val[1],val[2],val[3], balpos, this.Balle.Radius)
-            if (con != 0)
-            {
-                if (Vecteur2.Dot(con, this.Balle.VecteurDirection()) < 0)
-                {
-                    this.Balle.Direction = Contacts.AngleRebond(con.Normaliser(), this.Balle.Direction)
-                    if(con.Y > 0)
-                    {
-                        this.Balle.Direction = 90 + 70 * Math.max(Math.min((this.Paddle.X - this.Balle.X) / (this.Balle.Radius + this.Paddle.Image.width / 2), 1),-1)
-                    }
-                }
-            }
+            this.Balle.X -= v.x;
+            this.Balle.Y -= v.y;
+            this.Balle.RadDirection = v.bounceDirection(this.Balle.RadDirection); // La balle rebondi
         }
 
+        v = this.Balle.CercleCollision.collide_Overlap(this.Paddle.CollisionRect) // Collision avec le paddle
+        if (v.x != 0 || v.y != 0)
+        {
+            this.Balle.X -= v.x;
+            this.Balle.Y -= v.y;
+            this.Balle.Direction = -90 - 70 * Math.max(Math.min((this.Paddle.X - this.Balle.X) / (this.Balle.Radius + this.Paddle.Image.width / 2), 1),-1);
+        }
+        if (this.Briques.length == 0)
+        {
+            this.Balle.BalleAttente = 60;
+        }
+
+        // Corrige la trajectoire si celle-ci est horizontal (permet de ne pas rester bloquer)
+        if (Math.abs(this.Balle.Direction % Math.PI) < Math.PI / 18)
+        {
+            this.Balle.Direction += 0.1
+        }
     }
 
 
     Dessin(Context)
     {
-        this.Background.Dessin(Context);
-
         Context.fillStyle = "black"
-        Context.fillRect(0,0,this.BordL,Ecran_Hauteur);
-        Context.fillRect(Ecran_Largeur - this.BordL,0,this.BordL,Ecran_Hauteur);
-
-        for (let b = 0; b < this.Briques.length; b++) 
+        Context.fillRect(0,0,JeuPong.BordL, Ecran_Hauteur);
+        Context.fillRect(Ecran_Largeur - JeuPong.BordL, 0, JeuPong.BordL,Ecran_Hauteur);
+        
+        if (this.Briques.length == 0)
         {
-            this.Briques[b].Dessin(Context);
+            Context.textAlign = "center";
+            Context.fillStyle = "white"
+            Context.font = "60px " + "Arial";
+            Context.fillText("Bravo vous avez réussi", Ecran_Largeur / 2, Ecran_Hauteur / 2);
         }
-        this.Balle.Dessin(Context);
-        this.Paddle.Dessin(Context);
     }
 }

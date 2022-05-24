@@ -118,11 +118,21 @@ class Scene
     }
     /**
      * Effectue le dessin de l'élément racine ainsi que tout les éléments de la scene
-     * @param {CanvasRenderingContext2D} Context Context de dessin
+     * @param {CanvasRenderingContext2D} Context Contexte de dessin
      */
     Draw(Context)
     {
         this.Root.Draw(Context);
+        this.Dessin(Context);
+    }
+
+    /**
+     * Effectue un dessin suplémentaire après le dessin de tout les éléments.
+     * @param {CanvasRenderingContext2D} Context Contexte de dessin
+     */
+    Dessin(Context)
+    {
+        // Override by element
     }
 
     /**

@@ -12,7 +12,7 @@ class SATCollisionInfo
     vector = new Vector();			    // the direction you need to move - unit vector
     shapeAContained = false;		    // is object A contained in object B
     shapeBContained = false;		    // is object B contained in object A
-    separation = new Vector();           // how far to separate
+    separation = new Vector();          // how far to separate
 }
 /**
  * Module de detection de collision entre deux objets
