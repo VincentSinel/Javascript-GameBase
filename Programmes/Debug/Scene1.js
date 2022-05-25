@@ -18,10 +18,10 @@ class Scene1 extends Scene
 
         //this.Lutin3.Direction = Math.random() * 360;
 
-        //let tilemap = new TileMap( 0, 0, 50, 50);
-        //this.Tilemap = this.AddChildren(tilemap);
-        //this.Tilemap.Charger("Terrain1");
-        //this.Tilemap.Edition();
+        let tilemap = new TileMap( 0, 0, 50, 50);
+        this.Tilemap = this.AddChildren(tilemap);
+        this.Tilemap.Charger("Terrain1");
+        this.Tilemap.Edition();
 
 
         //new UI_Slider(200,200,1,200,30,0,100);

@@ -134,6 +134,10 @@ class TileMap_Layer extends Drawable
     {
         return this.Tilemap.CentreRotation
     }
+    set CentreRotation(v)
+    {
+        //Useless
+    }
     //set CentreRotation(value)
     //{
     //    super.CentreRotation = value;
@@ -391,6 +395,7 @@ class TileMap_Layer extends Drawable
     }
     /**
      * Mets à jour du layer
+     * @override
      * @param {float} Delta Frame depuis la précédentes mise à jour
      */
     Calcul(Delta)
@@ -406,6 +411,7 @@ class TileMap_Layer extends Drawable
     }
     /**
      * Effectue le dessin du layer
+     * @override
      * @param {CanvasRenderingContext2D} Context Contexte de dessin
      */
     Dessin(Context)

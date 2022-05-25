@@ -1,6 +1,7 @@
 /**
  * Interface d'édition de tilemap
  * @extends UIElement
+ * @class
  */
 class UI_EditionTileMap extends UIElement
 {
@@ -17,6 +18,7 @@ class UI_EditionTileMap extends UIElement
 
     /**
      * Créer un éditeur pour le tilemap séléctionné
+     * @constructor
      * @param {TileMap} Tilemap Tilemap Cible de l'éditeur
      */
     constructor(Tilemap)
@@ -90,7 +92,12 @@ class UI_EditionTileMap extends UIElement
         this.Focus()
     }
 
-    //#region Getter Setter
+    //#region GETTER SETTER
+
+    /**
+     * Position Scroll liste des tiles
+     * @type {float}
+     */
     get ScrollPosition()
     {
         return this.#ScrollPosition;
@@ -99,6 +106,10 @@ class UI_EditionTileMap extends UIElement
     {
         this.#ScrollPosition = v;
     }
+    /**
+     * Tiles selectionné dans la liste des tiles
+     * @type {int[]}
+     */
     get SelectedTiles()
     {
         return this.#SelectedTiles;
@@ -108,6 +119,10 @@ class UI_EditionTileMap extends UIElement
         this.#SelectedTiles = v;
         this.RefreshUI();
     }
+    /**
+     * Tiles selectionné dans le tilemap
+     * @type {Array<int[]>}
+     */
     get Edit_SelectedTile()
     {
         return this.#Edit_SelectedTile;
@@ -117,14 +132,26 @@ class UI_EditionTileMap extends UIElement
         this.#UID = Date.now();
         this.#Edit_SelectedTile = v;
     }
+    /**
+     * index de la couche selectionné dans la liste des couches
+     * @type {int}
+     */
     get SelectedLayer()
     {
         return this.ListeLayer.SelectedIndex;
     }
+    /**
+     * Nom de la couche selectionné dans la liste des couches
+     * @type {string}
+     */
     get Edit_SelectedLayer()
     {
         return Object.keys(this.T.Layers)[this.SelectedLayer];
     }
+    /**
+     * Couche selectionné dans la liste des couches (TileMap_Layer)
+     * @type {TileMap_Layer}
+     */
     get CurrentLayer()
     {
         return this.T.Layers[this.Edit_SelectedLayer];
@@ -134,6 +161,10 @@ class UI_EditionTileMap extends UIElement
 
     //#region Handler
 
+    /**
+     * Evenement lié à l'appuye d'une touche
+     * @param {UIEvenement} e Evenement associé
+     */
     Clavier_ToucheJusteBasse(e)
     {
         if (e.Param.key == "p")
@@ -141,21 +172,36 @@ class UI_EditionTileMap extends UIElement
             this.Sauvegarder();
         }
     }
-
+    /**
+     * Change la visibilité d'une couche
+     * @param {string} name Nom du layer
+     * @param {boolean} value Vraie si visible, faux sinon
+     */
     ToggleLayerVisibility(name, value)
     {
         this.T.Layers[name].Visible = value;
     }
-
+    /**
+     * Evenement lié au déplacement de la souris
+     * @param {UIEvenement} e Evenement associé
+     */
     Souris_Hover(e)
     {
         this.PositionPreview = this.T.PositionIndex(Souris.X, Souris.Y, this.#UID);
     }
+    /**
+     * Evenement lié au scroll de la souris
+     * @param {UIEvenement} e Evenement associé
+     */
     Souris_Scroll(e)
     {
         this.ScrollBar.ScrollPosition += e.Param.dy * 30;
     }
-    Souris_Clique(event)
+    /**
+     * Evenement lié au clique gauche de la souris
+     * @param {UIEvenement} e Evenement associé
+     */
+    Souris_Clique(e)
     {
         if (Souris.CX <= this.MenuW)
         {
@@ -166,7 +212,11 @@ class UI_EditionTileMap extends UIElement
             this.Clique_Tilemap();
         }
     }
-    Souris_RightClique(event)
+    /**
+     * Evenement lié au clique droit de la souris
+     * @param {UIEvenement} e Evenement associé
+     */
+    Souris_RightClique(e)
     {
         if (Souris.CX <= this.MenuW)
         {
@@ -177,6 +227,10 @@ class UI_EditionTileMap extends UIElement
             this.CliqueD_Tilemap();
         }
     }
+    /**
+     * Evenement lié au début de drag gauche de la souris
+     * @param {UIEvenement} event Evenement associé
+     */
     Souris_DragStart(event)
     {
         if (Souris.CX <= this.MenuW)
@@ -196,6 +250,10 @@ class UI_EditionTileMap extends UIElement
             this.Clique_Tilemap();
         }
     }
+    /**
+     * Evenement lié a la fin de drag gauche de la souris
+     * @param {UIEvenement} event Evenement associé
+     */
     Souris_DragEnd(event)
     {
         if (Souris.CX <= this.MenuW)
@@ -225,6 +283,10 @@ class UI_EditionTileMap extends UIElement
             this.Clique_Tilemap();
         }
     }
+    /**
+     * Evenement lié au drag gauche de la souris
+     * @param {UIEvenement} event Evenement associé
+     */
     Souris_Dragging(event)
     {
         if (Souris.CX <= this.MenuW)
@@ -251,6 +313,10 @@ class UI_EditionTileMap extends UIElement
             this.Clique_Tilemap();
         }
     }
+    /**
+     * Evenement lié au début de drag droit de la souris
+     * @param {UIEvenement} event Evenement associé
+     */
     Souris_RightDragStart(event)
     {
         if (Souris.CX <= this.MenuW)
@@ -270,6 +336,10 @@ class UI_EditionTileMap extends UIElement
             }
         }
     }
+    /**
+     * Evenement lié a la fin de drag droit de la souris
+     * @param {UIEvenement} event Evenement associé
+     */
     Souris_RightDragEnd(event)
     {
         if (Souris.CX <= this.MenuW)
@@ -301,6 +371,10 @@ class UI_EditionTileMap extends UIElement
             }
         }
     }
+    /**
+     * Evenement lié au drag droit de la souris
+     * @param {UIEvenement} event Evenement associé
+     */
     Souris_RightDragging(event)
     {
         if (Souris.CX <= this.MenuW)
@@ -319,14 +393,6 @@ class UI_EditionTileMap extends UIElement
                 this.DragSelectTiles = [
                     new Vector(Math.min(x,this.#DragStart.x), Math.min(y,this.#DragStart.y)),
                     new Vector(Math.max(x,this.#DragStart.x), Math.max(y,this.#DragStart.y))];
-                //this.SelectedTiles = [];
-                //for(let i = Math.min(x,this.#DragStart.x); i <= Math.max(x,this.#DragStart.x); i++)
-                //{
-                //    for(let j = Math.min(y,this.#DragStart.y); j <= Math.max(y,this.#DragStart.y); j++)
-                //    {
-                //        this.SelectedTiles.push(this.CurrentLayer.GetTileAt(new Vector(i,j)));
-                //    }
-                //}
             }
         }
     }
@@ -343,7 +409,6 @@ class UI_EditionTileMap extends UIElement
         this.T.Sauvegarder(name)
         Datas.SauvegarderData();
     }
-
     /**
      * Dessine la liste des tiles
      */
@@ -364,10 +429,10 @@ class UI_EditionTileMap extends UIElement
             tile.Dessin(this.AllTiles, x, y, t, 0);
         }
     }
-
     /**
      * Dessine la liste des tiles;
-     * @param {canvasrender2D} Context Front context
+     * @override
+     * @param {CanvasRenderingContext2D} Context Front context
      */
     DessinFrontUI(Context)
     {
@@ -412,9 +477,9 @@ class UI_EditionTileMap extends UIElement
             this.Panel.Padding[0], this.Panel.Padding[1], ctx.canvas.width, this.Panel.CH)
 
     }
-
     /**
      * Effectue une mise à jour du UI
+     * @override
      * @param {float} Delta Nombre de frame depuis la dernière mise a jour
      */
     Calcul(Delta)
@@ -422,7 +487,6 @@ class UI_EditionTileMap extends UIElement
         super.Calcul(Delta)
         this.RefreshUI();
     }
-
     /**
      * Active ou desactive la vision des collision du tilemap
      */
@@ -433,7 +497,6 @@ class UI_EditionTileMap extends UIElement
         else
             TileMap_Layer.CollisionDebug = false;
     }
-
     /**
      * Vide la selection de tile
      */
@@ -442,7 +505,6 @@ class UI_EditionTileMap extends UIElement
         this.SelectedTiles = [-1];
         this.Edit_SelectedTile = [[-1]];
     }
-
     /**
      * Action du clique gauche sur le menu latérale dans la liste des tiles
      */
@@ -502,5 +564,4 @@ class UI_EditionTileMap extends UIElement
         this.SelectedTiles = [id];
         this.Edit_SelectedTile = [[id]];
     }
-
 }

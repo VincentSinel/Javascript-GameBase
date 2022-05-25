@@ -172,17 +172,16 @@ class GameObject
      * Change le parent actuel du GameObject
      * @param {GameObject} parent Nouveau Parent
      */
-     ChangeParent(parent)
-     {
-        if (this.Parent)
-        {
-            this.Parent.RemoveChildren(this);
-        }
-        this.Parent = Parent;
-        if (this.Parent)
-            this.Root = Parent.Root;
-     }
-
+    ChangeParent(parent)
+    {
+    if (this.Parent)
+    {
+        this.Parent.RemoveChildren(this);
+    }
+    this.Parent = Parent;
+    if (this.Parent)
+        this.Root = Parent.Root;
+    }
     /**
      * Ajoute un enfant à l'objet actuel
      * @param {GameObject} object Enfant à ajouter
@@ -201,7 +200,6 @@ class GameObject
             this.Children.push(object);
         return object;
     }
-
     /**
      * Supprime l'objet enfant selectionné
      * @param {GameObject} object Objet enfant à supprimer
@@ -221,7 +219,6 @@ class GameObject
         }
         return false
     }
-
     /**
      * S'execute après l'assignation de la racine.
      */
@@ -229,8 +226,6 @@ class GameObject
     {
         // Add logic after parent set
     }
-
-
     /**
      * Supprime l'objet selectionné
      */
@@ -242,7 +237,6 @@ class GameObject
             this.Children[0].Destroy();
         }
     }
-
     /**
      * Mets à jour le GameObject ainsi que ces enfants
      * @param {float} Delta Temps depuis la dernière frame
@@ -255,7 +249,6 @@ class GameObject
         }
         this.Calcul(Delta);
     }
-
     /**
      * Appel la mise à jour de l'utilisateur
      * @param {float} Delta Temps depuis la dernière frame

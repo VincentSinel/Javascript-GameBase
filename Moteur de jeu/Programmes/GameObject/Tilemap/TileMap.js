@@ -1,5 +1,6 @@
 /**
  * Représente un tilemap
+ * @extends Drawable
  * @class
  */
 class TileMap extends Drawable
@@ -33,40 +34,76 @@ class TileMap extends Drawable
         this.RectDraw;
     }
 
+    //#region GETTER SETTER
+
+    /**
+     * Largeur du tilemap en pixel
+     * @override
+     * @type {float}
+     */
     get TextWidth()
     {
         return this.W * Tilesets.TileSize;
     }
+    /**
+     * Hauteur du tilemap en pixel
+     * @override
+     * @type {float}
+     */
     get TextHeight()
     {
         return this.H * Tilesets.TileSize;
     }
-
-    get H()
-    {
-        return this.#H
-    }
+    /**
+     * Largeur du tilemap en tile
+     * @type {float}
+     */
     get W()
     {
         return this.#W
     }
-
+    /**
+     * hauteur du tilemap en tile
+     * @type {float}
+     */
+    get H()
+    {
+        return this.#H
+    }
+    /**
+     * Couche selectionné
+     * @type {TileMap_Layer}
+     */
     get Edit_SelectedLayer()
     {
         return Object.keys(this.Layers)[this.EditUI.SelectedLayer];
     }
-    
+    /**
+     * Supprime le tableau de collision en réinitialisant ses paramètre
+     * @override
+     * @type {Rectangle}
+     */
     get CollisionRect()
     {
         return Rectangle.FromPosition(0,0,0,0);
     }
 
+    //#endregion
+
+    /**
+     * S'execute après l'assignation de la racine.
+     */
     PostSetParent()
     {
         super.PostSetParent()
         this.AddChildren(this.Layers.collision)
     }
-
+    /**
+     * Calcul la collision d'un objet rectangulaire sur le tilemap
+     * @param {Rectangle} rect Rectangle de test de collision
+     * @param {Vector} mouvement Mouvement de l'objet à tester
+     * @returns {Vector} Mouvement à effectuer pour quitter la collision
+     */
     GetOverlapVector(rect, mouvement)
     {
         let p1 = this.PositionIndex(rect.x,rect.y);
@@ -126,7 +163,12 @@ class TileMap extends Drawable
         }
         return o.to(new Vector(rect.x,rect.y));
     }
-
+    /**
+     * Test la collision 
+     * @param {int} i Tile X
+     * @param {int} j Tile Y
+     * @param {Rectangle} rect Rectangle à tester
+     */
     #GetOverlapVector_Do(i, j, rect)
     {
         if(this.Layers[TileMap_Layer.CollisionMaskName].GetTileAt(new Vector(i,j)) >= 0)
@@ -134,12 +176,10 @@ class TileMap extends Drawable
             let x = i * Tilesets.TileSize + this.X - this.TextWidth * this.CentreRotation.x;
             let y = j * Tilesets.TileSize + this.Y - this.TextHeight * this.CentreRotation.y;
             let r = Rectangle.FromPosition(x,y,Tilesets.TileSize,Tilesets.TileSize)
-            let e = rect.collisionWithOverlap(r); 
+            let e = rect.collide_Overlap(r); 
             rect.origin = rect.origin.add(e);
         }
     }
-
-
     /**
      * Ajoute une couche de dessin au tilemap
      * @param {String} Name Nom de la couche de dessin
@@ -159,11 +199,6 @@ class TileMap extends Drawable
         this.Layers[Name] = new TileMap_Layer(Name, this, Z, fill);
         this.AddChildren(this.Layers[Name]);
     }
-
-
-
-
-
     /**
      * Lance l'édition du TileMap
      */
@@ -176,7 +211,9 @@ class TileMap extends Drawable
         this.Edit = true;
         this.EditUI = new UI_EditionTileMap(this);
     }
-
+    /**
+     * Effectue un mirroir du contenue des Layers verticalement
+     */
     FlipLayersVerticaly()
     {
         Object.values(this.TileMap.Layers).forEach( value => {
@@ -192,6 +229,9 @@ class TileMap extends Drawable
             value.Load(value.EncodeData()[2])
         })
     }
+    /**
+     * Effectue un mirroir du contenue des Layers horizontalement
+     */
     FlipLayersHorizontaly()
     {
         Object.values(this.TileMap.Layers).forEach( value => {
@@ -207,7 +247,6 @@ class TileMap extends Drawable
             value.Load(value.EncodeData()[2])
         })
     }
-
     /**
      * Charge le contenue de la base de donnée pour définir le tilemap
      * @param {String} Nom Nom du Tilemap
@@ -220,7 +259,6 @@ class TileMap extends Drawable
             this.#Charge(data, Nom)
         }
     }
-
     /**
      * Lance le chargement du tilemap.
      * @param {Array} data Donnée à charger
@@ -265,7 +303,6 @@ class TileMap extends Drawable
             }
         }
     }
-
     /**
      * Sauvegarde le contenue du Tilemap en un fichier .json
      */
@@ -275,10 +312,9 @@ class TileMap extends Drawable
 
         Datas.AjoutTilemapData(Nom, this.W, this.H, data, TileMap.SauvegardeVersion)
     }
-
     /**
      * Encode chaque couche (TileMap_Layers) du tilemap pour l'enregistrement.
-     * @returns Tableau des données pour le tilemap
+     * @returns {Array<Array}Tableau des données pour le tilemap ([[Nom, Z, data]])
      */
     #EncodeData()
     {
@@ -289,47 +325,11 @@ class TileMap extends Drawable
         });
         return ar;
     }
-
-    /**
-     * Test si un contact est présent entre un lutin non tourné et le tilemap;
-     * @param {Lutin} Lutin Lutin a tester
-     * @returns Boolean représentant si il y a contact ou non
-     */
-    Contact_AABB(Lutin)
-    {
-        let dec = 2; // Cette valeur est arbitraire, le contact se fait en découpant le rectangle du lutin en 9 point de test.
-        let ar = Lutin.RectangleWH();
-        let dx = Math.floor(ar[1] / Tilesets.TileSize * dec);
-        let dy = Math.floor(ar[2] / Tilesets.TileSize * dec);
-        for (let x = 0; x <= dx; x++) {
-            for (let y = 0; y <= dy; y++) {
-                let ox = Math.min(ar[0].X + x * ar[1] / dx, ar[0].X + ar[1]);
-                let oy = Math.max(ar[0].Y - y * ar[2] / dy, ar[0].Y - ar[2]);
-                // Montre le découpage du lutin
-                //Debug.AjoutVecteur(new Vecteur2(Camera.AdapteX(ox),Camera.AdapteY(oy)), new Vecteur2(0,0))
-                let t = this.PositionIndex(ox, oy);
-                if (t.X >= 0 && t.X < this.W)
-                {
-                    if (t.Y >= 0 && t.Y < this.H)
-                    {
-                        let id = this.Contenue[t.X + t.Y * this.W];
-                        if (id != -1 && this.TileDepuisIndex(id).Contact)
-                        {
-                            return true;
-                        }
-                    }
-                }
-            }
-        }
-        return false;
-    }
-
-
     /**
      * Convertie une position sur la camera en une position sur le tilemap.
      * @param {float} X Position X sur la camera
      * @param {float} Y Position Y sur la camera
-     * @returns Vecteur2 représentant la position en tille sur le tilemap
+     * @returns {Vector} Vecteur représentant la position en tile sur le tilemap
      */
     PositionIndex(X,Y)
     {
@@ -337,9 +337,9 @@ class TileMap extends Drawable
         let y = Math.floor((Y - (this.Y - this.TextHeight * this.CentreRotation.y)) / Tilesets.TileSize);
         return new Vector(x, y);
     }
-
     /**
      * Lance les calculs lié au tilemap
+     * @override
      * @param {float} Delta Nombre de frame depuis la dernière mise à jour.
      */
     Calcul(Delta)
@@ -355,7 +355,10 @@ class TileMap extends Drawable
         
         this.RectDraw = Rectangle.FromPosition(dx, dy, size, size);
     }
-
+    /**
+     * Effectue le dessin supplémentaire sur le tilemap
+     * @param {CanvasRenderingContext2D} Context Contexte de dessin 
+     */
     Dessin(Context)
     {
        // Tout est gérer par les TileMap_Layer 
