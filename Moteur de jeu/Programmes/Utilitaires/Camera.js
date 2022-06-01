@@ -137,8 +137,8 @@ class Camera
         let disX = (P.x - Ecran_Largeur / 2) / Camera.Zoom;
         let disY = (P.y - Ecran_Hauteur / 2) / Camera.Zoom;
 
-        let x = Camera.X + disX * cos - disY * sin;
-        let y = Camera.Y + disX * sin + disY * cos;
+        let x = Camera.X + disX * cos + disY * sin;
+        let y = Camera.Y - disX * sin + disY * cos;
  
          return new Vector(x,y)
      }
