@@ -7,6 +7,8 @@
  * Camera.CameraVersEcran(P)
  * Camera.EcranVersCamera(P)
  * Camera.PleinEcran()
+ * @class
+ * @static
  */
 class Camera
 {
@@ -14,9 +16,13 @@ class Camera
     static Y = 0;
     static Z = 0;
     static Zoom = 1.0;
+    static FullScreen = false;
     static #Direction = 0;
     static #Viewport = undefined;
 
+    /**
+     * Renvoie le rectangle de vue de la camera
+     */
     static get Viewport()
     {
         if (Camera.#Viewport)
@@ -31,7 +37,9 @@ class Camera
             return Camera.#Viewport;
         }
     }
-
+    /**
+     * Renvoie le rectangle de vue de la camera sans prendre en compte le zoom
+     */
     static get ViewPortZoomLess()
     {
         let p = new Vector(-Ecran_Largeur / 2, -Ecran_Hauteur / 2);
@@ -39,30 +47,36 @@ class Camera
         return new Rectangle(p, Ecran_Largeur, Ecran_Hauteur, -Camera.#Direction)
 
     }
+    
+    //#region STATIC GETTER SETTER
 
-    static FullScreen = false;
-
-
+    /**
+     * Angle de la camera en radian 
+     * @type {float}
+     */
     static get RadDirection()
     {
         return Camera.#Direction;
     }
-
+    /**
+     * Angle de la camera en degré
+     * @type {float}
+     */
     static get Direction()
     {
         return Camera.#Direction * 180 / Math.PI;
     }
-
-    
     static set Direction(value)
     {
         Camera.#Viewport = undefined;
         Camera.#Direction = value * Math.PI / 180;
     }
 
+    //#endregion
+
     /**
      * Adapte une position X à celle de la camera
-     * @param {number} posX 
+     * @param {float} posX 
      * @returns Position X vis à vis de la camera
      */
     static AdapteX(posX)
@@ -71,17 +85,16 @@ class Camera
     }
     /**
      * Adapte une position Y à celle de la camera
-     * @param {number} posY 
+     * @param {float} posY 
      * @returns Position Y vis à vis de la camera
      */
     static AdapteY(posY)
     {
         return posY - Camera.Y;
     }
-
     /**
      * Déplace le context au centre de la camera
-     * @param {context} Context 
+     * @param {CanvasRenderingContext2D} Context 
      */
     static DeplacerCanvas(Context)
     {
@@ -96,11 +109,10 @@ class Camera
         // Déplace la camera a son centre
         Context.translate(-Camera.X, -Camera.Y);
     }
-
     /**
      * Transforme un point dans le repère de la camera en un point dans le repère du canvas.
      * @param {Vector} P Point à déplacer
-     * @returns Vecteur représentant la Position à l'écran dans le repère du canvas
+     * @returns {Vector} Vecteur représentant la Position à l'écran dans le repère du canvas
      */
     static CameraVersEcran(P)
     {
@@ -113,11 +125,10 @@ class Camera
 
         return new Vector(x,y)
     }
-
     /**
      * Transforme un point dans le repère du canvas en un point dans le repère de la camera.
      * @param {Vector} P Point à déplacer
-     * @returns Vecteur représentant la Position dans le repère de la camera
+     * @returns {Vector} Vecteur représentant la Position dans le repère de la camera
      */
      static EcranVersCamera(P)
      {

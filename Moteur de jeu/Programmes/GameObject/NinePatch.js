@@ -2,7 +2,7 @@
 /**
  * Un NinePatch est un style de rectangle, défini par une texture divisé en 9 partie. 
  * Cela permet de créer un rectangle au proportion quelconque sans déformer la texture de base.
- * 
+ * @class
  * @see {@link https://medium.com/flobiz-blog/create-resizable-bitmaps-9-patch-files-48c774db4526}
  * 
  *             Largeur 1           Largeur 2

@@ -5,13 +5,14 @@ class Combo extends Drawable
     constructor(Scene)
     {
         super(0,0,20000)
-        this.Multiplicateur = 20;
+        this.Multiplicateur = 1;
         this.Score = 0;
         this.Flamme = this.AddChildren(new Lutin_SC(270 - Ecran_Largeur / 2, 235,"Images/Moto/FlammeAnimation.png", [200,70]));
         this.Flamme.NextUpdate = 6;
         this.Flamme.Z = -2;
         this.TMultiplicateur = Textures.Charger("Images/Moto/Multiplicateur.png");
         this.TScore = Textures.Charger("Images/Moto/Score.png");
+        this.TVie = Textures.Charger("Images/Moto/Moto1.png");
 
         this.ScoreGlobal = 0;
         this.LastScore = [];
@@ -24,6 +25,7 @@ class Combo extends Drawable
         this.TimerMessage = 0;
         this.TailleMessage = 20;
         this.AngleMessage = 0;
+        this.HightScore = 0;
     }
 
     Calcul(Delta)
@@ -72,9 +74,16 @@ class Combo extends Drawable
         {
             this.LastScore.push(this.Score * this.Multiplicateur);
             this.TimerAnimation.push(0);
+            let i = Math.floor(Math.max(0,Math.log10(this.ScoreGlobal + 1) - 4));
             this.ScoreGlobal += this.Score * this.Multiplicateur;
+            let j = Math.log10(this.ScoreGlobal + 1) - 4 - i;
+            if (j > 1)
+            {
+                this.Scene.Moto.Vie += Math.floor(j);
+            }
             this.Score = 0;
             this.Multiplicateur = 1;
+
         }
 
         if (this.Multiplicateur > 3)
@@ -122,6 +131,9 @@ class Combo extends Drawable
                 this.Message = "";
             }
         }
+        this.DessinVie(Context);
+
+        this.DessinFinPartie(Context)
     }
 
     DessinMultiplicateur(Context)
@@ -178,17 +190,6 @@ class Combo extends Drawable
 
         let bx = tremblement * (Math.random() - 0.5);
         let by = tremblement * (Math.random() - 0.5);
-        // Sauvegarde la position actuel du canvas 
-        //Context.save();
-        // Adapte la position à celle de la camera
-        //Camera.DeplacerCanvas(Context)
-        // Translate le canvas au centre de notre lutin 
-        //Context.translate(Camera.AdapteX(Camera.X + Ecran_Largeur / 2 - 200 - position), Camera.AdapteY(Camera.Y)); 
-        // Tourne le canvas de l'angle souhaité
-        //Context.save();
-        //Context.rotate(-this.AngleMessage * Math.PI / 180);  
-        // Déplace le canvas à l'angle haut droit de l'image
-        //Context.translate(-w/2, -taille/2); 
 
         Context.globalAlpha = alpha;
 
@@ -204,21 +205,12 @@ class Combo extends Drawable
             x += taille;
         }
         Context.globalAlpha = 1;
-        // Retourne à la position initiale du canvas
-        //Context.restore(); 
     }
 
     DessinScoreGeneral(Context)
     {;
         let size =  30;
         let t = this.ScoreGlobal.toString();
-
-        // Sauvegarde la position actuel du canvas 
-        //Context.save();
-        // Adapte la position à celle de la camera
-        //Camera.DeplacerCanvas(Context)
-        // Translate le canvas au centre de notre lutin 
-        //Context.translate(Camera.AdapteX(Camera.X - Ecran_Largeur / 2 + 50), Camera.AdapteY(Camera.Y + Ecran_Hauteur / 2 - 10));
 
         let x = -Ecran_Largeur / 2;
         let y = -Ecran_Hauteur / 2;
@@ -247,7 +239,90 @@ class Combo extends Drawable
                 x, y, size, size);
             x += size;
         }
-        // Retourne à la position initiale du canvas
-        //Context.restore(); 
+    }
+
+    DessinVie(Context)
+    {
+        let vie = this.Scene.Moto.Vie
+        let size = 0.4;
+        let w = this.TVie.width *size;
+        let h = this.TVie.height * size;
+
+        let x = Camera.AdapteX(Camera.X + Ecran_Largeur / 2 - 5 - w);
+        let y = Camera.AdapteY(Camera.Y + Ecran_Hauteur / 2 - 5 - h);
+        if (vie < 4)
+        {
+            for(let i = 0; i < vie; i++)
+            {
+                Context.drawImage(this.TVie, x - w * i, y, w, h);
+            }
+        }
+        else
+        {
+            let s = 40;
+            let t = vie.toString();
+            x -= (t.length + 1 ) * s + 5
+            Context.drawImage(this.TVie, x, y, w, h);
+            x += w;
+            y = y + h /2 - s / 2
+            Context.drawImage(this.TMultiplicateur, 0, 0, 90, 90, //X
+            x, y, s, s);
+            x += s + 5;
+            for (let i = 0; i < t.length; i++) {
+                Context.drawImage(this.TMultiplicateur, 90 + parseInt(t[i]) * 90, 0, 90, 90, 
+                    x, y, s, s);
+                x += s;
+            }
+        }
+    }
+
+    DessinFinPartie(Context)
+    {
+        if (this.Scene.Moto.Vie == 0)
+        {
+            if (this.ScoreGlobal >= this.HightScore)
+            {
+                let size = 60;
+                let t = ["nouveau","meilleur","score",this.ScoreGlobal.toString() + " pts"];
+                let y = Camera.AdapteY(Camera.Y) - size * t.length / 2;
+                for (let i = 0; i < t.length; i++) {
+                    
+                    let x = Camera.AdapteX(Camera.X) - (size * t[i].length) / 2;
+                    if (i < 3)
+                        this.DessinTexteScore(Context,t[i],x + (Math.random() - 0.5) * 3,y + (Math.random() - 0.5) * 3,size);
+                    else
+                        this.DessinTexteScore(Context,t[i],x,y,size);
+                    y += size;
+                }
+                this.HightScore = this.ScoreGlobal;
+            }
+            else
+            {
+                let size = 60;
+                let t = [this.ScoreGlobal.toString() + " pts","meilleur","score",this.HightScore.toString() + " pts"];
+                let y = Camera.AdapteY(Camera.Y) - size * t.length / 2;
+                for (let i = 0; i < t.length; i++) {
+                    
+                    let x = Camera.AdapteX(Camera.X) - (size * t[i].length) / 2;
+                    if (i < 1)
+                        this.DessinTexteScore(Context,t[i],x + (Math.random() - 0.5) * 3,y + (Math.random() - 0.5) * 3,size);
+                    else
+                        this.DessinTexteScore(Context,t[i],x,y,size);
+                    y += size;
+                }
+            }
+        }
+    }
+
+    DessinTexteScore(Context,t,x,y,size)
+    {
+        for(let i = 0; i < t.length; i++)
+        {
+            let id = Combo.Lettre.indexOf(t[i]);
+            let posx = (id % 6) * 54;
+            let posy = Math.floor(id / 6) * 54;
+            Context.drawImage(this.TScore, posx, posy, 54, 54, 
+                x + i * size, y, size, size);
+        }
     }
 }

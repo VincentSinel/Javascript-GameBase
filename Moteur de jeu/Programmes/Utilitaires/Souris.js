@@ -70,8 +70,8 @@ class Souris
 
     /**
      * Renvoie si bouton de la souris est enfoncé
-     * @param {*} index Numéro du bouton (0 gauche; 1 centre; 2 droite; 3 retour arrière; 4 retour avant)
-     * @returns boolean (Vrai-Faux) indiquant si le bouton est cliqué
+     * @param {int} index Numéro du bouton (0 gauche; 1 centre; 2 droite; 3 retour arrière; 4 retour avant)
+     * @returns {boolean} Vrai-Faux indiquant si le bouton est cliqué
      */
     static BoutonClic(index)
     {
@@ -79,8 +79,8 @@ class Souris
     }
     /**
      * Renvoie si bouton de la souris viens juste d'être enfoncé
-     * @param {*} index Numéro du bouton (0 gauche; 1 centre; 2 droite; 3 retour arrière; 4 retour avant)
-     * @returns boolean (Vrai-Faux) indiquant si le bouton est cliqué
+     * @param {int} index Numéro du bouton (0 gauche; 1 centre; 2 droite; 3 retour arrière; 4 retour avant)
+     * @returns {boolean} Vrai-Faux indiquant si le bouton est cliqué
      */
     static BoutonJustClic(index)
     {
@@ -88,20 +88,28 @@ class Souris
     }
     /**
      * Renvoie si bouton de la souris viens juste d'être relaché
-     * @param {*} index Numéro du bouton (0 gauche; 1 centre; 2 droite; 3 retour arrière; 4 retour avant)
-     * @returns boolean (Vrai-Faux) indiquant si le bouton a été relaché
+     * @param {int} index Numéro du bouton (0 gauche; 1 centre; 2 droite; 3 retour arrière; 4 retour avant)
+     * @returns {boolean} Vrai-Faux indiquant si le bouton a été relaché
      */
     static BoutonJustDeclic(index)
     {
         return this.JusteHaut[index];
     }
 
+    /**
+     * S'execute lorsqu'un bouton de la souris est pressé
+     * @param {MouseEvent} e Evenement souris
+     */
     static MouseDownHandle(e)
     {
         Souris.#ClicIsStart = true;
         Souris.preventDefault(e);
         Souris.MouseDown(e.button, e);
     }
+    /**
+     * S'execute lorsqu'un bouton de la souris est relaché
+     * @param {MouseEvent} e Evenement souris
+     */
     static MouseUpHandle(e)
     {
         if (Souris.#ClicIsStart)
@@ -111,6 +119,10 @@ class Souris
         }
         Souris.#ClicIsStart = false;
     }
+    /**
+     * S'execute lorsque la souris bouge
+     * @param {MouseEvent} e Evenement souris
+     */
     static MouseMoveHandle(e)
     {
         if (Souris.#ClicIsStart)
@@ -140,8 +152,11 @@ class Souris
             UIElement.SHandle_MouseMove(Souris.CPosition)
         }
     }
-
-    // Fonction lié au événements
+    /**
+     * Gestion d'un boutton de la souris pressé
+     * @param {int} id index boutton
+     * @param {MouseEvent} e Evenement souris
+     */
     static MouseDown(id, e)
     {
         Souris.EtatBouton[id] = true;
@@ -150,6 +165,11 @@ class Souris
         Souris.DragState[id] = 1;
         UIElement.SHandle_Basse(id, Souris.CPosition);
     }
+    /**
+     * Gestion d'un boutton de la souris relaché
+     * @param {int} id index boutton
+     * @param {MouseEvent} e Evenement souris
+     */
     static MouseUp(id, e)
     {
         Souris.EtatBouton[id] = false;
@@ -161,9 +181,13 @@ class Souris
         }
         else
         {
-            Souris.DragEnd(e, id);
+            Souris.DragEnd(id, e);
         }
     }
+    /**
+     * Gestion du mouvement de la souris
+     * @param {MouseEvent} e Evenement souris
+     */
     static MouseMove(e)
     {
         for (let i = 0; i < 5; i++) 
@@ -171,7 +195,7 @@ class Souris
             if (Souris.DragState[i] == 1 && Souris.EtatBouton[i])
             {
                 // First move, launch drag
-                Souris.DragStr(e, i)
+                Souris.DragStr(i, e)
             }
         }
 
@@ -183,36 +207,54 @@ class Souris
             if (Souris.DragState[i] == 2 && Souris.EtatBouton[i])
             {
                 // Moving, drag continue
-                Souris.Draging(e, i)
+                Souris.Draging(i, e)
             }
         }
 
         UIElement.SHandle_MouseMove(Souris.CPosition)
     }
-    static DragStr(e, i)
+    /**
+     * Gestion du debut d'un drag de la souris
+     * @param {int} id index boutton
+     * @param {MouseEvent} e Evenement souris
+     */
+    static DragStr(id, e)
     {
         
-        UIElement.SHandle_DragStart(i, Souris.CPosition);
+        UIElement.SHandle_DragStart(id, Souris.CPosition);
 
-        Souris.DragStart[i] = Souris.CPosition;
-        Souris.DragState[i] = 2;
+        Souris.DragStart[id] = Souris.CPosition;
+        Souris.DragState[id] = 2;
     }
-    static DragEnd(e, i)
+    /**
+     * Gestion de la fin d'un drag de la souris
+     * @param {int} id index boutton
+     * @param {MouseEvent} e Evenement souris
+     */
+    static DragEnd(id, e)
     {
         if(Souris.DragState[e.button] > 1)
         {
-            Souris.DraggingEnd[i] = Souris.CPosition;
-            UIElement.SHandle_DragEnd(i, Souris.CPosition);
+            Souris.DraggingEnd[id] = Souris.CPosition;
+            UIElement.SHandle_DragEnd(id, Souris.CPosition);
         }
         Souris.DragState[e.button] = 0;
     }
-    static Draging(e, i)
+    /**
+     * Gestion d'un drag de la souris
+     * @param {int} id index boutton
+     * @param {MouseEvent} e Evenement souris
+     */
+    static Draging(id, e)
     {
-        Souris.Dragging[i] = Souris.CPosition;
-        UIElement.SHandle_Dragging(i, Souris.CPosition);
+        Souris.Dragging[id] = Souris.CPosition;
+        UIElement.SHandle_Dragging(id, Souris.CPosition);
     }
 
-
+    /**
+     * Gestion du scroll de la souris
+     * @param {ScrollEvent} e Evenement Scroll
+     */
     static MouseScroll(e)
     {
         Souris.ScrollX = Math.max(-1, Math.min(1, e.deltaX));
@@ -221,7 +263,9 @@ class Souris
     }
 
     
-    // Mise a jour de la position de la souris et des clics.
+    /**
+     * Mise a jour de la position de la souris et des clics.
+     */
     static Update()
     {
         let vec = new Vector(this.CX, this.CY);
@@ -234,6 +278,10 @@ class Souris
         Souris.ScrollY = 0;
     }
     
+    /**
+     * Annule les appels par default et la propagation d'un event
+     * @param {Event} e Evenement
+     */
     static preventDefault(e) {
         e.preventDefault();
         e.stopPropagation();

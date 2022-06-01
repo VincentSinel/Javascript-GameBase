@@ -12,9 +12,9 @@ class Clavier
 
     /**
      * Renvoie si une touche a été pressé
-     * @param {*} code code de la touche
+     * @param {string} code code de la touche
      * @param {boolean} TestCase Définit si la case doit être pris en compte (default : False)
-     * @returns boolean (Vrai-Faux) indiquant si la touche est pressé
+     * @returns {boolean} Vrai-Faux indiquant si la touche est pressé
      */
     static ToucheBasse(code, TestCase = false)
     {
@@ -25,9 +25,9 @@ class Clavier
     }
     /**
      * Renvoie si une touche viens juste d'être pressé
-     * @param {*} code code de la touche
+     * @param {string} code code de la touche
      * @param {boolean} TestCase Définit si la case doit être pris en compte (default : False)
-     * @returns boolean (Vrai-Faux) indiquant si la touche viens d'être
+     * @returns {boolean} Vrai-Faux indiquant si la touche viens d'être
      */
     static ToucheJusteBasse(code, TestCase = false)
     {
@@ -38,9 +38,9 @@ class Clavier
     }
     /**
      * Renvoie si une touche viens juste relaché
-     * @param {*} code code de la touche
+     * @param {string} code code de la touche
      * @param {boolean} TestCase Définit si la case doit être pris en compte (default : False)
-     * @returns boolean (Vrai-Faux) indiquant si la touche viens juste d'être relaché
+     * @returns {boolean} Vrai-Faux indiquant si la touche viens juste d'être relaché
      */
     static ToucheJusteHaute(code, TestCase = false)
     {
@@ -51,7 +51,8 @@ class Clavier
     }
 
     /**
-     * Fonction lié au événements
+     * S'éxecute lors de l'appuie d'une touche (en continue)
+     * @param {KeyboardEvent} e Evenement clavier
      */
     static KeyDown(e)
     {
@@ -63,6 +64,10 @@ class Clavier
         }
         UIElement.SHandle_KeyDown(e);
     }
+    /**
+     * S'éxecute lors du relachement d'une touche
+     * @param {KeyboardEvent} e Evenement clavier
+     */
     static KeyUp(e)
     {
         let index = this.Pressed.indexOf(e.key);
@@ -72,7 +77,6 @@ class Clavier
         this.JustReleased.push(e.key);
         UIElement.SHandle_KeyJustUp(e);
     }
-
     /**
      * Mise a jour des touches préssé
      */

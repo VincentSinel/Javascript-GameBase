@@ -1,12 +1,19 @@
 class JeuMoto extends Scene
 {
-    static CoefAppV = 5000;
+    static CoefAppV = 50000;
 
     constructor()
     {
         super("JeuMoto");
-        Debug.Parametre.Camera = true;
-        CouleurFond = "green"
+        Debug.Parametre.Camera = false;
+        Debug.Parametre.Grille = false;
+        Debug.Parametre.Info = false;
+        Debug.Parametre.TimeMesure = false;
+
+        let UI2 = new UI_Button(Ecran_Largeur - 80, 0, 1000000000, 80, 25, "Plein Ecran")
+        UI2.ClicAction = function(){ Camera.PleinEcran()};
+
+        CouleurFond = "dark grey"
         this.KeepUpdating = true;
 
         this.Routes = []
@@ -18,8 +25,6 @@ class JeuMoto extends Scene
         this.Moto = this.AddChildren(new Moto(this));
         this.Aiguille = this.AddChildren(new Lutin(0, 0,["Images/Moto/Aiguille.png"]));
 
-        //this.ZObject.push(JeuMoto.Moto);
-
         this.ComboObject = this.AddChildren(new Combo(this));
         this.ComboObject.Z = 100000000
 
@@ -29,6 +34,11 @@ class JeuMoto extends Scene
         this.Aiguille.Z = 500001
         
         this.ProchaineVoiture = 180;
+
+        let _this = this;
+        this.NewGame = new UI_Button(Ecran_Largeur / 2 - 60, Ecran_Hauteur - 100, 1000000000, 120, 25, "Nouvelle Partie")
+        this.NewGame.ClicAction = function(){ _this.Moto.NouvellePartie()};
+        this.NewGame.Visible = false;
     }
 
     AjouterVoiture(Delta)

@@ -24,7 +24,9 @@ var fade = 1.0; var fading = 0;
 var SceneActuel;
 var Pause = false;
 
-
+/**
+ * Class gérant le jeu
+ */
 class Game
 {
     static #TempContext;
@@ -134,9 +136,9 @@ class Game
         window.requestAnimationFrame(Game.BouclePrincipale);
 
     }
-    //============================================================================================
-    /// Gestion du dégradé d'écran
-    //============================================================================================
+    /**============================================================================================
+     * Gestion du dégradé d'écran
+     *///==========================================================================================
     static MiseAJourFade()
     {
         if (fading == 1)
@@ -163,9 +165,9 @@ class Game
         }
     }
 
-    //============================================================================================
-    /// Création du canvas sur la page HTML
-    //============================================================================================
+    /**============================================================================================
+     * Création du canvas sur la page HTML
+     *///============================================================================================
     static CreationCanvas()
     {
         // Création du canvas
@@ -190,7 +192,7 @@ class Game
 
     /**
      * Modifie la taille du canvas pour respecter le DPI de l'écran
-     * Explication : https://medium.com/wdstack/fixing-html5-2d-canvas-blur-8ebe27db07da
+     * @see {@link https://medium.com/wdstack/fixing-html5-2d-canvas-blur-8ebe27db07da}
      */
     static fix_dpi() {
         //get CSS height

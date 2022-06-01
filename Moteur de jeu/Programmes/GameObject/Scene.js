@@ -1,5 +1,6 @@
 /**
  * Un scene gére les GameObject qui lui sont rattaché, effectue le dessin et le calcul
+ * @class
  */
 class Scene
 {

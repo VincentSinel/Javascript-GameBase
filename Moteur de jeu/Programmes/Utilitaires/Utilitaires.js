@@ -1,9 +1,9 @@
  //=====================================================
 /**
  * Renvoie un nombre entier aléatoire entre le min et le max inclus
- * @param {number} min minimum
- * @param {number} max maximum
- * @returns nombre entier aléatoire entre le min et le max inclus
+ * @param {int} min minimum
+ * @param {int} max maximum
+ * @returns {int}nombre entier aléatoire entre le min et le max inclus
  */
  function EntierAleat(min, max)
  {
@@ -26,9 +26,9 @@
  //=====================================================
 /**
  * Renvoie un nombre aléatoire entre le min et le max inclus
- * @param {number} min minimum
- * @param {number} max maximum
- * @returns nombre entier aléatoire entre le min et le max inclus
+ * @param {float} min minimum
+ * @param {float} max maximum
+ * @returns {float} Nombre entier aléatoire entre le min et le max inclus
  */
  function NombreAleat(min, max)
  {

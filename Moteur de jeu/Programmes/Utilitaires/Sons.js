@@ -24,7 +24,11 @@ class Sons
     static SourceP_Musique = true;
     static SourceP_Bruit = true;
 
-    // Fonction caché pour jouer un fond sonore
+    /**
+     * Lance un fond sonore en boucle
+     * @param {string} Nom Nom du son
+     * @param {float} [volume = 1.0] Volume du son (1 max, 0 mute) 
+     */
     static #JouerFondSonore(Nom, volume = 1.0)
     {
       if (Sons.#SourceFondSon)
@@ -37,7 +41,11 @@ class Sons
       }
     }
 
-    // Fonction caché pour jouer un son court
+    /**
+     * Lance un son court
+     * @param {string} Nom Nom du son
+     * @param {float} [volume = 1.0] Volume du son (1 max, 0 mute) 
+     */
     static #JouerSonCourt(Nom, volume = 1.0)
     {
       Sons.SourceP_Bruit = false;
@@ -48,8 +56,9 @@ class Sons
         Sons.#FinLectureSonCourt()
       }
     }
-
-    // Fonction caché de détection de la fin d'un son cours
+    /**
+     * Detection de fin de son cours
+     */
     static #FinLectureSonCourt()
     {
       Sons.#SonCount -= 1;
@@ -58,8 +67,11 @@ class Sons
         Sons.SourceP_Bruit = true;
       }
     }
-
-    // Fonction caché pour jouer une musique
+    /**
+     * Lance une musique en boucle
+     * @param {string} Nom Nom du son
+     * @param {float} [volume = 1.0] Volume du son (1 max, 0 mute) 
+     */
     static #JouerMusique(Nom, volume = 1.0)
     {
       if (Sons.#SourceFondMusique)
@@ -71,8 +83,11 @@ class Sons
         Sons.#SourceFondMusique.source.start(0);
       }
     }
-
-    // Fonction caché pour jouer une musique courte
+    /**
+     * Lance une musique courte
+     * @param {string} Nom Nom du son
+     * @param {float} [volume = 1.0] Volume du son (1 max, 0 mute) 
+     */
     static #JouerMusiqueCourte(Nom, volume = 1.0)
     {
       Sons.SourceP_Musique = false;
@@ -84,7 +99,9 @@ class Sons
       }
     }
 
-    // Fonction caché de détection de la fin d'une musique courte
+    /**
+     * Detection de fin de musique courte
+     */
     static #FinLectureMusiqueCourte()
     {
       Sons.#MusiqueCount -= 1;
@@ -94,7 +111,20 @@ class Sons
       }
     }
 
-    // Fonction caché pour créer une source de son
+    /**
+     * @typedef {Object} SourceData
+     * @param {AudioBufferSourceNode} source Source lié au son
+     * @param {GainNode} gainNode Noeud de gain lié à la source
+     * @param {float} gainMax volume de la source
+     */
+
+    /**
+     * Créer une source de son
+     * @param {string} Nom Nom du son
+     * @param {float} volume volume du son
+     * @param {boolean} [loop = false] Définit la répétition de la source
+     * @returns {SourceData}
+     */
     static #CreerSource(Nom, volume, loop = false) 
     {
       if (Librairie_Sons.indexOf(Nom) >= 0)
@@ -126,7 +156,7 @@ class Sons
     /**
      * Lance la lecture d'un bruit.
      * @param {string} Nom Nom du fichier audio à jouer. Ce doit être le nom du fichier se trouvant dans le dossier SE.
-     * @param {float} volume Volume du son entre 0 et 1 (par default 1.0)
+     * @param {float||boolean} [volume = false] Volume du son entre 0 et 1. false pour définir le son au paramètre classique
      */
     static Jouer_Bruit(Nom, volume = false)
     {
@@ -135,7 +165,7 @@ class Sons
     /**
      * Lance la lecture d'une musique courte.
      * @param {string} Nom Nom du fichier audio à jouer. Ce doit être le nom du fichier se trouvant dans le dossier ME.
-     * @param {float} volume Volume du son entre 0 et 1 (par default 1.0)
+     * @param {float||boolean} [volume = false] Volume du son entre 0 et 1. false pour définir le son au paramètre classique
      */
     static Jouer_MusiqueCourte(Nom, volume = false)
     {
@@ -144,7 +174,7 @@ class Sons
     /**
      * Lance la lecture d'un bruit de fond.
      * @param {string} Nom Nom du fichier audio à jouer. Ce doit être le nom du fichier se trouvant dans le dossier BGS.
-     * @param {float} volume Volume du son entre 0 et 1 (par default 1.0)
+     * @param {float||boolean} [volume = false] Volume du son entre 0 et 1. false pour définir le son au paramètre classique
      */
     static Jouer_BruitFond(Nom, volume = false)
     {
@@ -153,7 +183,7 @@ class Sons
     /**
      * Lance la lecture d'une musique de fond
      * @param {string} Nom Nom du fichier audio à jouer. Ce doit être le nom du fichier se trouvant dans le dossier BGM.
-     * @param {float} volume Volume du son entre 0 et 1 (par default 1.0)
+     * @param {float||boolean} [volume = false] Volume du son entre 0 et 1. false pour définir le son au paramètre classique
      */
     static Jouer_MusiqueFond(Nom, volume = false)
     {
@@ -162,7 +192,7 @@ class Sons
     /**
      * Lance la lecture d'un autre son.
      * @param {string} Nom Nom du fichier audio à jouer. Ce doit être le nom du fichier se trouvant dans le dossier Autre.
-     * @param {float} volume Volume du son entre 0 et 1 (par default 1.0)
+     * @param {float||boolean} [volume = false] Volume du son entre 0 et 1. false pour définir le son au paramètre classique
      */
     static Jouer_AutreSon(Nom, volume = false)
     {
@@ -175,7 +205,7 @@ class Sons
     static Initialisation()
     {
         window.AudioContext = window.AudioContext || window.webkitAudioContext;
-        Sons.#context = new AudioContext();
+        Sons.#context = new AudioContext()
 
         LoadScreen.SonMax = Librairie_Sons.length;
 
@@ -192,7 +222,7 @@ class Sons
 
     /**
      * Mise a jour de la musique et du son de fond
-     * @param {float} dt Temps depuis la dernière mise à jour
+     * @param {float} dt Frame depuis la dernière mise à jour
      */
     static Update(dt)
     {
@@ -245,9 +275,17 @@ if (typeof Librairie_Sons === 'undefined')
 }
 /**
  * Objet de charge des fichiers audio.
+ * @class
  */
 class BufferLoader
 {
+  /**
+   * Fabrique un chargeur de fichier audio
+   * @constructor
+   * @param {AudioContext} context Contexte audio du buffer
+   * @param {string[]} urlList Liste des sons à charger 
+   * @callback callback fonction de rappel à la charge 
+   */
   constructor(context, urlList, callback)
   {
     this.context = context;
@@ -257,6 +295,11 @@ class BufferLoader
     this.loadCount = 0;
   }
 
+  /**
+   * Charge un fichier audio à partir d'un emplacement
+   * @param {string} url Lien vers le fichier audio
+   * @param {int} index Index du fichier
+   */
   loadBuffer(url, index)
   {
     // Load buffer asynchronously
@@ -294,6 +337,9 @@ class BufferLoader
     request.send();
   }
 
+  /**
+   * Lance la charge de tout les fichiers audios
+   */
   load()
   {
     for (var i = 0; i < this.urlList.length; ++i)

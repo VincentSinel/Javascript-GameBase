@@ -15,7 +15,11 @@ function readFile(e) {
     }
     reader.readAsText(file)
 }
-
+/**
+ * Module de gestion des données.
+ * @class
+ * @static
+ */
 class Datas
 {
     static TileMapsData = {};
@@ -35,9 +39,18 @@ class Datas
     }
 
     /**
+     * @typedef {Object} TileMapData
+     * @property {string} Nom Nom du tilemap
+     * @property {integer} Largeur Largeur en tile du tilemap
+     * @property {integer} Hauteur Hauteur en tile du tilemap
+     * @property {Array} Data Donnée du tilemap (Tableau de données des layer)
+     * @property {string} Version Version de la sauvegarde
+     */
+
+    /**
      * Récupère les données d'un tilemap à partir de son nom
      * @param {string} Nom Nom du tilemap
-     * @returns Données correspondante
+     * @returns {TileMapData} Données correspondante
      */
     static DataTileMap(Nom)
     {
@@ -61,7 +74,10 @@ class Datas
 
         DataBase = null;
     }
-
+    /**
+     * créer le fichier de sauvegarde
+     * @returns {string} Contenue du fichier de sauvegarde
+     */
     static #CreateData()
     {
         let Data = {};
@@ -130,7 +146,7 @@ class Datas
     }
 
     /**
-     * lance le chargement d'un fichier
+     * Lance le chargement d'un fichier
      */
     static Charger()
     {

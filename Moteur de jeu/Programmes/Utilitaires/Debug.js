@@ -17,7 +17,6 @@ class Debug
     static Rectangles = []
     static Circles = []
     static Polygones = []
-
     static Parametre = {
         Grille: false, 
         Info: true, 
@@ -32,6 +31,13 @@ class Debug
     static #TimeMesureVMax = 0;
     static #TimeMesureVMin = 0;
     static InfoPosition = 3; // Position des info de débuggage (0 haut gauche / 1 haut droit / 2 bas gauche / 3 bas droit)
+
+    /**
+     * Mets à jour les dessins de debugage
+     * @param {CanvasRenderingContext2D} Context Context de dessin
+     * @param {string} etape Etape de dessin actuel
+     * @param {float} Delta nombre de frame depuis la précedente mis à jour
+     */
     static UPDATE(Context, etape, Delta)
     {
         if (etape == "PreCalcul")
@@ -117,12 +123,16 @@ class Debug
         }   
     }
 
-
+    /**
+     * Lance le début d'une mesure de temps
+     */
     static StartMesure()
     {
         Debug.#StartTime = Date.now();
     }
-
+    /**
+     * Mets fin à une mesure de temps
+     */
     static EndMesure()
     {
         let delta = Date.now() -Debug.#StartTime;
@@ -132,7 +142,11 @@ class Debug
         }
         Debug.#TimeMesures.push(delta);
     }
-
+    /**
+     * Effectue le dessin du graphique de mesure de temps
+     * @param {CanvasRenderingContext2D} Context Contexte de dessin
+     * @returns {null}
+     */
     static #DrawTimeMesure(Context)
     {
         if (Debug.#TimeMesures.length < 2)
@@ -209,10 +223,10 @@ class Debug
 
 
     }
-
-
-
-
+    /**
+     * Permet de controller la camera
+     * @param {float} Delta Nombre de frame depuis la précédente mise à jour
+     */
     static #DeplaceCamera(Delta)
     {
         if (Clavier.ToucheBasse("j"))
@@ -268,9 +282,16 @@ class Debug
     }
 
     /**
-     * Dessin 
-     * @param {context} Context Context de dessin
-     * @param {Array} vec Informations sur le vecteur à tracé
+     * @typedef {Object} DrawVector
+     * @param {string} color couleur du vecteur
+     * @param {Vector} p1 Vecteur de début
+     * @param {Vector} p2 Vecteur de fin
+     */
+
+    /**
+     * Effectue le dessin d'un vecteur
+     * @param {CanvasRenderingContext2D} Context Context de dessin
+     * @param {DrawVector} vec Informations sur le vecteur à tracé
      */
     static #Vecteur(Context, vec)
     {
@@ -292,7 +313,7 @@ class Debug
 
     /**
      * Dessine le rectangle voulu sur le canvas en prenant en compte la position de la camera
-     * @param {context} Context Context de dessin
+     * @param {CanvasRenderingContext2D} Context Context de dessin
      * @param {Array} rect Rectangle à dessiner.
      */
     static #DessinRectangle(Context, rect)
@@ -314,7 +335,7 @@ class Debug
 
     /**
      * Dessine le cercle voulu sur le canvas en prenant en compte la position de la camera
-     * @param {context} Context Context de dessin
+     * @param {CanvasRenderingContext2D} Context Context de dessin
      * @param {Array} circle Cercle à dessiner.
      */
     static #DessinCercle(Context, circle)
@@ -336,7 +357,7 @@ class Debug
 
     /**
      * Dessine le polygone voulu sur le canvas en prenant en compte la position de la camera
-     * @param {context} Context Context de dessin
+     * @param {CanvasRenderingContext2D} Context Context de dessin
      * @param {Array} poly Polygone à dessiner.
      */
     static #DessinPolygone(Context, poly)
@@ -365,7 +386,7 @@ class Debug
 
     /**
      * Créer une cible au centre de l'écran
-     * @param {context} Context Context de dessin
+     * @param {CanvasRenderingContext2D} Context Context de dessin
      */
     static #Cible(Context)
     {
@@ -390,8 +411,8 @@ class Debug
 
     /**
      * Créer une grille de la taille choisi sur le canvas en prenant en compte la position de la camera
-     * @param {context} Context Context de dessin
-     * @param {number} Size Taille des cellules en pixel
+     * @param {CanvasRenderingContext2D} Context Context de dessin
+     * @param {int} Size Taille des cellules en pixel
      */
     static #Grid(Context, Size)
     {
@@ -437,8 +458,8 @@ class Debug
 
     /**
      * Ecris dans l'angle de l'écran la position de la camera
-     * @param {context} Context Context de dessin
-     * @param {Array<string>} Texte Liste des textes à afficher
+     * @param {CanvasRenderingContext2D} Context Context de dessin
+     * @param {string[]} Texte Liste des textes à afficher
      */
     static #DessinInfo(Context,Texte)
     {

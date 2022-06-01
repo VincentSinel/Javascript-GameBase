@@ -1,6 +1,7 @@
 /**
  * Objet racine d'une scene
- * @augments GameObject
+ * @extends GameObject
+ * @class
  */
 class RootObject extends GameObject
 {

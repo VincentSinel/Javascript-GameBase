@@ -12,7 +12,7 @@ class Moto extends Lutin
     {
         super(0,0,["Images/Moto/Moto1.png"])
 
-        this.Vitesse = 0;
+        this.Vitesse = 30;
         this.Acceleration = 400;
         this.TempsAppuie = 0;
 
@@ -24,6 +24,18 @@ class Moto extends Lutin
 
         this.Mort = false;
         this.Immortel = 0;
+        this.Vie = 3;
+    }
+
+    NouvellePartie()
+    {
+        this.Vie = 3;
+        this.TempsStop = 0;
+        this.X = 0;
+        this.Acceleration = 400;
+        this.Scene.ComboObject.ScoreGlobal = 0;
+        this.Scene.NewGame.Visible = false;
+        this.Scene.ProchaineVoiture = 180;
     }
 
 
@@ -42,6 +54,7 @@ class Moto extends Lutin
         if((this.Contact() && this.Immortel <= 0) || this.Direction < -70)
         {
             this.Mort = true;
+            this.Vie -= 1;
         }
         else if (this.Immortel > 0)
         {
@@ -63,6 +76,11 @@ class Moto extends Lutin
             this.TempsStop -= Delta;
             this.X += this.Vitesse * Delta;
             this.Vitesse = this.Vitesse * 0.99;
+            if (this.Vie == 0)
+            {
+                this.TempsStop = 60;
+                this.Scene.NewGame.Visible = true;
+            }
         }
         else
         {

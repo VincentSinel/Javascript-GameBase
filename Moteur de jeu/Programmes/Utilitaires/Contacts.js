@@ -278,10 +278,10 @@ class Contacts
 
     /**
      * Test si deux rectangle avec sans rotation sont en collision.
-     * @param {Vecteur2} X1 Position angle haut gauche du rectangle 1
-     * @param {Vecteur2} Z1 Position angle bas droit du rectangle 1
-     * @param {Vecteur2} X2 Position angle haut gauche du rectangle 2
-     * @param {Vecteur2} Z2 Position angle bas droit du rectangle 2
+     * @param {Vector} X1 Position angle haut gauche du rectangle 1
+     * @param {Vector} Z1 Position angle bas droit du rectangle 1
+     * @param {Vector} X2 Position angle haut gauche du rectangle 2
+     * @param {Vector} Z2 Position angle bas droit du rectangle 2
      * @returns Vrai si les deux rectangle sont en collision, faux sinon
      */
     static AABB(X1, Z1, X2, Z2)

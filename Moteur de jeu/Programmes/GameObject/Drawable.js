@@ -1,5 +1,6 @@
 /**
  * Objet dessinable
+ * @class
  * @extends GameObject
  */
 class Drawable extends GameObject

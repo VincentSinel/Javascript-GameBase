@@ -9,7 +9,9 @@ class LoadScreen
     static TextureMax = 1;
     static #TextureCharge = 0;
 
-    // Mise a jour des sons chargé
+    /**
+     * Mise a jour des sons à charger
+     */
     static Update_Son()
     {
         LoadScreen.#SonCharge += 1;
@@ -19,7 +21,9 @@ class LoadScreen
     }
 
     
-    // Mise a jour des sons chargé
+    /**
+     * Mise a jour textures à charger
+     */
     static Update_Texture()
     {
         LoadScreen.#TextureCharge += 1;
@@ -29,7 +33,9 @@ class LoadScreen
     }
 
 
-    // Mise a jour de l'écran de chargement
+    /**
+     * Mise a jour de l'écran de chargement
+     */
     static Update()
     {
         LoadScreen.#Chargement[0] = LoadScreen.#SonCharge / LoadScreen.SonMax * 100.0
@@ -43,7 +49,9 @@ class LoadScreen
         LoadScreen.#Dessin();
     }
 
-    // Rafraichissement de l'ecran.
+    /**
+     * Rafraichissement de l'ecran.
+     */
     static #Dessin()
     {
         let c = 0;

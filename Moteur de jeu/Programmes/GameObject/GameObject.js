@@ -1,5 +1,6 @@
 /**
  * Objet du jeu
+ * @class
  */
 class GameObject
 {

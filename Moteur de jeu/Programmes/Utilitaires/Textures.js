@@ -46,7 +46,7 @@ class Textures
      /**
       * Récupère l'une des images du buffer
       * @param {string} Nom Nom du fichier (complet)
-      * @returns Image contenant la texture chargé
+      * @returns {Image} Image contenant la texture chargé
       */
      static Charger(Nom)
      {

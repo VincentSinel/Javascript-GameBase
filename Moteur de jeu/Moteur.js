@@ -77,6 +77,9 @@ for (let s = 0; s < Scripts.length; s++)
     document.write('<script src="' + "Moteur de Jeu/" + Scripts[s] + '" charset="utf-8"></script>')
 }
 
+/**
+ * Initialisation du moteur de jeu
+ */
 function InitMoteur()
 {
     let file = document.createElement("input");
@@ -93,7 +96,10 @@ function InitMoteur()
 
     Game.Initialisation();
 }
-
+/**
+ * Charge un fichiers data
+ * @param {string} Name Nom du fichier data
+ */
 function MainScriptLoaded(Name)
 {
     console.log("Le Fichier " + Name + ".js n'est pas présent dans le dossier Fichiers. Il doit être créé, pour cela copier le fichier existant depuis 'Moteur de jeu/Base Fichier/" + Name + ".js'");
