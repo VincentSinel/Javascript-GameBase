@@ -486,6 +486,7 @@ class UI_EditionTileMap extends UIElement
     {
         super.Calcul(Delta)
         this.RefreshUI();
+        this.Souris_Hover()
     }
     /**
      * Active ou desactive la vision des collision du tilemap

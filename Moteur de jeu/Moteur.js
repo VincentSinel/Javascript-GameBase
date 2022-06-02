@@ -1,5 +1,6 @@
 //=====================================================
 // Liste des script à charger
+// Moteur V2.0;
 //=====================================================
 
 var Scripts = [
@@ -42,6 +43,7 @@ var Scripts = [
     "Programmes/GameObject/Lutin/BulleDialogue.js",
     "Programmes/GameObject/Lutin/Lutin.js",
     "Programmes/GameObject/Lutin/Lutin_SC.js",
+    "Programmes/GameObject/Lutin/Lutin_RPGMaker.js",
     "Programmes/GameObject/Tilemap/Tiles/Tile.js",
     "Programmes/GameObject/Tilemap/Tiles/Tile_Multi.js",
     "Programmes/GameObject/Tilemap/Tiles/Tile_Animation.js",

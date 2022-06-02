@@ -16,11 +16,12 @@ function InitObjets()
     LoadTilemap();
     
     // Ajouter ici les objets à creer
-    //Player = new Joueur(0,0);
+    Player = new Joueur(0,0);
 
     //Scene.ChangeScene(JeuPong, Ecran_Largeur / 2 - JeuPong.BordL, -Ecran_Hauteur / 2)
-    //Scene.ChangeScene(JeuMoto, 0, 0)
-    Scene.ChangeScene(Scene1,0,0)
+    //Scene.ChangeScene(JeuMoto,0,0)
+    //Scene.ChangeScene(Scene1,0,0)
+    Scene.ChangeScene(Niveau1,0,0)
     //Debug.Parametre.Camera = false;
     Debug.Parametre.Grille = false;
 

@@ -37,7 +37,7 @@ class UIElement
 
         // For performance reasons, we will first map to a temp array, sort and map the temp array to the objects array.
         var map = UIElement.#Menus.map(function (el, index) {
-            return { index : index, value : el.ZG };
+            return { index : index, value : el.GZ };
         });
 
         // Now we need to sort the array by z index.
@@ -57,7 +57,7 @@ class UIElement
      */
     static RemoveMenu(menu)
     {
-        UIElement.#Menus.splice(UIElement.#Menus.indexOf(this), 1);
+        UIElement.#Menus.splice(UIElement.#Menus.indexOf(menu), 1);
     }
     /**
      * Renvoie l'object ayant le focus

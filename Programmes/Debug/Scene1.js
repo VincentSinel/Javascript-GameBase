@@ -135,7 +135,7 @@ class Scene1 extends Scene
         //    this.lutins[l].Direction += 0.1 * Delta;
         //}
         
-        Debug.AjoutCercle(this.shape1, "RED")
+        //Debug.AjoutCercle(this.shape1, "RED")
         let a = this.shape1.collide_Overlap(this.shape2)
         let b = this.shape1.collide_Overlap(this.shape3)
         let color = "Magenta"
@@ -147,7 +147,7 @@ class Scene1 extends Scene
             this.shape1.x = Camera.X;
             this.shape1.y = Camera.Y;
         }
-        Debug.AjoutRectangle(this.shape2, color)
+        //Debug.AjoutRectangle(this.shape2, color)
         color = "Blue"
         if (b.x != 0 || b.y != 0)
         {
@@ -157,7 +157,7 @@ class Scene1 extends Scene
             this.shape1.x = Camera.X;
             this.shape1.y = Camera.Y;
         }
-        Debug.AjoutPolygone(this.shape3, color)
+        //Debug.AjoutPolygone(this.shape3, color)
         //Debug.AjoutVecteur(this.Triangle[0], this.Triangle[0].to(this.Triangle[1]),color)
         //Debug.AjoutVecteur(this.Triangle[1], this.Triangle[1].to(this.Triangle[2]),color)
         //Debug.AjoutVecteur(this.Triangle[2], this.Triangle[2].to(this.Triangle[0]),color)

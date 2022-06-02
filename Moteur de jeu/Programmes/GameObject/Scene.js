@@ -142,6 +142,8 @@ class Scene
     Exit()
     {
         // Override by element
+        console.trace();
+        console.log("test")
     }
 
     /**
@@ -154,9 +156,4 @@ class Scene
         Camera.X = X;
         Camera.Y = Y;
     }
-
-    // * #LocalWaitForExiting()
-    // {
-
-    // }
 }

@@ -1,11 +1,31 @@
-class Joueur extends Lutin_SC
+class Joueur extends Lutin_RPGMaker
 {
     constructor(X,Y)
     {
-        super(X,Y, "Images/Joueur/Perso.png", [32,32], 1);
-        this.Vue = 0
+        super(X,Y, "Images/Joueur/Perso2.png", true);
         this.CentreRotation = new Vector(0.5,1);
         this.Vitesse = 2;
+
+        this.Inventaire = {};
+    }
+
+    AjoutInventaire(Objet, Nbr)
+    {
+        if (this.Inventaire.hasOwnProperty(Objet))
+        {
+            this.Inventaire[Objet] += Nbr;
+            if(this.Inventaire[Objet] <= 0)
+            {
+                delete this.Inventaire[Objet]
+            }
+        }
+        else
+        {
+            if(Nbr > 0)
+            {
+                this.Inventaire[Objet] = Nbr;
+            }
+        }
     }
 
 
@@ -24,7 +44,7 @@ class Joueur extends Lutin_SC
         if (Clavier.ToucheBasse("d"))
             deplacementx += 1
 
-        let id = 4 + this.Vue *12
+        this.FrameIDLE()
 
         if (deplacementx != 0 || deplacementy != 0)
         {
@@ -52,16 +72,16 @@ class Joueur extends Lutin_SC
 
 
             if (deplacementx > 0)
-                this.Vue = 2
+                this.DirectionVue = 2
             if (deplacementx < 0)
-                this.Vue = 1
+                this.DirectionVue = 1
             if (deplacementy > 0 && deplacementx == 0)
-                this.Vue = 0
+                this.DirectionVue = 0
             if (deplacementy < 0 && deplacementx == 0)
-                this.Vue = 3
+                this.DirectionVue = 3
 
             if (deplacementx != 0 || deplacementy != 0)
-                id = 3 + this.Vue * 12 + 1 + ((-2 + Math.floor(this.Time / 12) % 4) % 2)
+                this.FrameSuivante();
         }
 
         Camera.X = this.X;
@@ -69,7 +89,7 @@ class Joueur extends Lutin_SC
         this.Z = this.Y;
         
         
-        this.BasculerCostume(id)
+        //this.BasculerCostume(id)
     }
 
     TestContact(dir)

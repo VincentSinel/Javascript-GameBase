@@ -1,11 +1,11 @@
 /**
- * Lutin acceptant un spritesheet comme texture au lieu d'une liste d'image
+ * Lutin acceptant un spritesheet de RPG Maker comme texture au lieu d'une liste d'image
  * @class
  * @extends Lutin
  */
- class Lutin_SC extends Lutin
+ class Lutin_RPGMaker extends Lutin
  {
-     #Decoupage
+     #PersoActuel
  
      /**
       * Création d'un lutin manipulable avec des fonction simple
@@ -13,14 +13,18 @@
       * @param {number} X Position X du lutin
       * @param {number} Y Position Y du lutin
       * @param {string} Texture Texture à utiliser;
-      * @param {Array<number>} Decoupage Hauteur et Largeur d'un Sprite;
+      * @param {boolean} [Simple = true] Type de texture (true pour une seul perso, false pour 8 perso);
+      * @param {int} [IdCostum = 0] ID perso de départ;
+      * @param {int} [DirVue = 0] Direction du personnage (0 vers le bas; 1 gauche; 2 droite; 3 bas);
       */
-     constructor(X,Y, Texture, Decoupage, IdCostum = 0)
+     constructor(X,Y, Texture, Simple = true, IdCostum = 0, DirVue = 0)
      {
          super(X,Y,[Texture])
-         this.Decoupage = Decoupage;
+         this.MaxCostume = Simple ? 1 : 8;
  
-         this.CostumeActuel = Math.max(Math.min(IdCostum, this.MaxCostume),0);
+         this.PersoActuel = IdCostum;
+         this.AnimationFrame = 1;
+         this.DirectionVue = DirVue;
      }
  
      //#region GETTER SETTER
@@ -32,7 +36,9 @@
       */
      get TextWidth()
      {
-         return this.Decoupage[0];
+         if (this.MaxCostume == 1)
+             return this.Image.width / 3;
+         return this.Image.width / 12;
      }
      /**
       * Hauteur de la texture du lutin
@@ -41,32 +47,38 @@
       */
      get TextHeight()
      {
-         return this.Decoupage[1];
+         if (this.MaxCostume == 1)
+             return this.Image.height / 8;
+         return this.Image.height / 4;
      }
      /**
-      * Tableau de découpage de la texture
-      * @type {Array<number>}
+      * ID du perso actuel
+      * @type {int}
       */
-     get Decoupage()
+     get PersoActuel()
      {
-         return this.#Decoupage;
+         return this.#PersoActuel
      }
-     set Decoupage(v)
+     set PersoActuel(v)
      {
-         this.#Decoupage = v;
-         this.Recalcul();
+         this.#PersoActuel =  Math.max(Math.min(v, this.MaxCostume),0);
      }
  
      //#endregion
  
      /**
-      * Recalcul les paramètres du lutin lorsque la taille de découpage change
+      * Passe l'animation à la frame suivante
       */
-     Recalcul()
+     FrameSuivante()
      {
-         let w = this.Image.width / this.Decoupage[0]
-         let h = this.Image.height / this.Decoupage[1]
-         this.MaxCostume = w * h - 1;
+         this.AnimationFrame = (this.AnimationFrame + 1) % 4
+     }
+     /**
+      * Passe l'animation sur la frame de pause
+      */
+     FrameIDLE()
+     {
+         this.AnimationFrame = 1;
      }
      /**
       * Selectionne le costume suivant
@@ -109,10 +121,10 @@
       */
      Dessin(Context)
      {
-         let x = this.Decoupage[0] * (this.CostumeActuel % (super.TextWidth / this.Decoupage[0]));
-         let y = this.Decoupage[1] * Math.floor(this.CostumeActuel / (super.TextWidth / this.Decoupage[0]));
+         let anim = this.AnimationFrame == 3 ? 1 : this.AnimationFrame;
+         let x = ((this.PersoActuel % 4) * 3 + anim) * this.TextWidth;
+         let y = (Math.floor(this.PersoActuel / 4) * 4 + this.DirectionVue) * this.TextHeight;
          // Dessine le lutin
-         Context.drawImage(this.Image, x, y, this.Decoupage[0], this.Decoupage[1], 0, 0, this.Decoupage[0], this.Decoupage[1]);
+         Context.drawImage(this.Image, x, y, this.TextWidth, this.TextHeight, 0, 0, this.TextWidth, this.TextHeight);
      }
  }
- 
