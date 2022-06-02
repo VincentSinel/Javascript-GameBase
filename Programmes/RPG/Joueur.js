@@ -44,7 +44,6 @@ class Joueur extends Lutin_RPGMaker
         if (Clavier.ToucheBasse("d"))
             deplacementx += 1
 
-        this.FrameIDLE()
 
         if (deplacementx != 0 || deplacementy != 0)
         {
@@ -80,8 +79,11 @@ class Joueur extends Lutin_RPGMaker
             if (deplacementy < 0 && deplacementx == 0)
                 this.DirectionVue = 3
 
-            if (deplacementx != 0 || deplacementy != 0)
-                this.FrameSuivante();
+            this.FrameSuivante();
+        }
+        else
+        {
+            this.FrameIDLE()
         }
 
         Camera.X = this.X;

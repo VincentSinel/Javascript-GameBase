@@ -4,6 +4,17 @@
  */
 class GameObject
 {
+
+    /**
+     * Effectue une Update static d'object particulier
+     * @param {float} Delta Nombre de frame depuis la précédente mise à jour
+     */
+    static Update(Delta)
+    {
+        Lutin_RPGMaker.AnimationTimer += Delta;
+    }
+
+
     // Angle de l'objet
     #Direction = 0;
     // Racine des objets

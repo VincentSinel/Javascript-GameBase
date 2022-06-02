@@ -5,6 +5,8 @@
  */
  class Lutin_RPGMaker extends Lutin
  {
+     static AnimationSpeed = 6;
+     static AnimationTimer = 0;
      #PersoActuel
  
      /**
@@ -48,8 +50,8 @@
      get TextHeight()
      {
          if (this.MaxCostume == 1)
-             return this.Image.height / 8;
-         return this.Image.height / 4;
+             return this.Image.height / 4;
+         return this.Image.height / 8;
      }
      /**
       * ID du perso actuel
@@ -71,7 +73,7 @@
       */
      FrameSuivante()
      {
-         this.AnimationFrame = (this.AnimationFrame + 1) % 4
+         this.AnimationFrame = Math.floor(Lutin_RPGMaker.AnimationTimer / FPS * Lutin_RPGMaker.AnimationSpeed) % 4
      }
      /**
       * Passe l'animation sur la frame de pause

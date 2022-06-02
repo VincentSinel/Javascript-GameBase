@@ -69,7 +69,7 @@ class Game
         if (Pause)
         {
             window.requestAnimationFrame(Game.BouclePrincipale);
-            return 
+            return;
         }
         // Ajoute 1 au total des frames
         TotalFrame += 1;
@@ -88,7 +88,8 @@ class Game
 
         Tilesets.Update(dt);
 
-        Scene.Update(dt)
+        Scene.Update(dt);
+        GameObject.Update(dt);
         // Lancement de la boucle de calcul;
         if (SceneActuel)
             SceneActuel.Update(dt);
@@ -96,10 +97,10 @@ class Game
         UIElement.Calcul(dt);
 
         // Fix pour la résolution d'écran (voir plus bas)
-        Game.fix_dpi()
+        Game.fix_dpi();
 
         //Efface l'écran
-        Game.#TempContext.fillStyle = CouleurFond
+        Game.#TempContext.fillStyle = CouleurFond;
         Game.#TempContext.fillRect(0,0,Ecran_Largeur, Ecran_Hauteur);
         Game.#TempContext.imageSmoothingEnabled = false;
 
@@ -123,7 +124,7 @@ class Game
         // Dessine le rendu sur le canvas principal
         ctx.imageSmoothingEnabled = false;
         ctx.scale(canvas.width / Ecran_Largeur, canvas.height / Ecran_Hauteur);
-        ctx.drawImage(Game.#TempContext.canvas, 0,0)
+        ctx.drawImage(Game.#TempContext.canvas, 0,0);
 
         // Met en place le dégradé d'affichage
         ctx.fillStyle = Color.Couleur(0, 0, 0, fade);
