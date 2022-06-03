@@ -1,3 +1,7 @@
+/**
+ * Class de base pour tout les UIElement. Celle-ci gère tout les événement et les paramètre standard.
+ * @class
+ */
 class UIElement
 {
     //#region STATIC Element
@@ -27,38 +31,8 @@ class UIElement
     static #topScrollElement = undefined;
     static #DraggingElement = undefined;
 
-    /**
-     * Ajoute un Menu à la liste des menus globaux. La mise a jour et le dessin sont alors automatiquement géré.
-     * @param {UIElement} menu Menu a ajouter.
-     */
-    static AddMenu(menu)
-    {
-        UIElement.#Menus.push(menu);
+    //#region STATIC GETTER SETTER
 
-        // For performance reasons, we will first map to a temp array, sort and map the temp array to the objects array.
-        var map = UIElement.#Menus.map(function (el, index) {
-            return { index : index, value : el.GZ };
-        });
-
-        // Now we need to sort the array by z index.
-        map.sort(function (a, b) {
-            return a.value - b.value;
-        });
-
-        let objects = UIElement.#Menus;
-        // We finaly rebuilt our sorted objects array.
-        UIElement.#Menus = map.map(function (el) {
-            return objects[el.index];
-        });
-    }
-    /**
-     * Supprime un menu de la liste des menus globaux.
-     * @param {UIElement} menu Menu à supprimer.
-     */
-    static RemoveMenu(menu)
-    {
-        UIElement.#Menus.splice(UIElement.#Menus.indexOf(menu), 1);
-    }
     /**
      * Renvoie l'object ayant le focus
      */
@@ -83,54 +57,11 @@ class UIElement
     static get TopElement(){
         UIElement.#topElement;
     }
-    /**
-     * Cherche l'objet le plus haut à une position donnée
-     * @param {Vector} pos Position à tester
-     * @returns UIElement le plus haut à cette position
-     */
-    static #GetTopElement(pos)
-    {
-        UIElement.#topElement = undefined;
-        for (let ui = UIElement.#Menus.length - 1; ui >= 0; ui--) 
-        {
-            let el = UIElement.#Menus[ui];
-            if (el.Actif)
-            {
-                if (el.PointIn(pos))
-                {
-                    let t = el.GetTopElement(pos);
-                    if (t != undefined)
-                    {
-                        UIElement.#topElement = t;
-                        return;
-                    }
 
-                }
-            }
-        }
-    }
-    /**
-     * Cherche l'objet le plus haut à une position donnée
-     * @param {Vector} pos Position à tester
-     * @returns UIElement le plus haut à cette position
-     */
-     static #GetScrollTopElement(pos)
-     {
-         UIElement.#topScrollElement = undefined;
-         for (let ui = UIElement.#Menus.length - 1; ui >= 0; ui--) 
-         {
-             let el = UIElement.#Menus[ui];
-             if (el.ScrollIn(pos))
-             {
-                 if (el.Actif)
-                 {
-                         UIElement.#topScrollElement = el.GetScrollTopElement(pos);
-                 }
-                 return;
-             }
-             
-         }
-     }
+//#endregion
+
+    //#region STATIC Event Handler
+
     /**
      * Gestionnaire de déplacement de la souris pour les UIElement
      * @param {Vector} position Position de la souris
@@ -283,7 +214,88 @@ class UIElement
         }
     }
 
+    //#endregion
 
+    /**
+     * Ajoute un Menu à la liste des menus globaux. La mise a jour et le dessin sont alors automatiquement géré.
+     * @param {UIElement} menu Menu a ajouter.
+     */
+    static AddMenu(menu)
+    {
+        UIElement.#Menus.push(menu);
+
+        // For performance reasons, we will first map to a temp array, sort and map the temp array to the objects array.
+        var map = UIElement.#Menus.map(function (el, index) {
+            return { index : index, value : el.GZ };
+        });
+
+        // Now we need to sort the array by z index.
+        map.sort(function (a, b) {
+            return a.value - b.value;
+        });
+
+        let objects = UIElement.#Menus;
+        // We finaly rebuilt our sorted objects array.
+        UIElement.#Menus = map.map(function (el) {
+            return objects[el.index];
+        });
+    }
+     /**
+      * Supprime un menu de la liste des menus globaux.
+      * @param {UIElement} menu Menu à supprimer.
+      */
+    static RemoveMenu(menu)
+    {
+        UIElement.#Menus.splice(UIElement.#Menus.indexOf(menu), 1);
+    }
+     /**
+     * Cherche l'objet le plus haut à une position donnée
+     * @param {Vector} pos Position à tester
+     * @returns UIElement le plus haut à cette position
+     */
+    static #GetTopElement(pos)
+    {
+        UIElement.#topElement = undefined;
+        for (let ui = UIElement.#Menus.length - 1; ui >= 0; ui--) 
+        {
+            let el = UIElement.#Menus[ui];
+            if (el.Actif)
+            {
+                if (el.PointIn(pos))
+                {
+                    let t = el.GetTopElement(pos);
+                    if (t != undefined)
+                    {
+                        UIElement.#topElement = t;
+                        return;
+                    }
+
+                }
+            }
+        }
+    }
+    /**
+     * Cherche l'objet le plus haut à une position donnée
+     * @param {Vector} pos Position à tester
+     * @returns UIElement le plus haut à cette position
+     */
+    static #GetScrollTopElement(pos)
+    {
+        UIElement.#topScrollElement = undefined;
+        for (let ui = UIElement.#Menus.length - 1; ui >= 0; ui--) 
+        {
+            let el = UIElement.#Menus[ui];
+            if (el.ScrollIn(pos))
+            {
+                if (el.Actif)
+                {
+                        UIElement.#topScrollElement = el.GetScrollTopElement(pos);
+                }
+                return;
+            }
+            
+        }
+    }
     /**
      * Mise a jour global des UIElement
      * @param {float} Delta Nombre de frame écoulé depuis le dernier rafraichissement d'écran
@@ -348,6 +360,8 @@ class UIElement
         this.#Z = Z;
         this.#W = W;
         this.#H = H;
+        this.DrawOffSetX = 0;
+        this.DrawOffSetY = 0;
         this.#SizeChanged = true;
         this.Padding = [this.EpaisseurBord, this.EpaisseurBord, this.EpaisseurBord, this.EpaisseurBord];
         this.Parent = Parent;
@@ -407,19 +421,42 @@ class UIElement
 
     //#region Getter Setter
 
+    
+    /**
+     * Position X de l'objet
+     * @type {float}
+     */
     get X() { return this.#X }
-    get Y() { return this.#Y }
-    get Z() { return this.#Z }
-    get W() { return this.#W }
-    get H() { return this.#H }
-
     set X(v) { this.#X = v; this.#SizeChanged = true; }
+    /**
+     * Position Y de l'objet
+     * @type {float}
+     */
+    get Y() { return this.#Y }
     set Y(v) { this.#Y = v; this.#SizeChanged = true; }
+    /**
+     * Position Z de l'objet
+     * @type {float}
+     */
+    get Z() { return this.#Z }
     set Z(v) { this.#Z = v; this.#SizeChanged = true; }
+    /**
+     * Largeur de l'objet
+     * @type {float}
+     */
+    get W() { return this.#W }
     set W(v) { this.#W = v; this.#SizeChanged = true; }
+    /**
+     * Hauteur de l'objet
+     * @type {float}
+     */
+    get H() { return this.#H }
     set H(v) { this.#H = v; this.#SizeChanged = true; }
 
-    // Calcul la position X de cette objet vis à vis de son parent
+    /**
+     * Calcul la position X de cette objet vis à vis de son parent
+     * @type {float}
+     */
     get GX()
     {
         if (this.Parent)
@@ -427,7 +464,10 @@ class UIElement
         else
             return this.X;
     }
-    // Calcul la position Y de cette objet vis à vis de son parent
+    /**
+     * Calcul la position Y de cette objet vis à vis de son parent
+     * @type {float}
+     */
     get GY()
     {
         if (this.Parent)
@@ -435,7 +475,10 @@ class UIElement
         else
             return this.Y;
     }
-    // Calcul la position Z de cette objet vis à vis de son parent
+    /**
+     * Calcul la position Z de cette objet vis à vis de son parent
+     * @type {float}
+     */
     get GZ()
     {
         if (this.Parent)
@@ -443,32 +486,50 @@ class UIElement
         else
             return this.Z;
     }
-    // Calcul la position X de point de départ d'un contenue d'objet (padding)
+    /**
+     * Calcul la position X de point de départ d'un contenue d'objet (padding)
+     * @type {float}
+     */
     get CX()
     {
         return this.GX + this.Padding[0];
     }
-    // Calcul la position Y de point de départ d'un contenue d'objet (padding)
+    /**
+     * Calcul la position Y de point de départ d'un contenue d'objet (padding)
+     * @type {float}
+     */
     get CY()
     {
         return this.GY + this.Padding[1];
     }
-    // Calcul la largeur disponible pour un enfant
+    /**
+     * Calcul la largeur disponible pour un enfant
+     * @type {float}
+     */
     get CW()
     {
         return this.W - this.Padding[0] - this.Padding[2];
     }
-    // Calcul la hauteur disponible pour un enfant
+    /**
+     * Calcul la hauteur disponible pour un enfant
+     * @type {float}
+     */
     get CH()
     {
         return this.H - this.Padding[1] - this.Padding[3];
     }
-    // Revoie si l'élément a actuellement le focus
+    /**
+     * Revoie si l'élément a actuellement le focus
+     * @type {boolean}
+     */
     get isFocus()
     {
         return UIElement.FocusObject == this
     }
-    // Renvoie si la souris est actuellement au dessus de l'élément
+    /**
+     * Renvoie si la souris est actuellement au dessus de l'élément
+     * @type {boolean}
+     */
     get Hover()
     {
         if (this.Actif && this.SourisCapture)
@@ -480,7 +541,10 @@ class UIElement
         }
         return false;
     }
-    // Renvoie si le canvas a besoin d'être regénéré
+    /**
+     * Renvoie si le canvas a besoin d'être regénéré
+     * @type {boolean}
+     */
     get CanvasChanged()
     {
         if(this.#CanvasChange)
@@ -492,7 +556,10 @@ class UIElement
         }
         return false;
     }
-    // Renvoie si l'objet est actif en prenant en compte l'état du parent
+    /**
+     * Renvoie / Définit si l'objet est actif en prenant en compte l'état du parent
+     * @type {boolean}
+     */
     get Actif()
     {
         if(this.Parent)
@@ -501,7 +568,6 @@ class UIElement
         }
         return this.#Actif;
     }
-    // Définit l'état de l'objet et appel les retours d'événements
     set Actif(v)
     {
         if (v != this.#Actif)
@@ -517,11 +583,15 @@ class UIElement
             }
         }
     }
+
     //#endregion
 
 
-    //#region Handler
+    //#region Event Handler
 
+    /**
+     * Gestion du départ de la souris
+     */
     Handle_MouseLeave()
     {
         if(!this.SourisCapture)
@@ -533,6 +603,10 @@ class UIElement
             this.onSouris_Quitte[ev](event)
         }
     }
+    /**
+     * Gestion du déplacement de la souris
+     * @param {Vector} position Position de la souris
+     */
     Handle_MouseMove(position)
     {
         if(!this.SourisCapture)
@@ -552,6 +626,11 @@ class UIElement
             this.onSouris_AuDessus[ev](event)
         }
     }
+    /**
+     * Gestion des clique de la souris
+     * @param {int} id index du clique de souris
+     * @param {Vector} position Position de la souris
+     */
     Handle_Clique(id, position)
     {
         if(!this.SourisCapture)
@@ -562,6 +641,11 @@ class UIElement
             this.onSouris_Clique[id][ev](event)
         }
     }
+    /**
+     * Gestion de l'appuie des cliques de la souris
+     * @param {int} id index du clique de souris
+     * @param {Vector} position Position de la souris
+     */
     Handle_Basse(id, position)
     {
         if(!this.SourisCapture)
@@ -572,6 +656,11 @@ class UIElement
             this.onSouris_Basse[id][ev](event)
         }
     }
+    /**
+     * Gestion du relachement des cliques de la souris
+     * @param {int} id index du clique de souris
+     * @param {Vector} position Position de la souris
+     */
     Handle_Relache(id, position)
     {
         if(!this.SourisCapture)
@@ -582,6 +671,11 @@ class UIElement
             this.onSouris_Relache[id][ev](event)
         }
     }
+    /**
+     * Gestion du début de drag de la souris
+     * @param {int} id index du clique de souris
+     * @param {Vector} position Position de la souris
+     */
     Handle_DragStart(id, position)
     {
         if(!this.SourisCapture)
@@ -592,6 +686,11 @@ class UIElement
             this.onSouris_DragStart[id][ev](event)
         }
     }
+    /**
+     * Gestion du fin de drag de la souris
+     * @param {int} id index du clique de souris
+     * @param {Vector} position Position de la souris
+     */
     Handle_DragEnd(id, position)
     {
         if(!this.SourisCapture)
@@ -602,6 +701,11 @@ class UIElement
             this.onSouris_DragEnd[id][ev](event)
         }
     }
+    /**
+     * Gestion du drag de la souris
+     * @param {int} id index du clique de souris
+     * @param {Vector} position Position de la souris
+     */
     Handle_Dragging(id, position)
     {
         if(!this.SourisCapture)
@@ -612,6 +716,12 @@ class UIElement
             this.onSouris_Dragging[id][ev](event)
         }
     }
+    /**
+     * Gestion du scroll de la souris
+     * @param {Vector} position Position de la souris
+     * @param {float} dx Scroll Horizontal
+     * @param {float} dx Scroll Verticale
+     */
     Handle_Scroll(position, dx, dy)
     {
         if(!this.SourisCapture)
@@ -622,6 +732,10 @@ class UIElement
             this.onSouris_Scroll[ev](event)
         }
     }
+    /**
+     * Gestion de l'appuie d'une touche de clavier
+     * @param {KeyboardEvent} e Evenement du clavier
+     */
     Handle_KeyJustDown(e)
     {
         let event = new UIEvenement(UIEvenementType.Clavier_ToucheJusteBasse, this, e);
@@ -630,6 +744,10 @@ class UIElement
             this.onClavier_ToucheJusteBasse[ev](event)
         }
     }
+    /**
+     * Gestion du maintient d'une touche de clavier
+     * @param {KeyboardEvent} e Evenement du clavier
+     */
     Handle_KeyDown(e)
     {
         let event = new UIEvenement(UIEvenementType.Clavier_ToucheBasse, this, e);
@@ -638,6 +756,10 @@ class UIElement
             this.onClavier_ToucheBasse[ev](event)
         }
     }
+    /**
+     * Gestion du relachement d'une touche de clavier
+     * @param {KeyboardEvent} e Evenement du clavier
+     */
     Handle_KeyJustUp(e)
     {
         let event = new UIEvenement(UIEvenementType.Clavier_ToucheJusteHaute, this, e);
@@ -646,6 +768,10 @@ class UIElement
             this.onClavier_ToucheJusteHaute[ev](event)
         }
     }
+    /**
+     * Gestion du changement de taille d'un objet enfant
+     * @param {UIEvenement} e Evenement lié
+     */
     Handle_ChildResize(e)
     {
         for (let ev = 0; ev < this.onChildResize.length; ev++)
@@ -661,6 +787,9 @@ class UIElement
     //#endregion
 
 
+    /**
+     * Active cet objet
+     */
     Activate()
     {
         let event = new UIEvenement(UIEvenementType.Activation, this);
@@ -671,6 +800,9 @@ class UIElement
             element.Activate();
         });
     }
+    /**
+     * Desactive cet objet
+     */
     Deactivate()
     {
         let event = new UIEvenement(UIEvenementType.Desactivation, this);
@@ -681,7 +813,11 @@ class UIElement
             element.Deactivate();
         });
     }
-
+    /**
+     * Test si un point est au dessus de l'objet
+     * @param {Vector} Point Vecteur position à tester
+     * @returns {boolean}
+     */
     PointIn(Point)
     {
         //if(!this.SourisCapture)
@@ -692,6 +828,11 @@ class UIElement
         }
         return false;
     }
+    /**
+     * Renvoie l'objet cliquable le plus haut à l'emplacement donnée
+     * @param {Vector} pos Position à tester
+     * @returns {UIElement} Objet le plus haut
+     */
     GetTopElement(pos)
     {
         for (let ui = this.Childrens.length - 1; ui >= 0; ui--) 
@@ -712,6 +853,11 @@ class UIElement
             return this;
         return undefined;
     }
+    /**
+     * Test si un point est dans un objet scrollable
+     * @param {Vector} Point Point à tester
+     * @returns {boolean}
+     */
     ScrollIn(Point)
     {
         if(!this.ScrollCapture)
@@ -722,6 +868,11 @@ class UIElement
         }
         return false;
     }
+    /**
+     * Renvoie l'objet scrollable le plus haut à l'emplacement donnée
+     * @param {Vector} pos Position à tester
+     * @returns {UIElement} Objet le plus haut
+     */
     GetScrollTopElement(pos)
     {
         for (let ui = this.Childrens.length - 1; ui >= 0; ui--) 
@@ -739,7 +890,9 @@ class UIElement
         }
         return this;
     }
-
+    /**
+     * Trie les objets enfant selon leur position Z (pour le dessin)
+     */
     #SortChildren()
     {
         // For performance reasons, we will first map to a temp array, sort and map the temp array to the objects array.
@@ -802,8 +955,8 @@ class UIElement
      */
     RemoveChildren(Element)
     {
-        if (this.Childrens.indexOf(this) > -1)
-            this.Childrens.splice(this.Childrens.indexOf(this), 1);
+        if (this.Childrens.indexOf(Element) > -1)
+            this.Childrens.splice(this.Childrens.indexOf(Element), 1);
         this.#CanvasChange = true;
         this.#SortChildren()
     }
@@ -839,7 +992,9 @@ class UIElement
             this.#CanvasChange = true;
         }
     }
-    
+    /**
+     * Demande un rafraichissement du canvas et de son contenue
+     */
     RefreshUI()
     {
         this.#CanvasChange = true;
@@ -849,7 +1004,11 @@ class UIElement
             this.onRecreate[ev](event)
         }
     }
-
+    /**
+     * Calcul le rectangle contenant l'objet (et ces enfants si voulu)
+     * @param {boolean} child_Recursif Prise en compte des enfants
+     * @returns {Rectangle} Rectangle contenant l'objet et ses enfants si précisé
+     */
     BoundingBoxChild(child_Recursif = false)
     {
         let x1 = 0;
@@ -877,8 +1036,10 @@ class UIElement
         }
         return Rectangle.FromPosition(x1, y1, x2 - x1, y2 - y1);
     }
-   
-
+    /**
+     * Effectue les calcul de changement de taille pour cet élément et ces enfants
+     * @param {float} Delta Nombre de frame depuis la précédentes mise à jour
+     */
     Calcul(Delta)
     {
         if (this.#SizeChanged)
@@ -899,7 +1060,10 @@ class UIElement
             element.Calcul(Delta)
         });
     }
-
+    /**
+     * Effectue le dessin de ce canvas ainsi que de ses enfants
+     * @param {CanvasRenderingContext2D} Context Context de dessin
+     */
     Dessin(Context)
     {
         if(!this.Visible || this.W == 0 || this.H == 0)
@@ -916,23 +1080,38 @@ class UIElement
         }
         this.#CanvasChange = false;
 
-        Context.drawImage(this.Backctx.canvas, this.X, this.Y)
+        if (this.Backctx.canvas.width > 0 && this.Backctx.canvas.height > 0)
+            Context.drawImage(this.Backctx.canvas, this.X + this.DrawOffSetX, this.Y + this.DrawOffSetY)
         this.DessinChild(Context)
-        Context.drawImage(this.Frontctx.canvas, this.X, this.Y)
+        if (this.Frontctx.canvas.width > 0 && this.Frontctx.canvas.height > 0)
+            Context.drawImage(this.Frontctx.canvas, this.X + this.DrawOffSetX, this.Y + this.DrawOffSetY)
     }
-
+    /**
+     * Effectue le dessin des objet enfants
+     * @param {CanvasRenderingContext2D} Context Context de dessin
+     */
     DessinChild(Context)
     {
-        Context.drawImage(this.Childctx.canvas, this.X + this.Padding[0], this.Y + this.Padding[1])
+        if (this.Childctx.canvas.width > 0 && this.Childctx.canvas.height > 0)
+            Context.drawImage(this.Childctx.canvas, this.X + this.Padding[0], this.Y + this.Padding[1])
     }
-
+    /**
+     * Effectue le dessin du contenue arrière de cette objet (vis à vis des enfants)
+     * @param {CanvasRenderingContext2D} Context Context de dessin
+     */
     DessinBackUI(Context)
     {
     }
+    /**
+     * Effectue le dessin du contenue avant de cette objet (vis à vis des enfants)
+     * @param {CanvasRenderingContext2D} Context Context de dessin
+     */
     DessinFrontUI(Context)
     {
     }
-
+    /**
+     * Initialise les canvas temporaire
+     */
     CreateCanvas()
     {
         this.Backctx = document.createElement("canvas").getContext("2d");
@@ -945,7 +1124,9 @@ class UIElement
         this.Frontctx.canvas.width = this.W;
         this.Frontctx.canvas.height = this.H;
     }
-
+    /**
+     * Créer le canvas des enfants de cet élément
+     */
     CreateChildCanvas()
     {
         this.Childctx = document.createElement("canvas").getContext("2d");
@@ -1093,23 +1274,39 @@ class UIElement
 
     
 }
-
+/**
+ * Objet Evenement lié au gestionnaire
+ * @class
+ */
 class UIEvenement
 {
+    /**
+     * Créer un nouvelle événement d'UI
+     * @constructor
+     * @param {UIEvenementType} Type Typde d'événement
+     * @param {UIElement} objet Objet cible
+     * @param {Object} parameters Paramètres supplémentaires
+     */
     constructor(Type, objet, parameters = undefined)
     {
         this.Type = Type;
         this.Target = objet;
         this.Param = parameters
     }
-
+    /**
+     * Renvoie si l'objet cible à le focus
+     * @type {boolean}
+     */
     get isFocus()
     {
         return this.Target.isFocus
     }
 
 }
-
+/**
+ * Class gérant tout les type d'événement d'UI
+ * @enum
+ */
 class UIEvenementType {
     // Create new instances of the same class as static attributes
     static Souris_AuDessus = new UIEvenementType("Souris_AuDessus")
@@ -1139,7 +1336,10 @@ class UIEvenementType {
       this.Name = name
     }
 }
-
+/**
+ * Class gérant tout les type d'alignement horizontaux
+ * @enum
+ */
 class HorizontalAlignementType
 {
     static Gauche = new HorizontalAlignementType("Gauche", "left");
@@ -1152,12 +1352,15 @@ class HorizontalAlignementType
         this.Value = value;
     }
 }
-
+/**
+ * Class gérant tout les type d'alignement verticaux
+ * @enum
+ */
 class VerticalAlignementType
 {
-    static Haut = new VerticalAlignementType("Gauche");
+    static Haut = new VerticalAlignementType("Haut");
     static Centre = new VerticalAlignementType("Centre");
-    static Bas = new VerticalAlignementType("Droite");
+    static Bas = new VerticalAlignementType("Bas");
     static Etendu = new VerticalAlignementType("Etendu");
     constructor(name)
     {

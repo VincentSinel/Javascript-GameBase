@@ -7,8 +7,9 @@ class Moto extends Lutin
     static DecelationSol = 0.9; // Décélération lorsque la roue touche le sol
     static VitesseCabrage = 1.2; // Vitesse de cabrage lorsque l'on appuie sur l'accelerateur
     static CoefficientChute = 1.7; // Vitesse de chute de la moto lorsque l'accelerateur n'est pas enfoncé
+    static AngleMax = 360; // Vitesse de chute de la moto lorsque l'accelerateur n'est pas enfoncé
 
-    constructor(Scene)
+    constructor()
     {
         super(0,0,["Images/Moto/Moto1.png"])
 
@@ -18,7 +19,6 @@ class Moto extends Lutin
 
         this.OldX = -200;
         this.OldY = 0;
-        this.Scene = Scene
 
         this.CentreRotation = new Vector(24/155, 67.5/93);
 
@@ -51,7 +51,7 @@ class Moto extends Lutin
  
         this.Commande(Delta)
         
-        if((this.Contact() && this.Immortel <= 0) || this.Direction < -70)
+        if((this.Contact() && this.Immortel <= 0) || this.Direction < -Moto.AngleMax)
         {
             this.Mort = true;
             this.Vie -= 1;
@@ -119,7 +119,7 @@ class Moto extends Lutin
 
         this.Vitesse = (1 - Math.pow(Math.E, -this.Acceleration * Moto.CoefficientVMax)) * Moto.VitesseMax + this.Acceleration * Moto.VitesseFixe;
 
-        this.Scene.Aiguille.Direction = 30 - (this.Vitesse / Moto.VitesseMax) * 90 / 60 * Moto.VitesseMaxCompteur;
+        this.Scene.Compteur.Aiguille.Direction = 30 - (this.Vitesse / Moto.VitesseMax) * 90 / 60 * Moto.VitesseMaxCompteur;
 
         if(Clavier.ToucheBasse("ArrowUp"))
         {
@@ -149,7 +149,7 @@ class Moto extends Lutin
         this.Z = this.Y + decalageY;
 
         this.ColRect = Rectangle.FromPosition(this.X - decalageX, this.Y + decalageY - H/3, L, H/3)
-        //Debug.AjoutRectangle(this.ColRect, "green")
+        Debug.AjoutRectangle(this.ColRect, "green")
     }
 
 

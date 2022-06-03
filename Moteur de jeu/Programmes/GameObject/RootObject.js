@@ -5,6 +5,7 @@
  */
 class RootObject extends GameObject
 {
+    #Scene;
     /**
      * Crée un objet racine dans la scene voulu.
      * @constructor
@@ -16,8 +17,7 @@ class RootObject extends GameObject
         this.Parent = this;
         this.Visible = true;
         this.Root = this;
-        this.Scene = Scene;
-
+        this.#Scene = Scene;
         this.DrawAbleObject = [];
     }
 
@@ -58,6 +58,18 @@ class RootObject extends GameObject
     get GRadDirection()
     {
         return this.RadDirection;
+    }
+    /**
+     * Renvoie la scene lié à cet objet racine
+     * @type {Scene}
+     */
+    get Scene()
+    {
+        return this.#Scene;
+    }
+    set Scene(v)
+    {
+        this.#Scene = v;
     }
 
     //#endregion

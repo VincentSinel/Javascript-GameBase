@@ -183,19 +183,6 @@ class Drawable extends GameObject
     {
         this.Visible = false;
     }
-    ///**
-    // * Detruit l'objet actuel
-    // * @override
-    // */
-    //Destroy()
-    //{
-    //    super.Destroy()
-        //if (this.Root)
-       // {
-        //    this.Root.DrawAbleObject.splice(this.Root.DrawAbleObject.indexOf(this), 1);
-        //    this.Root.SortDrawable();
-        //}
-    //}
     /**
      * Effectue le dessin de cette objet en prenant en compte la position de la camera, la rotation, la taille et la teinte
      * @param {CanvasRenderingContext2D} Context Context de dessin

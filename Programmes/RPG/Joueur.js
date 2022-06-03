@@ -2,7 +2,7 @@ class Joueur extends Lutin_RPGMaker
 {
     constructor(X,Y)
     {
-        super(X,Y, "Images/Joueur/Perso2.png", true);
+        super(X,Y, "Images/Joueur/Perso.png", false,1);
         this.CentreRotation = new Vector(0.5,1);
         this.Vitesse = 2;
 

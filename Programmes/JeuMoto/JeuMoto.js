@@ -5,7 +5,7 @@ class JeuMoto extends Scene
     constructor()
     {
         super("JeuMoto");
-        Debug.Parametre.Camera = false;
+        Debug.Parametre.Camera = true;
         Debug.Parametre.Grille = false;
         Debug.Parametre.Info = false;
         Debug.Parametre.TimeMesure = false;
@@ -22,16 +22,12 @@ class JeuMoto extends Scene
         }
 
         this.Voitures = []
-        this.Moto = this.AddChildren(new Moto(this));
-        this.Aiguille = this.AddChildren(new Lutin(0, 0,["Images/Moto/Aiguille.png"]));
+        this.Moto = this.AddChildren(new Moto());
 
-        this.ComboObject = this.AddChildren(new Combo(this));
+        this.ComboObject = this.AddChildren(new Combo());
         this.ComboObject.Z = 100000000
 
-        this.Compteur = this.AddChildren(new Lutin(0, 0,["Images/Moto/Compteur.png"]));
-        this.Aiguille.CentreRotation = new Vector(7.5 / 68, 0.5);
-        this.Compteur.Z = 500000
-        this.Aiguille.Z = 500001
+        this.Compteur = this.AddChildren(new Compteur());
         
         this.ProchaineVoiture = 180;
 
@@ -46,7 +42,7 @@ class JeuMoto extends Scene
         let i = 0
         while (this.ProchaineVoiture <= 0 && i < 30)
         {
-            let X = this.Moto.X + Ecran_Largeur + 200 //+ Math.random() * 500;
+            let X = this.Moto.X + Ecran_Largeur + 200;
             let Y = Math.random() * 350 - 200;
             let voiture = this.AddChildren(new Voiture(X, Y));
             this.Voitures.push(voiture);
@@ -82,11 +78,5 @@ class JeuMoto extends Scene
         }
 
         this.AjouterVoiture(Delta);
-        
-
-        this.Compteur.X = Camera.X - Ecran_Largeur / 2 + 55;
-        this.Compteur.Y = Camera.Y + Ecran_Hauteur / 2 - 55;
-        this.Aiguille.X = Camera.X - Ecran_Largeur / 2 + 55;
-        this.Aiguille.Y = Camera.Y + Ecran_Hauteur / 2 - 55;
     }
 }

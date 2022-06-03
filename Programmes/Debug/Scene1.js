@@ -21,8 +21,10 @@ class Scene1 extends Scene
         let tilemap = new TileMap( 0, 0, 50, 50);
         this.Tilemap = this.AddChildren(tilemap);
         this.Tilemap.Charger("Terrain1");
-        this.Tilemap.Edition();
+        //this.Tilemap.Edition();
 
+        this.menu = new UI_Image("Images/Moto/Aiguille.png",200, 200, 10000);
+        this.menu.CentreRotation = new Vector(7.5 / 68, 0.5);
 
         //new UI_Slider(200,200,1,200,30,0,100);
         //new UI_Button(400,400,2,200,200,"test");
@@ -104,6 +106,9 @@ class Scene1 extends Scene
     Calcul(Delta)
     {
         super.Calcul(Delta)
+        this.menu.Angle += Math.PI / 180
+        this.menu.ScaleX =  1 + Math.cos(TotalFrame * Math.PI / 125) * 0.5;
+        this.menu.ScaleY =  1 + Math.cos(TotalFrame * Math.PI / 125) * 0.5;
         // if(Clavier.ToucheBasse("ArrowUp"))
         // {
         //     this.Lutin3.Y -= speed

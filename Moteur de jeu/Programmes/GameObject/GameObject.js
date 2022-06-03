@@ -177,6 +177,16 @@ class GameObject
     {
         return Camera.AdapteX(this.CY)
     }
+    /**
+     * Renvoie la scene mère de cet objet
+     * @type {Scene}
+     */
+    get Scene()
+    {
+        if (this.Root)
+            return this.Root.Scene;
+        return undefined
+    }
 
     //#endregion
 
