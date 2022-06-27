@@ -16,7 +16,8 @@ var Scripts = [
     "Programmes/Class/2DShape/Rectangle.js",
     "Programmes/Class/2DShape/Circle.js",
 
-    "Jeu_Base.js",
+    //"Jeu_Base.js",
+    "Game.js",
 
     "Programmes/GameObject/GameObject.js",
     "Programmes/GameObject/RootObject.js",
@@ -107,4 +108,5 @@ function MainScriptLoaded(Name)
     console.log("Le Fichier " + Name + ".js n'est pas présent dans le dossier Fichiers. Il doit être créé, pour cela copier le fichier existant depuis 'Moteur de jeu/Base Fichier/" + Name + ".js'");
 }
 
-console.log("[INFO] - Chargement des modules terminé")
+//Debug.Log("Chargement des modules terminé")
+console.log("[INFO]      - Chargement des modules terminé")

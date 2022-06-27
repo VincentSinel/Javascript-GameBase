@@ -15,7 +15,7 @@ class Voiture extends Lutin
 
         this.Vitesse = 3 +  Math.random()
 
-        this.BasculerCostume(Math.floor(Math.random() * textures.length))
+        this.CostumeActuel = Math.floor(Math.random() * textures.length);
 
         this.CentreRotation = new Vector(0.5,1)
 
@@ -39,5 +39,6 @@ class Voiture extends Lutin
         let decalageY = 10;
         
         this.ColRect = Rectangle.FromPosition(this.X - decalageX, this.Y - decalageY - H/3, L, H/3)
+        //Debug.AjoutRectangle(this.ColRect, "red")
     }
 }

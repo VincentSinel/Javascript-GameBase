@@ -3,34 +3,131 @@
  * @class
  * @extends Drawable
  */
-class Lutin extends Drawable
-{
+ class Lutin extends Drawable
+ {
+    #Costumes = [];
+    #Image;
+    #Decoupage;
+    #CostumeActuel
+    #Bulle
+    #Velocite
+
+     /**
+      * Création d'un lutin manipulable avec des fonction simple
+      * @constructor
+      * @param {number} X Position X du lutin
+      * @param {number} Y Position Y du lutin
+      * @param {Array<string>} Costumes Liste des costumes du lutin
+      */
+     constructor(X, Y, Costumes)
+     {
+         super(X,Y,0)
+ 
+         this.#Costumes = [];
+         this.#Image = new Image();
+         if (Costumes)
+         {
+             for (let c = 0; c < Costumes.length; c++) {
+                 this.#Costumes.push(Textures.Charger(Costumes[c]));
+             }
+             this.#Image = this.Costumes[0];
+         }
+         this.#Decoupage = [0,0,this.Image.width, this.Image.height];
+         this.#CostumeActuel = 0;
+ 
+         // Création de la bulle de dialogue
+         this.#Bulle = this.AddChildren(new BulleDialogue("", 0,0))
+ 
+         this.#Velocite = new Vector(0, 0, 0);
+ 
+     }
+ 
+     //#region GETTER SETTER
+
     /**
-     * Création d'un lutin manipulable avec des fonction simple
-     * @constructor
-     * @param {number} X Position X du lutin
-     * @param {number} Y Position Y du lutin
-     * @param {Array<string>} Costumes Liste des costumes du lutin
+     * Liste des costumes
+     * @type {Array<Image>}
      */
-    constructor(X, Y, Costumes)
+    get Costumes()
     {
-        super(X,Y,0)
-
-        this.Costumes = [];
-        for (let c = 0; c < Costumes.length; c++) {
-            this.Costumes.push(Textures.Charger(Costumes[c]));
-        }
-        this.Image = this.Costumes[0]
-        this.CostumeActuel = 0;
-
-        // Création de la bulle de dialogue
-        this.Bulle = this.AddChildren(new BulleDialogue("", 0,0))
-
-        this.Velocite = new Vector(0, 0, 0);
+        return this.#Costumes;
     }
+    /**
+     * Index du costume actuel
+     * @type {int}
+     */
+    get CostumeActuel()
+    {
+        return this.#CostumeActuel;
+    }
+    set CostumeActuel(v)
+    {
+        if (typeof(v) === "number" && this.#Costumes.length > 0)
+        {
 
-    //#region GETTER SETTER
-
+            this.#CostumeActuel = Math.round(v) % this.Costumes.length
+            this.#Image = this.Costumes[this.#CostumeActuel]
+            this.Decoupage = [0,0,this.Image.width, this.Image.height];
+        }
+        else
+        {
+            Debug.LogErreurType("Fading", "Number", v)
+        }
+    }
+    /**
+     * Image actuel du lutin
+     * @type {Image}
+     */
+    get Image()
+    {
+        return this.#Image
+    }
+    /**
+     * Decoupage de l'image
+     * @type {Array<int>}
+     */
+    get Decoupage()
+    {
+        return this.#Decoupage;
+    }
+    set Decoupage(v)
+    {
+        if (v instanceof Array)
+        {
+            this.#Decoupage = v
+        }
+        else
+        {
+            Debug.LogErreurType("Decoupage", "Array", v)
+        }
+    }
+    /**
+     * Bulle de dialogue
+     * @type {BulleDialogue}
+     */
+    get Bulle()
+    {
+        return this.#Bulle;
+    }
+    /**
+     * Vitesse assigné a ce lutin
+     * @type {Vector}
+     */
+    get Velocite()
+    {
+        return this.#Velocite;
+    }
+    set Velocite(v)
+    {
+        if (v instanceof Vector)
+        {
+            this.#Velocite = v
+        }
+        else
+        {
+            Debug.LogErreurType("Velocite", "Vector", v)
+        }
+    }
     /**
      * Lutin en train de parler
      * @type {boolean}
@@ -41,7 +138,14 @@ class Lutin extends Drawable
     }
     set Parle(v)
     {
-        this.Bulle.Visible = v;
+        if (typeof(v) === "boolean")
+        {
+            this.Bulle.Visible = v;
+        }
+        else
+        {
+            Debug.LogErreurType("Parle", "boolean", v);
+        }
     }
     /**
      * Largeur de la texture Image
@@ -49,10 +153,7 @@ class Lutin extends Drawable
      */
     get TextWidth()
     {
-        if (this.Image)
-            return this.Image.width;
-        else
-            return 0;
+        return this.Decoupage[2];
     }
     /**
      * Hauteur de la texture Image
@@ -60,14 +161,11 @@ class Lutin extends Drawable
      */
     get TextHeight()
     {
-        if (this.Image)
-            return this.Image.height;
-        else
-            return 0;
+        return this.Decoupage[3];
     }
-
-    //#endregion
-
+ 
+     //#endregion
+ 
     /**
      * Permet de savoir si la souris touche l'objet actuel
      * @returns {boolean} vraie si la souris touche, faux sinon
@@ -122,7 +220,8 @@ class Lutin extends Drawable
     Dire(Texte)
     {
         this.Bulle.Texte = Texte;
-        this.Bulle.Visible = true
+        this.Bulle.Visible = true;
+        this.Bulle.Y = -this.TextHeight * this.CentreRotation.y * this.Zoom;
     }
     /**
      * Change la direction du lutin pour le tourner vers un point cible
@@ -139,7 +238,8 @@ class Lutin extends Drawable
     CostumeSuivant()
     {
         this.CostumeActuel = (this.CostumeActuel + 1) % this.Costumes.length
-        this.Image = this.Costumes[this.CostumeActuel]
+        this.#Image = this.Costumes[this.CostumeActuel]
+        this.Decoupage = [0,0,this.Image.width, this.Image.height];
     }
     /**
      * Selectionne le costume précédent
@@ -147,17 +247,19 @@ class Lutin extends Drawable
     CostumePrecedent()
     {
         this.CostumeActuel = (this.CostumeActuel + this.Costumes.length - 1) % this.Costumes.length
-        this.Image = this.Costumes[this.CostumeActuel]
+        this.#Image = this.Costumes[this.CostumeActuel]
+        this.Decoupage = [0,0,this.Image.width, this.Image.height];
     }
-    /**
-     * Selection le costume choisi
-     * @param {int} index Index du costume
-     */
-    BasculerCostume(index)
-    {
-        this.CostumeActuel = Math.round(index) % this.Costumes.length
-        this.Image = this.Costumes[this.CostumeActuel]
-    }
+    //  /**
+    //   * Selection le costume choisi
+    //   * @param {int} index Index du costume
+    //   */
+    //  BasculerCostume(index)
+    //  {
+    //      this.CostumeActuel = Math.round(index) % this.Costumes.length
+    //      this.Image = this.Costumes[this.CostumeActuel]
+    //      this.Decoupage = [0,0,this.Image.width, this.Image.height];
+    //  }
     /**
      * Effectue les calculs liés au lutin
      * @override
@@ -166,7 +268,7 @@ class Lutin extends Drawable
     Calcul(Delta)
     {
         this.Position = this.Position.add(this.Velocite.time(Delta));
-        this.Bulle.Y = -this.TextHeight * this.CentreRotation.y;
+        this.Bulle.Y = -this.TextHeight * this.CentreRotation.y * this.Zoom;
     }
     /**
      * Effecue le dessin du lutin
@@ -176,7 +278,12 @@ class Lutin extends Drawable
     Dessin(Context)
     {
         // Dessine le lutin
-        if (this.Image)
-            Context.drawImage(this.Image, 0, 0);
+        if (this.#Image && this.Costumes.length > 0)
+            Context.drawImage(this.#Image,
+                this.Decoupage[0], 
+                this.Decoupage[1], 
+                this.Decoupage[2], 
+                this.Decoupage[3], 
+                0, 0,this.Decoupage[2], this.Decoupage[3]);
     }
-}
+ }

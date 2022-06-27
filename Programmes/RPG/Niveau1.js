@@ -16,7 +16,7 @@ class Niveau1 extends Map
 
     CreerCailloux()
     {
-        let nbr = 50;
+        let nbr = 250;
         for (let i = 0; i < nbr; i++) 
         {
             let x = (Math.random() - 0.5) * 1600;

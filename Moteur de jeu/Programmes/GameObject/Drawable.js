@@ -5,8 +5,10 @@
  */
 class Drawable extends GameObject
 {
-    // Rectangle contenant le rectangle de l'objet
-    #BoundingBox = undefined;
+    #CentreRotation;
+    #Teinte;
+    #AllowScaling = true;
+    #AllowRotation = true;
 
     /**
      * Créer un Object avec une représentation visuel
@@ -20,44 +22,116 @@ class Drawable extends GameObject
         super(X, Y, Z)
 
         this.Visible = true;
-        this.#BoundingBox = undefined;
-        this.CentreRotation = new Vector(0.5,0.5);
+        this.#CentreRotation = new Vector(0.5,0.5);
 
-        this.Teinte = new Color(0,0,0,0);
-        this.AllowScaling = true;
-        this.AllowRotation = true;
+        this.#Teinte = new Color(0,0,0,0);
+        this.#AllowScaling = true;
+        this.#AllowRotation = true;
     }
 
     //#region GETTER SETTER
 
-
+    /**
+     * Position du centre de rotation relatif à la texture.
+     * @type {Vector}
+     */
+    get CentreRotation()
+    {
+        return this.#CentreRotation;
+    }
+    set CentreRotation(v)
+    {
+        if (v instanceof Vector)
+        {
+            this.#CentreRotation = v
+        }
+        else
+        {
+            Debug.LogErreurType("CentreRotation", "Vector", v);
+        }
+    }
+    /**
+     * Teinte à appliquer à la texture.
+     * @type {Color}
+     */
+    get Teinte()
+    {
+        return this.#Teinte;
+    }
+    set Teinte(v)
+    {
+        if (v instanceof Color)
+        {
+            this.#Teinte = v
+        }
+        else
+        {
+            Debug.LogErreurType("Teinte", "Color", v);
+        }
+    }
+    /**
+     * Autorisation de changement d'angle
+     * @type {boolean}
+     */
+    get AllowRotation()
+    {
+        return this.#AllowRotation
+    }
+    set AllowRotation(v)
+    {
+        if (typeof(v) === "boolean")
+        {
+            this.#AllowRotation = v;
+        }
+        else
+        {
+            Debug.LogErreurType("AllowRotation", "boolean", v);
+        }
+    }
+    /**
+     * Autorisation de changement de taille
+     * @type {boolean}
+     */
+    get AllowScaling()
+    {
+        return this.#AllowScaling
+    }
+    set AllowScaling(v)
+    {
+        if (typeof(v) === "boolean")
+        {
+            this.#AllowScaling = v;
+        }
+        else
+        {
+            Debug.LogErreurType("AllowScaling", "boolean", v);
+        }
+    }
     /**
      * Angle en radian.
      * @override
      * @type {float}
      */
-    set RadDirection(value)
-    {
-        this.#BoundingBox = undefined;
-        super.RadDirection = value;
-    }
     get RadDirection()
     {
         return super.RadDirection
+    }
+    set RadDirection(value)
+    {
+        super.RadDirection = value;
     }
     /**
      * Angle en degré.
      * @override
      * @type {float}
      */
-    set Direction(value)
-    {
-        this.#BoundingBox = undefined;
-        super.Direction = value;
-    }
     get Direction()
     {
         return super.Direction
+    }
+    set Direction(value)
+    {
+        super.Direction = value;
     }
     /**
      * Largeur de l'objet à dessiner.

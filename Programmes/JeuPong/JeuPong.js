@@ -10,8 +10,8 @@ class JeuPong extends Scene
         super("Pong")
         this.Briques = [];
 
-        JeuPong.JeuLargeur = Ecran_Largeur - 2 * JeuPong.BordL;
-        JeuPong.JeuHauteur = Ecran_Hauteur;
+        JeuPong.JeuLargeur = Game.Ecran_Largeur - 2 * JeuPong.BordL;
+        JeuPong.JeuHauteur = Game.Ecran_Hauteur;
 
         // Création des briques
         let colonne = 15; // Nombre de colonne
@@ -19,18 +19,18 @@ class JeuPong extends Scene
         let marge = 50; // Marge au bord de l'écran
 
         let w = JeuPong.JeuLargeur - marge * 2;
-        let h = Ecran_Hauteur / 2 - 10;
+        let h = Game.Ecran_Hauteur / 2 - 10;
         for (let y = 0; y < line; y++) 
         {
             for (let x = 0; x < colonne; x++) 
             {
                 let posX = marge + (x + 0.5) * w / (colonne);
-                let posY = -Ecran_Hauteur / 2 - (y + 0.5) * h / (line)
+                let posY = -Game.Ecran_Hauteur / 2 - (y + 0.5) * h / (line)
                 this.Briques.push(this.AddChildren(new Brique(posX,posY)))
             }
         }
 
-        this.Background = this.AddChildren(new Lutin(Ecran_Largeur / 2 - JeuPong.BordL, -Ecran_Hauteur / 2, ["Images/CasseBrique/Background.png"]));
+        this.Background = this.AddChildren(new Lutin(Game.Ecran_Largeur / 2 - JeuPong.BordL, -Game.Ecran_Hauteur / 2, ["Images/CasseBrique/Background.png"]));
         this.Background.Z = -500
         this.Balle = this.AddChildren(new Balle());
         this.Paddle = this.AddChildren(new Paddle(JeuPong.JeuLargeur / 2, -60));
@@ -44,8 +44,8 @@ class JeuPong extends Scene
         this.Background.X = Camera.X + (JeuPong.JeuLargeur / 2 - this.Paddle.X) / 50;
         this.Background.Y = Camera.Y;
 
-        Camera.X = Ecran_Largeur / 2 - JeuPong.BordL + (Math.random() - 0.5) * this.bruit;
-        Camera.Y =  -Ecran_Hauteur / 2 + (Math.random() - 0.5) * this.bruit;
+        Camera.X = Game.Ecran_Largeur / 2 - JeuPong.BordL + (Math.random() - 0.5) * this.bruit;
+        Camera.Y =  -Game.Ecran_Hauteur / 2 + (Math.random() - 0.5) * this.bruit;
 
         if (this.bruit > 0)
         {
@@ -107,15 +107,15 @@ class JeuPong extends Scene
     Dessin(Context)
     {
         Context.fillStyle = "black"
-        Context.fillRect(0,0,JeuPong.BordL, Ecran_Hauteur);
-        Context.fillRect(Ecran_Largeur - JeuPong.BordL, 0, JeuPong.BordL,Ecran_Hauteur);
+        Context.fillRect(0,0,JeuPong.BordL, Game.Ecran_Hauteur);
+        Context.fillRect(Game.Ecran_Largeur - JeuPong.BordL, 0, JeuPong.BordL,Game.Ecran_Hauteur);
         
         if (this.Briques.length == 0)
         {
             Context.textAlign = "center";
             Context.fillStyle = "white"
             Context.font = "60px " + "Arial";
-            Context.fillText("Bravo vous avez réussi", Ecran_Largeur / 2, Ecran_Hauteur / 2);
+            Context.fillText("Bravo vous avez réussi", Game.Ecran_Largeur / 2, Game.Ecran_Hauteur / 2);
         }
     }
 }

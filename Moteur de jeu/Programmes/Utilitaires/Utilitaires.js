@@ -1,15 +1,15 @@
- //=====================================================
+ //===============================================================================
 /**
  * Renvoie un nombre entier aléatoire entre le min et le max inclus
  * @param {int} min minimum
  * @param {int} max maximum
- * @returns {int}nombre entier aléatoire entre le min et le max inclus
+ * @returns {int}nombre entier aléatoire entre le min et le max exclus
  */
  function EntierAleat(min, max)
  {
-     if (max == undefined)
+     if (max === undefined)
      {
-        return Math.floor(Math.random() * min)
+        return Math.floor((Math.random() % 1) * min)
      }
      else
      {
@@ -17,22 +17,22 @@
         {
             throw Error('Le maximum doit être plus grand que le minimum');
         }
-        return min + Math.floor(Math.random() * (max - min))
+        return min + Math.floor((Math.random() % 1) * (max - min))
      }
  }
- //=====================================================
+ //===============================================================================
 
 
- //=====================================================
+ //===============================================================================
 /**
  * Renvoie un nombre aléatoire entre le min et le max inclus
  * @param {float} min minimum
  * @param {float} max maximum
- * @returns {float} Nombre entier aléatoire entre le min et le max inclus
+ * @returns {float} Nombre entier aléatoire entre le min et le max exclus
  */
  function NombreAleat(min, max)
  {
-    if (max == undefined)
+    if (max === undefined)
     {
        return Math.random() * min
     }
@@ -45,7 +45,7 @@
         return min + Math.random() * (max - min)
     }
  }
- //=====================================================
+ //===============================================================================
 
  
  ChargerImage = async img => {

@@ -6,6 +6,7 @@
 class RootObject extends GameObject
 {
     #Scene;
+    #DrawableObject = [];
     /**
      * Crée un objet racine dans la scene voulu.
      * @constructor
@@ -18,7 +19,6 @@ class RootObject extends GameObject
         this.Visible = true;
         this.Root = this;
         this.#Scene = Scene;
-        this.DrawAbleObject = [];
     }
 
     //#region GETTER SETTER
@@ -62,6 +62,7 @@ class RootObject extends GameObject
     /**
      * Renvoie la scene lié à cet objet racine
      * @type {Scene}
+     * @override
      */
     get Scene()
     {
@@ -69,7 +70,30 @@ class RootObject extends GameObject
     }
     set Scene(v)
     {
-        this.#Scene = v;
+        if (v === undefined || v instanceof Scene)
+        {
+            this.#Scene = v;
+        }
+        else
+        {
+            Debug.LogErreurType("Scene", "Scene ou undefined", v);
+        }
+    }
+
+    get DrawAbleObject()
+    {
+        return this.#DrawableObject
+    }
+    set DrawAbleObject(v)
+    {
+        if (v instanceof Array)
+        {
+            this.#DrawableObject = v
+        }
+        else
+        {
+            Debug.LogErreurType("DrawableObject", "Array", v);
+        }
     }
 
     //#endregion
@@ -83,7 +107,7 @@ class RootObject extends GameObject
      */
     RemoveChildren(object)
     {
-        if (object.Parent == this)
+        if (object.Parent === this)
         {
             this.DeleteDrawable(object);
             super.RemoveChildren(object);

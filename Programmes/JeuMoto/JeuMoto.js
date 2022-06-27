@@ -10,10 +10,10 @@ class JeuMoto extends Scene
         Debug.Parametre.Info = false;
         Debug.Parametre.TimeMesure = false;
 
-        let UI2 = new UI_Button(Ecran_Largeur - 80, 0, 1000000000, 80, 25, "Plein Ecran")
+        let UI2 = new UI_Button(Game.Ecran_Largeur - 80, 0, 1000000000, 80, 25, "Plein Ecran")
         UI2.ClicAction = function(){ Camera.PleinEcran()};
 
-        CouleurFond = "dark grey"
+        Game.CouleurFond = "dark grey"
         this.KeepUpdating = true;
 
         this.Routes = []
@@ -32,7 +32,7 @@ class JeuMoto extends Scene
         this.ProchaineVoiture = 180;
 
         let _this = this;
-        this.NewGame = new UI_Button(Ecran_Largeur / 2 - 60, Ecran_Hauteur - 100, 1000000000, 120, 25, "Nouvelle Partie")
+        this.NewGame = new UI_Button(Game.Ecran_Largeur / 2 - 60, Game.Ecran_Hauteur - 100, 1000000000, 120, 25, "Nouvelle Partie")
         this.NewGame.ClicAction = function(){ _this.Moto.NouvellePartie()};
         this.NewGame.Visible = false;
     }
@@ -42,7 +42,7 @@ class JeuMoto extends Scene
         let i = 0
         while (this.ProchaineVoiture <= 0 && i < 30)
         {
-            let X = this.Moto.X + Ecran_Largeur + 200;
+            let X = this.Moto.X + Game.Ecran_Largeur + 200;
             let Y = Math.random() * 350 - 200;
             let voiture = this.AddChildren(new Voiture(X, Y));
             this.Voitures.push(voiture);
@@ -66,7 +66,7 @@ class JeuMoto extends Scene
         let id = 0;
         while (id < this.Voitures.length) 
         {
-            if(this.Voitures[id].X < Camera.X - Ecran_Largeur / 2 - 200)
+            if(this.Voitures[id].X < Camera.X - Game.Ecran_Largeur / 2 - 200)
             {
                 this.RemoveChildren(this.Voitures[id])
                 this.Voitures.splice(id, 1);

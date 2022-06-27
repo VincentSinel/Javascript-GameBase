@@ -128,7 +128,7 @@ class Souris
         if (Souris.#ClicIsStart)
         {
             Souris.preventDefault(e);
-            Souris.EtatBouton[0] = e.buttons % 2 == 1;
+            Souris.EtatBouton[0] = e.buttons % 2 === 1;
             Souris.EtatBouton[1] = e.buttons % 8 >= 4;
             Souris.EtatBouton[2] = e.buttons % 4 >= 2;
             Souris.EtatBouton[3] = e.buttons % 16 >= 8;
@@ -146,8 +146,8 @@ class Souris
         }
         else
         {
-            Souris.CX = e.offsetX / canvas.width * Ecran_Largeur * dpi
-            Souris.CY = e.offsetY / canvas.height * Ecran_Hauteur * dpi
+            Souris.CX = (e.offsetX - Game.OffSetX) / Game.Ratio * Game.DPI
+            Souris.CY = (e.offsetY - Game.OffSetY) / Game.Ratio * Game.DPI
 
             UIElement.SHandle_MouseMove(Souris.CPosition)
         }
@@ -160,7 +160,7 @@ class Souris
     static MouseDown(id, e)
     {
         Souris.EtatBouton[id] = true;
-        if (Souris.DragState[id] == 0)
+        if (Souris.DragState[id] === 0)
             Souris.JusteBas[id] = true;
         Souris.DragState[id] = 1;
         UIElement.SHandle_Basse(id, Souris.CPosition);
@@ -175,7 +175,7 @@ class Souris
         Souris.EtatBouton[id] = false;
         Souris.JusteHaut[id] = true;
         UIElement.SHandle_Relache(id,Souris.CPosition);
-        if (Souris.DragState[id] == 1)
+        if (Souris.DragState[id] === 1)
         {
             UIElement.SHandle_Clique(id, Souris.CPosition)
         }
@@ -192,19 +192,19 @@ class Souris
     {
         for (let i = 0; i < 5; i++) 
         {
-            if (Souris.DragState[i] == 1 && Souris.EtatBouton[i])
+            if (Souris.DragState[i] === 1 && Souris.EtatBouton[i])
             {
                 // First move, launch drag
                 Souris.DragStr(i, e)
             }
         }
 
-        Souris.CX = e.offsetX / canvas.width * Ecran_Largeur * dpi
-        Souris.CY = e.offsetY / canvas.height * Ecran_Hauteur * dpi
+        Souris.CX = (e.offsetX - Game.OffSetX) / Game.Ratio * Game.DPI;
+        Souris.CY = (e.offsetY - Game.OffSetY) / Game.Ratio * Game.DPI;
 
         for (let i = 0; i < 5; i++) 
         {
-            if (Souris.DragState[i] == 2 && Souris.EtatBouton[i])
+            if (Souris.DragState[i] === 2 && Souris.EtatBouton[i])
             {
                 // Moving, drag continue
                 Souris.Draging(i, e)

@@ -16,7 +16,7 @@ class Tile_Auto extends Tile
      */
     static Calcul(Delta)
     {
-        while(Tile_Auto.#NextUpdate < TotalTime)
+        while(Tile_Auto.#NextUpdate < Game.TotalTime)
         {
             Tile_Auto.#Frame = (Tile_Auto.#Frame + 1) % 4;
             Tile_Auto.Frame = Tile_Auto.#Frame - Math.floor(Tile_Auto.#Frame / 3) * 2;

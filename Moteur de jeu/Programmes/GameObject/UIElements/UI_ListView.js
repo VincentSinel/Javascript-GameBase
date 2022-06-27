@@ -8,9 +8,9 @@ class UI_ListView extends UI_Panel
         
         this.SourisCapture = true;
         this.ScrollCapture = true;
+        this.Elements = [];
         this.ScrollBar = new UI_VerticalScrollBar(this.CW - UI_VerticalScrollBar.ScrollW, 0,this.CH, this);
 
-        this.Elements = [];
         this.SelectedIndex = -1;
         this.#ScrollPosition = 0;
 
@@ -26,7 +26,7 @@ class UI_ListView extends UI_Panel
     set ScrollPosition(v)
     {
         this.#ScrollPosition = v;
-        this.RefreshUI();
+        this.RefreshUI();   
     }
 
     Souris_Scroll(e)
@@ -73,6 +73,24 @@ class UI_ListView extends UI_Panel
             h += element.H;
         });
         return h;
+    }
+
+    RemoveChildren(element)
+    {
+        super.RemoveChildren(element)
+        
+        let i = this.Elements.indexOf(element)
+        if (i > -1)
+        {
+            let h = element.H;
+            this.Elements.splice(this.Elements.indexOf(element), 1);
+            for (let j = i; j < this.Elements.length; j++) 
+            {
+                this.Elements[j].Y -= h;
+                
+            }
+        }
+        
     }
 
 
@@ -201,7 +219,7 @@ class ListeElement extends UIElement
 
     DessinBackUI(Context)
     {
-        if(this.ID % 2 == 0)
+        if(this.ID % 2 === 0)
         {
             Context.fillStyle = Color.Couleur(1,1,1,0.1)
             Context.fillRect(0, 0, this.W, this.H);

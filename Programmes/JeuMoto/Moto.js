@@ -136,7 +136,7 @@ class Moto extends Lutin
         this.Direction = Math.min(-(this.TempsAppuie) * Moto.VitesseCabrage, 0)
 
 
-        Camera.X = Math.max(this.X + Ecran_Largeur / 2 * 5 / 6, Ecran_Largeur / 2);
+        Camera.X = Math.max(this.X + Game.Ecran_Largeur / 2 * 5 / 6, Game.Ecran_Largeur / 2);
         
         this.OldX = this.X;
         this.OldY = this.Y;
@@ -149,7 +149,7 @@ class Moto extends Lutin
         this.Z = this.Y + decalageY;
 
         this.ColRect = Rectangle.FromPosition(this.X - decalageX, this.Y + decalageY - H/3, L, H/3)
-        Debug.AjoutRectangle(this.ColRect, "green")
+        //Debug.AjoutRectangle(this.ColRect, "green")
     }
 
 

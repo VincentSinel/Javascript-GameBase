@@ -12,8 +12,8 @@ class Compteur extends Lutin
 
     Calcul(Delta)
     {
-        this.X = Camera.X - Ecran_Largeur / 2 + 55;
-        this.Y = Camera.Y + Ecran_Hauteur / 2 - 55;
+        this.X = Camera.X - Game.Ecran_Largeur / 2 + 55;
+        this.Y = Camera.Y + Game.Ecran_Hauteur / 2 - 55;
 
         let v = this.Scene.Moto.Vitesse;
         this.Aiguille.Direction = 30 - (v / Moto.VitesseMax) * 90 / 60 * Moto.VitesseMaxCompteur;

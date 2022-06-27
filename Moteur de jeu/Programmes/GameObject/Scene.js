@@ -28,23 +28,23 @@ class Scene
     {
         while(true)
         {
-            fading = 1;
-            if (SceneActuel)
+            Game.Fading = 1;
+            if (Game.SceneActuel)
             {
-                while(fading != 0)
+                while(Game.Fading != 0)
                 {
                     yield 0;
                 }
-                SceneActuel.Exit();
+                Game.SceneActuel.Exit();
             }
             else
             {
-                fade = 1.0
+                Game.Fade = 1.0
             }
-            SceneActuel = new Scene.#Exiting[0]()
-            SceneActuel.Enter(Scene.#Exiting[1],Scene.#Exiting[2]);
-            fading = -1;
-            while(fading != 0)
+            Game.SceneActuel = new Scene.#Exiting[0]()
+            Game.SceneActuel.Enter(Scene.#Exiting[1],Scene.#Exiting[2]);
+            Game.Fading = -1;
+            while(Game.Fading != 0)
             {
                 yield 0;
             }
@@ -64,6 +64,13 @@ class Scene
         }
     }
 
+    #GameSpeed = 1.0;
+    #Pause = false;
+    #TotalFrame = 0;
+    #KeepUpdating = false;
+    #Name = "";
+    #Root;
+
     /**
      * Créer une scene
      * @constructor
@@ -71,13 +78,100 @@ class Scene
      */
     constructor(Name)
     {
-        this.Root = new RootObject(this);
-        this.Name = Name;
-        this.Pause = false;
-        this.KeepUpdating = false;
-
-        this.Exiting = false;
+        this.#Root = new RootObject(this);
+        this.#Name = Name;
     }
+
+    //#region GETTER SETTER
+
+    /**
+     * Vitesse de calcul de la scene
+     * @type {float}
+     */
+    get GameSpeed()
+    {
+        return this.Pause ? 0 : this.#GameSpeed;
+    }
+    set GameSpeed(v)
+    {
+        if (typeof(v) === "number")
+        {
+            if (v >= 0)
+                this.#GameSpeed = v;
+            else
+                Debug.Log("La valeur choisie pour GameSpeed n'est pas correct. Celle-ci doit être compris entre 0 et 1  valeur ► " + v, 1);
+        }
+        else
+        {
+            Debug.LogErreurType("GameSpeed", "number", v);
+        }
+    }
+    /**
+     * Définit si la scene est en pause
+     * @type {boolean}
+     */
+    get Pause()
+    {
+        return this.#Pause || this.#GameSpeed === 0;
+    }
+    set Pause(v)
+    {
+        if (typeof(v) === "boolean")
+        {
+            this.#Pause = v;
+        }
+        else
+        {
+            Debug.LogErreurType("Pause", "boolean", v);
+        }
+    }
+    /**
+     * Nombre de frame total depuis la création de la scene
+     * @type {int}
+     */
+    get TotalFrame()
+    {
+        return Math.floor(this.#TotalFrame);
+    }
+    /**
+     * Définit si la scene doit continuer d'être mise à jour lors du fadein fadeout
+     * @type {boolean}
+     */
+    get KeepUpdating()
+    {
+        return this.#KeepUpdating;
+    }
+    set KeepUpdating(v)
+    {
+        if (typeof(v) === "boolean")
+        {
+            this.#KeepUpdating = v;
+        }
+        else
+        {
+            Debug.LogErreurType("KeepUpdating", "boolean", v);
+        }
+    }
+    /**
+     * Nom de la scene
+     * @type {string}
+     */
+    get Name()
+    {
+        return this.#Name;
+    }
+    /**
+     * Racine des GameObject
+     * @type {RootObject}
+     */
+    get Root()
+    {
+        return this.#Root;
+    }
+
+
+    //#endregion
+
     /**
      * Ajoute un GameObject dans la scene
      * @param {GameObject} object Objet à ajouté
@@ -103,10 +197,11 @@ class Scene
      */
     Update(Delta)
     {
-        if (this.KeepUpdating || (fading == 0 && fade == 0) && !this.Pause)
+        this.#TotalFrame += Delta * this.GameSpeed;
+        if (this.KeepUpdating || (Game.Fading === 0 && Game.Fade === 0))
         {
-            this.Calcul(Delta);
-            this.Root.Update(Delta);
+            this.Calcul(Delta * this.GameSpeed);
+            this.Root.Update(Delta * this.GameSpeed);
         }
     }
     /**
@@ -142,8 +237,6 @@ class Scene
     Exit()
     {
         // Override by element
-        console.trace();
-        console.log("test")
     }
 
     /**
@@ -155,5 +248,33 @@ class Scene
     {
         Camera.X = X;
         Camera.Y = Y;
+        TileMap.SceneChange();
+    }
+
+    GetChildrens(Type)
+    {
+        return this.GetAllChildren().filter(function(x) { return x instanceof Type; });
+    }
+
+    GetAllChildren()
+    {
+        return this.#GetChildOf(this.Root);
+    }
+
+    #GetChildOf(Element)
+    {
+        if (Element.Children.length === 0)
+        {
+            return [Element];
+        }
+        else
+        {
+            let c = this.#GetChildOf(Element);
+            let t = [Element];
+            c.forEach(element => {
+                t.push(element)
+            });
+            return c;
+        }
     }
 }

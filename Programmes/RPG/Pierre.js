@@ -2,8 +2,14 @@ class Pierre extends Lutin
 {
     constructor(X,Y)
     {
-        super(X,Y,["Images/Chat.png"])
+        super(X,Y,["Images/IconSet.png"])
+        let id = 341;
+        let x = (id % 16) * 24;
+        let y = Math.floor(id / 16) * 24;
+        this.Decoupage = [x,y,24,24];
     }
+
+    static Objets = ["Pierre", "Bois", "Planche"]
 
     Calcul(Delta)
     {
@@ -18,7 +24,7 @@ class Pierre extends Lutin
         {
             if(Clavier.ToucheJusteBasse("Enter"))
             {
-                Player.AjoutInventaire("Pierre", 1);
+                Player.AjoutInventaire(Pierre.Objets[EntierAleat(0,3)], 1);
                 this.Destroy()
             }
         }

@@ -62,7 +62,7 @@ class Sons
     static #FinLectureSonCourt()
     {
       Sons.#SonCount -= 1;
-      if (Sons.#SonCount == 0)
+      if (Sons.#SonCount === 0)
       {
         Sons.SourceP_Bruit = true;
       }
@@ -105,7 +105,7 @@ class Sons
     static #FinLectureMusiqueCourte()
     {
       Sons.#MusiqueCount -= 1;
-      if (Sons.#MusiqueCount == 0)
+      if (Sons.#MusiqueCount === 0)
       {
         Sons.SourceP_Musique = true;
       }
@@ -216,7 +216,7 @@ class Sons
             );
 
         Sons.#bufferLoader.load();
-        if (LoadScreen.SonMax == 0)
+        if (LoadScreen.SonMax === 0)
           LoadScreen.Update_Son();
     }
 
@@ -319,7 +319,7 @@ class BufferLoader
             return;
           }
           loader.bufferList[index] = buffer;
-          if (++loader.loadCount == loader.urlList.length)
+          if (++loader.loadCount === loader.urlList.length)
             loader.onload(loader.bufferList);
           LoadScreen.Update_Son();
         },

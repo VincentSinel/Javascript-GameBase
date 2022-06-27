@@ -1,7 +1,7 @@
 var Librairie_Sons = [
     // Autre
-      'Sons/Autre/Moto.ogg',
-      'Sons/BGM/Airship.ogg',
+      //'Sons/Autre/Moto.ogg',
+      //'Sons/BGM/Airship.ogg',
       /*
     // BGM : BackGround Music
       'Sons/BGM/Airship.ogg',

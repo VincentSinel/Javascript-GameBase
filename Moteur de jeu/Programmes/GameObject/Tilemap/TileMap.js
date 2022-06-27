@@ -6,10 +6,28 @@
 class TileMap extends Drawable
 {
 
+    static SauvegardeVersion = "2.0"
+
+    static #Edition = false;
+    static Edition()
+    {
+        TileMap.#Edition = true;
+    }
+
+    static Calcul()
+    {
+
+    }
+
+    static SceneChange()
+    {
+    }
+
+
     #W;
     #H;
-
-    static SauvegardeVersion = "2.0"
+    #Layers = {};
+    #Edit = false;
 
     /**
      * Création d'un tilemap modifiable
@@ -26,10 +44,10 @@ class TileMap extends Drawable
         this.#W = W;
         this.#H = H;
 
-        this.Layers = {};
-        this.Layers[TileMap_Layer.CollisionMaskName] = this.AddChildren(new TileMap_Layer(TileMap_Layer.CollisionMaskName, this, 1000000000));
+        this.#Layers = {};
+        this.#Layers[TileMap_Layer.CollisionMaskName] = this.AddChildren(new TileMap_Layer(TileMap_Layer.CollisionMaskName, this, 1000000000));
 
-        this.Edit = false;
+        this.#Edit = false;
         this.Teinte = new Color(0,0,0,0);
         this.RectDraw;
     }
@@ -87,6 +105,22 @@ class TileMap extends Drawable
     {
         return Rectangle.FromPosition(0,0,0,0);
     }
+    /**
+     * Renvoie la liste des couches de dessin.
+     * @type {Object}
+     */
+    get Layers()
+    {
+        return this.#Layers;
+    }
+    /**
+     * Indique si ce tilemap est en mode édition
+     * @type {boolean}
+     */
+    get Edit()
+    {
+        return this.#Edit
+    }
 
     //#endregion
 
@@ -115,7 +149,7 @@ class TileMap extends Drawable
             {
                 for(let j = p1.y; j <= p2.y; j++)
                 {
-                    if (i == p1.x || i == p2.x || j == p1.y || j == p2.y)
+                    if (i === p1.x || i === p2.x || j === p1.y || j === p2.y)
                     {
                         this.#GetOverlapVector_Do(i, j, rect);
                     }
@@ -128,7 +162,7 @@ class TileMap extends Drawable
             {
                 for(let j = p1.y; j <= p2.y; j++)
                 {
-                    if (i == p1.x || i == p2.x || j == p1.y || j == p2.y)
+                    if (i === p1.x || i === p2.x || j === p1.y || j === p2.y)
                     {
                         this.#GetOverlapVector_Do(i, j, rect);
                     }
@@ -141,7 +175,7 @@ class TileMap extends Drawable
             {
                 for(let j = p2.y; j >= p1.y; j--)
                 {
-                    if (i == p1.x || i == p2.x || j == p1.y || j == p2.y)
+                    if (i === p1.x || i === p2.x || j === p1.y || j === p2.y)
                     {
                         this.#GetOverlapVector_Do(i, j, rect);
                     }
@@ -154,7 +188,7 @@ class TileMap extends Drawable
             {
                 for(let j = p2.y; j >= p1.y; j--)
                 {
-                    if (i == p1.x || i == p2.x || j == p1.y || j == p2.y)
+                    if (i === p1.x || i === p2.x || j === p1.y || j === p2.y)
                     {
                         this.#GetOverlapVector_Do(i, j, rect);
                     }
@@ -192,11 +226,11 @@ class TileMap extends Drawable
         {
             console.log("Une couche du même nom a déjà été créée");
         }
-        else if (Name == TileMap_Layer.CollisionMaskName)
+        else if (Name === TileMap_Layer.CollisionMaskName)
         {
             throw "Une couche ne peut pas porter ce nom (utilisé pour définir les contacts)";
         }
-        this.Layers[Name] = new TileMap_Layer(Name, this, Z, fill);
+        this.#Layers[Name] = new TileMap_Layer(Name, this, Z, fill);
         this.AddChildren(this.Layers[Name]);
     }
     /**
@@ -208,7 +242,7 @@ class TileMap extends Drawable
         {
             UI_EditionTileMap.Instance.Fermer();
         }
-        this.Edit = true;
+        this.#Edit = true;
         this.EditUI = new UI_EditionTileMap(this);
     }
     /**
@@ -258,6 +292,7 @@ class TileMap extends Drawable
         {
             this.#Charge(data, Nom)
         }
+        this.Calcul(0);
     }
     /**
      * Lance le chargement du tilemap.
@@ -269,7 +304,7 @@ class TileMap extends Drawable
         this.#W = data.Largeur;
         this.#H = data.Hauteur;
         let v = data.Version;
-        if (v == undefined)
+        if (v === undefined)
         {
             throw "La version n'est pas définit"
             /* let datas = data.Data.split(",");
@@ -278,12 +313,12 @@ class TileMap extends Drawable
                 this.Contenue.push(parseInt(s))
             }); */
         }
-        else if (v == "1.0")
+        else if (v === "1.0")
         {
             this.AddLayer(nom, z);
             this.Layers[nom].Load(data.Data);
         }
-        else if (v == "2.0")
+        else if (v === "2.0")
         {
             for (let l = 0; l < data.Data.length; l++) 
             {
@@ -291,7 +326,7 @@ class TileMap extends Drawable
                 let name =  element[0];
                 let z = element[1];
                 let d = element[2];
-                if (name == TileMap_Layer.CollisionMaskName)
+                if (name === TileMap_Layer.CollisionMaskName)
                 {
                     this.Layers[name].Load(d);
                 }
@@ -349,7 +384,7 @@ class TileMap extends Drawable
 
         let newx = this.X - this.TextWidth * this.CentreRotation.x;
         let newy = this.Y - this.TextHeight * this.CentreRotation.y;
-        let size = Math.max(Tilesets.TileSize,(Diagonal + Tilesets.TileSize) / Camera.Zoom);
+        let size = Math.max(Tilesets.TileSize,(Game.Diagonal + Tilesets.TileSize) / Camera.Zoom);
         let dx = Camera.X - size / 2 - newx
         let dy = Camera.Y - size / 2 - newy
         

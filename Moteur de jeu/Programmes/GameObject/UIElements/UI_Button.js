@@ -65,7 +65,7 @@ class UI_Button extends UIElement
 
     Souris_Hover(event)
     {
-        if(this.Etat == "Base")
+        if(this.Etat === "Base")
         {
             this.Etat = "Hover"
             this.Couleur = this.HoverCouleur;
@@ -89,7 +89,7 @@ class UI_Button extends UIElement
 
         let offy = 0;
         let offh = Math.min(10,this.H * 0.2);
-        if (this.Etat == "Hover_Click")
+        if (this.Etat === "Hover_Click")
         {
             offy = offh * 0.7;
             offh -= offy;

@@ -6,49 +6,53 @@ class UI_Label extends UIElement
     /**
      * Créer un TextBlock pour interface utilisateur. C'est un block de texte.
      * Utiliser Slider.ModifierTexte(Texte) pour modifier le contenue (effectue un rafraichissement du découpage).
-     * @param {Number} X Position X relative à l'objet parent
-     * @param {Number} Y Position Y relative à l'objet parent
-     * @param {Number} Z Position Z relative à l'objet parent
-     * @param {Number} W Largeur du TextBlock
-     * @param {Number} H Hauteur du TextBlock
-     * @param {Number} Texte Texte à afficher, les lignes sont automatiquement découper selon la largeur de l'objet
+     * @param {float} X Position X relative à l'objet parent
+     * @param {float} Y Position Y relative à l'objet parent
+     * @param {float} Z Position Z relative à l'objet parent
+     * @param {float} W Largeur du TextBlock
+     * @param {float} H Hauteur du TextBlock
+     * @param {string} Texte Texte à afficher, les lignes sont automatiquement découper selon la largeur de l'objet
      * @param {UIElement} Parent Objet Parent (facultatif)
      */
-     constructor(X,Y,Z,W,H, Texte, Parent = undefined)
-     {
+    constructor(X,Y,Z,W,H, Texte, Parent = undefined)
+    {
         super(X,Y,Z,W,H, Parent)
 
         this.#MaxW = W;
         this.#TotalH = 0;
         this.Lines = [];
         this.Texte = Texte;
-     }
+    }
 
-     get MaxW()
-     {
+    get MaxW()
+    {
         return this.#MaxW
-     }
-     set MaxW(v)
-     {
+    }
+    set MaxW(v)
+    {
         this.#MaxW = v;
-        this.CalculateTexteSize();
         this.RefreshUI();
-     }
-     get TotalH()
-     {
-         return this.#TotalH;
-     }
+    }
+    get TotalH()
+    {
+        return this.#TotalH;
+    }
 
-     get Texte()
-     {
+    get Texte()
+    {
         return this.#Texte;
-     }
-     set Texte(v)
-     {
+    }
+    set Texte(v)
+    {
         this.#Texte = v;
-        this.CalculateTexteSize();
         this.RefreshUI();
-     }
+    }
+
+    RefreshUI()
+    {
+        this.CalculateTexteSize();
+        super.RefreshUI();
+    }
 
     CalculateTexteSize()
     {
@@ -75,7 +79,7 @@ class UI_Label extends UIElement
                         actualline += " " + mot;
                     }
                 }
-                if (actualline == "")
+                if (actualline === "")
                 {
                     if (this.Backctx.measureText(mot).width > this.MaxW)
                     {
@@ -113,7 +117,7 @@ class UI_Label extends UIElement
             this.Lines = [this.Texte];
         }
         this.#TotalH = (this.FontTaille + 2) * this.Lines.length + 2;
-        if(this.VerticalAlignement == VerticalAlignementType.Etendu &&
+        if(this.VerticalAlignement === VerticalAlignementType.Etendu &&
             this.H != this.#TotalH)
         {
             this.H = this.#TotalH;
@@ -128,19 +132,19 @@ class UI_Label extends UIElement
         Context.textAlign = this.HorizontalAlignement.Value;
 
         let offx = 0;
-        if(this.HorizontalAlignement == HorizontalAlignementType.Etendu ||
-           this.HorizontalAlignement == HorizontalAlignementType.Centre)
+        if(this.HorizontalAlignement === HorizontalAlignementType.Etendu ||
+           this.HorizontalAlignement === HorizontalAlignementType.Centre)
         {
             offx = this.W / 2;
         }
-        if(this.HorizontalAlignement == HorizontalAlignementType.Droite )
+        if(this.HorizontalAlignement === HorizontalAlignementType.Droite )
         {
             offx = this.W;
         }
         
         let offy = 0;
-        if(this.VerticalAlignement == VerticalAlignementType.Etendu ||
-           this.VerticalAlignement == VerticalAlignementType.Centre)
+        if(this.VerticalAlignement === VerticalAlignementType.Etendu ||
+           this.VerticalAlignement === VerticalAlignementType.Centre)
         {
             offy = (this.H - this.#TotalH)/ 2;
         }

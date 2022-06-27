@@ -18,7 +18,7 @@ function InitObjets()
     // Ajouter ici les objets à creer
     //Player = new Joueur(0,0);
 
-    //Scene.ChangeScene(JeuPong, Ecran_Largeur / 2 - JeuPong.BordL, -Ecran_Hauteur / 2)
+    //Scene.ChangeScene(JeuPong, Game.Ecran_Largeur / 2 - JeuPong.BordL, -Game.Ecran_Hauteur / 2)
     //Scene.ChangeScene(JeuMoto,0,0)
     Scene.ChangeScene(Scene1,0,0)
     //Scene.ChangeScene(Niveau1,0,0)
@@ -30,7 +30,7 @@ function InitObjets()
     //UI.ClicAction = function(){ Debug.Parametre.Grille = !Debug.Parametre.Grille }
     //UI.Toggle = Debug.Parametre.Grille;
 
-    let UI2 = new UI_Button(Ecran_Largeur - 60, 0, 1000000000, 60, 25, "Plein Ecran")
+    let UI2 = new UI_Button(Game.Ecran_Largeur - 60, 0, 1000000000, 60, 25, "Plein Ecran")
     UI2.ClicAction = function(){ Camera.PleinEcran()};
 }
 

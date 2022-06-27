@@ -18,6 +18,8 @@
  */
 class NinePatch extends Drawable
 {
+    #Image
+    #Parametre
     #TempCanvas
     /**
      * Création d'un NinePatch
@@ -28,13 +30,14 @@ class NinePatch extends Drawable
     constructor(X,Y,Texture, Parametre = [0,0,0,0])
     {
         super(X,Y,0)
+        
+        this.#TempCanvas = document.createElement("canvas").getContext("2d");
 
-        this.Texture = Texture;
-        this.Image = Textures.Charger(Texture);
+        this.ChangeTexture(Texture);
         this.Parametre = Parametre;
-
-        this.Reajuster(0,0);
     }
+
+    //#region GETTER SETTER
 
     /**
      * Canvas temporaire
@@ -44,6 +47,31 @@ class NinePatch extends Drawable
     {
         return this.#TempCanvas;
     }
+
+    get Parametre()
+    {
+        return this.#Parametre
+    }
+    set Parametre(v)
+    {
+        if (v instanceof Array)
+        {
+            if (v.length === 4)
+            {
+                this.#Parametre = v
+            }
+            else
+            {
+                Debug.Log("La taille du tableau n'est pas correct Parametre ► taille : " + v.length, 1);
+            }
+        }
+        else
+        {
+            Debug.LogErreurType("Parametre", "Array", v);
+        }
+    }
+
+    //#endregion
 
     /**
      * Permet de modifier la taille de la fenêtre (en prenant en compte la taille minimal)
@@ -62,15 +90,20 @@ class NinePatch extends Drawable
      */
     ChangeTexture(Texture)
     {
-        this.Texture = Texture;
-        this.Image = Textures.Charger(Texture);
+        if (typeof(Texture) === "string")
+        {
+            this.#Image = Textures.Charger(Texture);
+        }
+        else
+        {
+            Debug.LogErreurType("Texture", "string", Texture);
+        }
     }
     /**
      * Redessine la boite lorsque les dimensions change
      */
     ResizeDessin()
     {
-        this.#TempCanvas = document.createElement("canvas").getContext("2d");
         this.#TempCanvas.canvas.width = this.W; // Modification taille
         this.#TempCanvas.canvas.height = this.H; // Modification taille
 
@@ -90,27 +123,27 @@ class NinePatch extends Drawable
         let h = h1 + h3;
 
         // Coins
-        this.#TempCanvas.drawImage(this.Image, 0, 0, this.Parametre[0], this.Parametre[2],
+        this.#TempCanvas.drawImage(this.#Image, 0, 0, this.Parametre[0], this.Parametre[2],
             0, 0, w1, h1);
-        this.#TempCanvas.drawImage(this.Image, this.Image.width - this.Parametre[1], 0, this.Parametre[1], this.Parametre[2],
+        this.#TempCanvas.drawImage(this.#Image, this.#Image.width - this.Parametre[1], 0, this.Parametre[1], this.Parametre[2],
             x3, 0, w3, h1);
-        this.#TempCanvas.drawImage(this.Image, 0, this.Image.height - this.Parametre[3], this.Parametre[0], this.Parametre[3],
+        this.#TempCanvas.drawImage(this.#Image, 0, this.#Image.height - this.Parametre[3], this.Parametre[0], this.Parametre[3],
             0, y3, w1, h3);
-        this.#TempCanvas.drawImage(this.Image, this.Image.width - this.Parametre[1], this.Image.height - this.Parametre[3], this.Parametre[1], this.Parametre[3],
+        this.#TempCanvas.drawImage(this.#Image, this.#Image.width - this.Parametre[1], this.#Image.height - this.Parametre[3], this.Parametre[1], this.Parametre[3],
             x3, y3, w3, h3);
 
         // Bords
-        this.#TempCanvas.drawImage(this.Image, this.Parametre[0], 0, this.Image.width - w, this.Parametre[2],
+        this.#TempCanvas.drawImage(this.#Image, this.Parametre[0], 0, this.#Image.width - w, this.Parametre[2],
             x2, 0, w2, h1);
-        this.#TempCanvas.drawImage(this.Image, this.Parametre[0], this.Image.height - this.Parametre[3], this.Image.width - w, this.Parametre[3],
+        this.#TempCanvas.drawImage(this.#Image, this.Parametre[0], this.#Image.height - this.Parametre[3], this.#Image.width - w, this.Parametre[3],
             x2, y3, w2, h3);
-        this.#TempCanvas.drawImage(this.Image, 0, this.Parametre[2], this.Parametre[0], this.Image.height - h,
+        this.#TempCanvas.drawImage(this.#Image, 0, this.Parametre[2], this.Parametre[0], this.#Image.height - h,
             0, y2, w1, h2);
-        this.#TempCanvas.drawImage(this.Image, this.Image.width - this.Parametre[1], this.Parametre[2], this.Parametre[1], this.Image.height - h,
+        this.#TempCanvas.drawImage(this.#Image, this.#Image.width - this.Parametre[1], this.Parametre[2], this.Parametre[1], this.#Image.height - h,
             x3, y2, w3, h2);
 
         // Centre
-        this.#TempCanvas.drawImage(this.Image, this.Parametre[0], this.Parametre[2], this.Image.width - w, this.Image.height - h,
+        this.#TempCanvas.drawImage(this.#Image, this.Parametre[0], this.Parametre[2], this.#Image.width - w, this.#Image.height - h,
             x2, y2, w2, h2);
     }
     /**

@@ -25,7 +25,7 @@ class UI_Grid extends UIElement
         let cn = 0;
         let dw = this.W;
         this.Colonnes.forEach(element => {
-            if (element.Type == 0)
+            if (element.Type === 0)
                 dw -= element.Width;
             else
                 cn += element.Width;
@@ -33,7 +33,7 @@ class UI_Grid extends UIElement
         let ln = 0;
         let dh = this.H;
         this.Lines.forEach(element => {
-            if (element.Type == 0)
+            if (element.Type === 0)
                 dh -= element.Height;
             else
                 ln += element.Height;
@@ -48,9 +48,9 @@ class UI_Grid extends UIElement
             for (let c = 0; c < Math.min(this.Colonnes.length, info[0] + info[2]); c++) 
             {
                 if (c < info[0])
-                    x += this.Colonnes[c].Type == 0 ?  this.Colonnes[c].Height : this.Colonnes[c].Height * cn;
+                    x += this.Colonnes[c].Type === 0 ?  this.Colonnes[c].Height : this.Colonnes[c].Height * cn;
                 else
-                    w += this.Colonnes[c].Type == 0 ?  this.Colonnes[c].Height : this.Colonnes[c].Height * cn;
+                    w += this.Colonnes[c].Type === 0 ?  this.Colonnes[c].Height : this.Colonnes[c].Height * cn;
             }
             child.X = x;
             child.W = w;
@@ -59,9 +59,9 @@ class UI_Grid extends UIElement
             for (let c = 0; c < Math.min(this.Lines.length, info[1] + info[3]); c++) 
             {
                 if (c < info[0])
-                    y += this.Lines[c].Type == 0 ?  this.Lines[c].Width : this.Lines[c].Width * ln;
+                    y += this.Lines[c].Type === 0 ?  this.Lines[c].Width : this.Lines[c].Width * ln;
                 else
-                    h += this.Lines[c].Type == 0 ?  this.Lines[c].Width : this.Lines[c].Width * ln;
+                    h += this.Lines[c].Type === 0 ?  this.Lines[c].Width : this.Lines[c].Width * ln;
             }
             child.Y = y;
             child.H = h;

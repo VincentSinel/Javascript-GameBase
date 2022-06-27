@@ -8,6 +8,7 @@ class BulleDialogue extends NinePatch
     #Texte
     #Font
     #FontSize
+    #Lines;
     /**
      * Création d'une bulle de dialogue contenant un texte précis.
      * @constructor
@@ -22,16 +23,27 @@ class BulleDialogue extends NinePatch
         this.TempCanvas.fillStyle = "black"
         this.#Texte = Texte;
         this.#Font = "Arial";
-        this.FontSize = 12;
-        this.Lines = [];
+        this.#FontSize = 12;
+        this.#Lines = [];
         this.Visible = false;
 
         this.AllowRotation = false;
         this.AllowScaling = false;
+        
+        this.TempCanvas.font = this.FontSize + "px " + this.Font;
+        this.#CalculTailleBulle()
     }
 
     //#region GETTER SETTER
 
+    /**
+     * Renvoie la liste des lignes de texte de la bulle.
+     * @type {Array<string>}
+     */
+    get Lines()
+    {
+        return this.#Lines;
+    }
     /**
      * Texte à afficher
      * @type {string}
@@ -43,7 +55,7 @@ class BulleDialogue extends NinePatch
     set Texte(v)
     {
         this.#Texte = v;
-        this.CalculTailleBulle()
+        this.#CalculTailleBulle()
     }
     /**
      * Font du texte
@@ -57,7 +69,7 @@ class BulleDialogue extends NinePatch
     {
         this.#Font = v;
         this.TempCanvas.font = this.FontSize + "px " + this.Font;
-        this.CalculTailleBulle()
+        this.#CalculTailleBulle()
     }
     /**
      * Taille du texte
@@ -71,7 +83,7 @@ class BulleDialogue extends NinePatch
     {
         this.#FontSize = v;
         this.TempCanvas.font = this.FontSize + "px " + this.Font;
-        this.CalculTailleBulle()
+        this.#CalculTailleBulle()
     }
     /**
      * Largeur de la texture
@@ -100,7 +112,7 @@ class BulleDialogue extends NinePatch
      * @param {CanvasRenderingContext2D} Context Context d'un canvas
      * @param {number} MaxW Largeur maximum de la bulle de dialogue
      */
-    CalculTailleBulle(MaxW = 250)
+    #CalculTailleBulle(MaxW = 250)
     {
         let Context = document.createElement("canvas").getContext("2d");
         Context.font = this.FontSize + "px " + this.Font;
@@ -126,7 +138,7 @@ class BulleDialogue extends NinePatch
                         actualline += " " + mot;
                     }
                 }
-                if (actualline == "")
+                if (actualline === "")
                 {
                     if (Context.measureText(mot).width > MaxW)
                     {
@@ -157,12 +169,12 @@ class BulleDialogue extends NinePatch
                 line.push(actualline);
             }
 
-            this.Lines = line
+            this.#Lines = line
             this.Reajuster(MaxW + 18, (this.FontSize + 2) * line.length + 32)
         }
         else
         {
-            this.Lines = [this.Texte];
+            this.#Lines = [this.Texte];
             this.Reajuster(Context.measureText(this.Texte).width + 18, this.FontSize + 34)
         }
         this.CentreRotation = new Vector(34 / this.W, 1);

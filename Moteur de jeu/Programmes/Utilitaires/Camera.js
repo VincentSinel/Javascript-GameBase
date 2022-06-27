@@ -31,9 +31,9 @@ class Camera
         }
         else
         {
-            let p = new Vector(-Ecran_Largeur / 2 / this.Zoom, -Ecran_Hauteur / 2 / this.Zoom);
+            let p = new Vector(-Game.Ecran_Largeur / 2 / this.Zoom, -Game.Ecran_Hauteur / 2 / this.Zoom);
             p = p.rotate(-Camera.#Direction).add(new Vector(Camera.X, Camera.Y));
-            Camera.#Viewport = new Rectangle(p, Ecran_Largeur / this.Zoom, Ecran_Hauteur / this.Zoom, -Camera.#Direction)
+            Camera.#Viewport = new Rectangle(p, Game.Ecran_Largeur / this.Zoom, Game.Ecran_Hauteur / this.Zoom, -Camera.#Direction)
             return Camera.#Viewport;
         }
     }
@@ -42,9 +42,9 @@ class Camera
      */
     static get ViewPortZoomLess()
     {
-        let p = new Vector(-Ecran_Largeur / 2, -Ecran_Hauteur / 2);
+        let p = new Vector(-Game.Ecran_Largeur / 2, -Game.Ecran_Hauteur / 2);
         p = p.rotate(-Camera.#Direction).add(new Vector(Camera.X, Camera.Y));
-        return new Rectangle(p, Ecran_Largeur, Ecran_Hauteur, -Camera.#Direction)
+        return new Rectangle(p, Game.Ecran_Largeur, Game.Ecran_Hauteur, -Camera.#Direction)
 
     }
     
@@ -101,7 +101,7 @@ class Camera
         //// Sauvegarde la position actuel du canvas 
         //Context.save();
         // Translate le canvas au centre de l'écran
-        Context.translate(Ecran_Largeur / 2, Ecran_Hauteur / 2); 
+        Context.translate(Game.Ecran_Largeur / 2, Game.Ecran_Hauteur / 2); 
         // Tourne le canvas de l'angle pour la camera
         Context.rotate(Camera.#Direction);
         // Zoom le canvas celon le zoom de camera
@@ -120,8 +120,8 @@ class Camera
         let sin = Math.sin(- Camera.#Direction);
         let disX = P.x * Camera.Zoom;
         let disY = P.y * Camera.Zoom;
-        let x = Ecran_Largeur / 2 + disX * cos + disY * sin;
-        let y = Ecran_Hauteur / 2 - disX * sin + disY * cos;
+        let x = Game.Ecran_Largeur / 2 + disX * cos + disY * sin;
+        let y = Game.Ecran_Hauteur / 2 - disX * sin + disY * cos;
 
         return new Vector(x,y)
     }
@@ -134,8 +134,8 @@ class Camera
      {
         let cos = Math.cos(Camera.#Direction);
         let sin = Math.sin(Camera.#Direction);
-        let disX = (P.x - Ecran_Largeur / 2) / Camera.Zoom;
-        let disY = (P.y - Ecran_Hauteur / 2) / Camera.Zoom;
+        let disX = (P.x - Game.Ecran_Largeur / 2) / Camera.Zoom;
+        let disY = (P.y - Game.Ecran_Hauteur / 2) / Camera.Zoom;
 
         let x = Camera.X + disX * cos + disY * sin;
         let y = Camera.Y - disX * sin + disY * cos;
@@ -165,17 +165,17 @@ class Camera
          }
          else
          {
-            if (canvas.requestFullscreen)
+            if (Game.MainContext.canvas.requestFullscreen)
             {
-                canvas.requestFullscreen();
+                Game.MainContext.canvas.requestFullscreen();
             }
-            else if(canvas.webkitRequestFullScreen) 
+            else if(Game.MainContext.canvas.webkitRequestFullScreen) 
             {
-                canvas.webkitRequestFullScreen();
+                Game.MainContext.canvas.webkitRequestFullScreen();
             }
             else 
             {
-                canvas.mozRequestFullScreen();
+                Game.MainContext.canvas.mozRequestFullScreen();
             }
          }
      }
@@ -191,11 +191,11 @@ class Camera
         }
         else
         {
-            canvas.style.width = Ecran_Largeur + 'px';
-            canvas.style.height = Ecran_Hauteur + 'px';
-            canvas.width = Ecran_Largeur;
-            canvas.height = Ecran_Hauteur;
-            ctx.scale(1,1);
+            Game.MainContext.canvas.style.width = Game.Ecran_Largeur + 'px';
+            Game.MainContext.canvas.style.height = Game.Ecran_Hauteur + 'px';
+            Game.MainContext.canvas.width = Game.Ecran_Largeur;
+            Game.MainContext.canvas.height = Game.Ecran_Hauteur;
+            Game.MainContext.scale(1,1);
         }
      }
 
@@ -204,7 +204,7 @@ class Camera
       */
      static RedefinirTailleCanvas() 
      {
-        var canvasRatio = Ecran_Hauteur / Ecran_Largeur;
+        var canvasRatio = Game.Ecran_Hauteur / Game.Ecran_Largeur;
         var windowRatio = screen.height / screen.width;
         var width;
         var height;
@@ -217,10 +217,10 @@ class Camera
             height = width * canvasRatio;
         }
     
-        canvas.style.width = width + 'px';
-        canvas.style.height = height + 'px';
+        Game.MainContext.canvas.style.width = screen.width//width + 'px';
+        Game.MainContext.canvas.style.height = screen.height//height + 'px';
 
-        canvas.width = width;
-        canvas.height = height;
+        Game.MainContext.canvas.width = screen.width//width;
+        Game.MainContext.canvas.height = screen.height//height;
     }
 }

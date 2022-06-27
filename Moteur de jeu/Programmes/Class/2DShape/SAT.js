@@ -321,7 +321,7 @@ class SAT
     // if a polygon is a line, then add in a third point to make it act line a very thing rectangle
     static _patchLineVerts(verts)
     {
-        if (verts.length == 2)
+        if (verts.length === 2)
         {
             let [p1,p2] = verts;
             var pt = new Vector(-(p2.y - p1.y), p2.x - p1.x);

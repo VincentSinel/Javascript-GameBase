@@ -10,7 +10,7 @@
 class Debug
 {
     static FPS_Reel = [];
-    static FPS_Mesure = FPS
+    static FPS_Mesure = Game.FPS
     static GridSize = 32;
     static Textes = [];
     static Vecteurs = []; // Les vecteur sont des vecteurs 4
@@ -40,21 +40,21 @@ class Debug
      */
     static UPDATE(Context, etape, Delta)
     {
-        if (etape == "PreCalcul")
+        if (etape === "PreCalcul")
         {
             if (Debug.Parametre.Camera)
             {
                 Debug.#DeplaceCamera(Delta)
             }
         }
-        else if (etape == "Pre")
+        else if (etape === "Pre")
         {
             if (Debug.Parametre.Grille)
             {
                 this.#Grid(Context, Math.floor(Debug.GridSize))
             }
         }
-        else
+        else if (etape === "Post")
         {
 
             if (Debug.Parametre.Shape)
@@ -84,7 +84,9 @@ class Debug
                 }
                 Debug.Vecteurs = []
             }
-    
+        }
+        else
+        {
             if (Debug.Parametre.Cible)
             {
                 this.#Cible(Context)
@@ -94,7 +96,7 @@ class Debug
             if (Debug.Parametre.Info)
             {
                 // Calcul des FPS
-                Debug.FPS_Reel.push(FPS / Delta);
+                Debug.FPS_Reel.push(Game.FPS / Delta);
                 if (Debug.FPS_Reel.length > this.FPS_Mesure)
                     Debug.FPS_Reel.shift()
                 let total = 0;
@@ -109,6 +111,8 @@ class Debug
                 Debug.Textes.push("Camera Z : " + Camera.Zoom.toFixed(2))
                 Debug.Textes.push("Souris X : " + Souris.X.toFixed(2))
                 Debug.Textes.push("Souris Y : " + Souris.Y.toFixed(2))
+                Debug.Textes.push("Souris CX : " + Souris.CX.toFixed(2))
+                Debug.Textes.push("Souris CY : " + Souris.CY.toFixed(2))
                 Debug.Textes.push("Grid Siz : " + Math.floor(Debug.GridSize))
                 this.#DessinInfo(Context, Debug.Textes)
             }
@@ -136,7 +140,7 @@ class Debug
     static EndMesure()
     {
         let delta = Date.now() -Debug.#StartTime;
-        if (Debug.#TimeMesures.length == Debug.#TimeMesureMax)
+        if (Debug.#TimeMesures.length === Debug.#TimeMesureMax)
         {
             Debug.#TimeMesures.shift();
         }
@@ -175,22 +179,22 @@ class Debug
         Context.fillStyle = "white"
         Context.font = "12px Arial";
         Context.textAlign = "start";
-        if (Debug.InfoPosition % 2 == 0)
+        if (Debug.InfoPosition % 2 === 0)
             x = 5;
         else
         {
-            x = Ecran_Largeur - 5;
+            x = Game.MainContext.canvas.width - Game.OffSetX - 5;
             Context.textAlign = "end";
         }
 
         if (Debug.InfoPosition > 1)
-            y = Ecran_Hauteur - 6 - 13 * (Debug.Textes.length) - h;
+            y = Game.MainContext.canvas.height - Game.OffSetY - 6 - 13 * (Debug.Textes.length) - h;
         else
             y = 15 + 13 * (Debug.Textes.length + 1);
 
         Context.fillText(total, x, y);
 
-        if (Debug.InfoPosition % 2 == 1)
+        if (Debug.InfoPosition % 2 === 1)
             x -= w;
 
         let imageCtx = document.createElement("canvas").getContext("2d"); // Création d'un canvas temporaire
@@ -390,22 +394,24 @@ class Debug
      */
     static #Cible(Context)
     {
+        let l = Game.MainContext.canvas.width - Game.OffSetX;
+        let h = Game.MainContext.canvas.height - Game.OffSetY;
         Context.strokeStyle = "Red"
         Context.beginPath();
-        Context.moveTo(0,0);
-        Context.lineTo(Ecran_Largeur, Ecran_Hauteur);
+        Context.moveTo(Game.OffSetX,Game.OffSetY);
+        Context.lineTo(l, h);
         Context.stroke();
         Context.beginPath();
-        Context.moveTo(Ecran_Largeur,0);
-        Context.lineTo(0, Ecran_Hauteur);
+        Context.moveTo(l,Game.OffSetY);
+        Context.lineTo(Game.OffSetX, h);
         Context.stroke();
         Context.beginPath();
-        Context.moveTo(Ecran_Largeur / 2,0);
-        Context.lineTo(Ecran_Largeur / 2, Ecran_Hauteur);
+        Context.moveTo(l / 2,Game.OffSetY);
+        Context.lineTo(l / 2, h);
         Context.stroke();
         Context.beginPath();
-        Context.moveTo(0,Ecran_Hauteur / 2);
-        Context.lineTo(Ecran_Largeur,Ecran_Hauteur / 2);
+        Context.moveTo(Game.OffSetX,h / 2);
+        Context.lineTo(l,h / 2);
         Context.stroke();
     }
 
@@ -421,7 +427,7 @@ class Debug
         // Déplace la camera a son centre
         Context.translate(Camera.X, Camera.Y);
 
-        let maxsize = Math.sqrt(Ecran_Largeur * Ecran_Largeur + Ecran_Hauteur * Ecran_Hauteur) / (Camera.Zoom)
+        let maxsize = Game.Diagonal/ (Camera.Zoom)
         let BorderX = Camera.AdapteX(maxsize / 2);
         let BorderY = Camera.AdapteY(maxsize / 2);
         let startX = BorderX % Size
@@ -429,7 +435,7 @@ class Debug
         while(startX < maxsize)
         {
             Context.strokeStyle = "Gray"
-            if (BorderX - startX == 0)
+            if (BorderX - startX === 0)
             {
                 Context.strokeStyle = "Cyan"
             }
@@ -442,7 +448,7 @@ class Debug
         while(startY < maxsize)
         {
             Context.strokeStyle = "Gray"
-            if (BorderY - startY == 0)
+            if (BorderY - startY === 0)
             {
                 Context.strokeStyle = "Cyan"
             }
@@ -465,7 +471,7 @@ class Debug
     {
         Context.fillStyle = "white"
         Context.font = "12px Arial";
-        if (Debug.InfoPosition == 0)
+        if (Debug.InfoPosition === 0)
         {
             Context.textAlign = "start";
             for (let index = 0; index < Texte.length; index++) 
@@ -473,28 +479,28 @@ class Debug
                 Context.fillText(Texte[index], 5, 15 + 13 * index)
             }
         }
-        else if (Debug.InfoPosition == 1)
+        else if (Debug.InfoPosition === 1)
         {
             Context.textAlign = "end";
             for (let index = 0; index < Texte.length; index++) 
             {
-                Context.fillText(Texte[index], Ecran_Largeur - 5, 15 + 13 * index)
+                Context.fillText(Texte[index], Game.MainContext.canvas.width - 5 - Game.OffSetX, 15 + 13 * index)
             }
         }
-        else if (Debug.InfoPosition == 2)
+        else if (Debug.InfoPosition === 2)
         {
             Context.textAlign = "start";
             for (let index = 0; index < Texte.length; index++) 
             {
-                Context.fillText(Texte[index], 5, Ecran_Hauteur - 5 - 13 * (Texte.length - 1 - index))
+                Context.fillText(Texte[index], 5, Game.MainContext.canvas.height - Game.OffSetY - 5 - 13 * (Texte.length - 1 - index))
             }
         }
-        else if (Debug.InfoPosition == 3)
+        else if (Debug.InfoPosition === 3)
         {
             Context.textAlign = "end";
             for (let index = 0; index < Texte.length; index++) 
             {
-                Context.fillText(Texte[index], Ecran_Largeur - 5, Ecran_Hauteur - 5 - 13 * (Texte.length - 1 - index))
+                Context.fillText(Texte[index], Game.MainContext.canvas.width - 5 - Game.OffSetX, Game.MainContext.canvas.height - Game.OffSetY - 5 - 13 * (Texte.length - 1 - index))
             }
         }
         
@@ -549,4 +555,27 @@ class Debug
                  color: color
              })
      }
+
+
+
+    static Log(message, type = 0)
+    {
+        if (type === 1)
+        {
+            console.error("[ERREUR]    - " + message);
+        }
+        else if (type === 2)
+        {
+            console.warn("[ATTENTION] - " + message);
+        }
+        else
+        {
+            console.info("[INFO]      - " + message);
+        }
+    }
+
+    static LogErreurType(VarName, VarType, Value)
+    {
+        Debug.Log("La valeur choisie pour " + VarName + " n'est pas un " + VarType + ". | " + typeof(Value) + " ► " + Value, 1)
+    }
 }

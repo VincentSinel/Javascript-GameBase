@@ -1,6 +1,7 @@
 var Librairie_Textures = [
     
     "Images/Chat.png",
+    "Images/IconSet.png",
 
     "Images/CasseBrique/Background.png",
     "Images/CasseBrique/Balle.png",

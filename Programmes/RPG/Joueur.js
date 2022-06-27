@@ -26,6 +26,8 @@ class Joueur extends Lutin_RPGMaker
                 this.Inventaire[Objet] = Nbr;
             }
         }
+        if (this.MenuInventaire)
+            this.MenuInventaire.RefreshUI();
     }
 
 
@@ -43,6 +45,11 @@ class Joueur extends Lutin_RPGMaker
             deplacementx -= 1
         if (Clavier.ToucheBasse("d"))
             deplacementx += 1
+
+        if(Clavier.ToucheJusteBasse("f"))
+        {
+            this.MontrerInventaire()
+        }
 
 
         if (deplacementx != 0 || deplacementy != 0)
@@ -89,14 +96,12 @@ class Joueur extends Lutin_RPGMaker
         Camera.X = this.X;
         Camera.Y = this.Y;
         this.Z = this.Y;
-        
-        
-        //this.BasculerCostume(id)
     }
 
     TestContact(dir)
     {
         let rect = this.CollisionRect;
+        //Debug.AjoutRectangle(rect,"Purple")
         rect.origin = rect.origin.add(dir);
         for (let i = 0; i < this.Parent.Children.length; i++) {
             const element = this.Parent.Children[i];
@@ -110,4 +115,22 @@ class Joueur extends Lutin_RPGMaker
         return false
     }
 
+
+    MontrerInventaire()
+    {
+        if(!this.MenuInventaire)
+            this.MenuInventaire = new Inventaire()
+        else if (!this.MenuInventaire.Visible)
+            this.MenuInventaire.Visible = true;
+        else
+            this.MenuInventaire.Visible = false;
+        this.MenuInventaire.RefreshUI();
+    }
+    
+    get CollisionRect()
+    {
+        let rect = super.CollisionRect;
+        let e = Rectangle.FromPosition(rect.x + 5, rect.y + 8, rect.w - 10, rect.h - 8);
+        return e;
+    }
 }

@@ -50,7 +50,7 @@ class Matrix
     {
         if ((matrix instanceof Matrix))
         {
-            if (this.width == matrix.height)
+            if (this.width === matrix.height)
             {
                 var m = new Matrix(matrix.width,this.height);
                 for(let j = 0; j < matrix.width; j++)

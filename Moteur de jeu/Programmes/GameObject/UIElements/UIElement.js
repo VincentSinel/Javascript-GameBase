@@ -139,7 +139,7 @@ class UIElement
         {
             if(UIElement.#DraggingElement.Draggable)
                 UIElement.#DraggingElement.Handle_DragEnd(id, position);
-            else if(UIElement.#DraggingElement == UIElement.#topElement)
+            else if(UIElement.#DraggingElement === UIElement.#topElement)
                 UIElement.#DraggingElement.Handle_Clique(id, position);
             UIElement.#DraggingElement = undefined;
         }
@@ -331,6 +331,17 @@ class UIElement
     #H;
     #SizeChanged;
 
+    #FontSize
+    #Font
+    #FontColor
+    #FontColorBase
+    #FontColorHover
+    #FontColorSelect
+    #FontColorInactif
+    #HorAlign
+    #VerAlign
+    #BorderSize
+
     /**
      * Créer un UIElement. Classe mère des objets de création d'interface utilisateur.
      * @param {Number} X Position X relative au parent
@@ -343,16 +354,16 @@ class UIElement
     constructor(X,Y,Z,W,H, Parent = undefined)
     {
         // Assignation style par default
-        this.Font = UIElement.BaseFont;
-        this.FontTaille = UIElement.BaseFontTaille;
-        this.FontCouleur = UIElement.BaseTexteCouleur;
-        this.BaseCouleur = UIElement.BaseCouleur;
-        this.HoverCouleur = UIElement.BaseHoverCouleur;
-        this.SelectionCouleur = UIElement.BaseSelectionCouleur;
-        this.InactifCouleur = UIElement.BaseInactifCouleur;
-        this.HorizontalAlignement = HorizontalAlignementType.Etendu;
-        this.VerticalAlignement = VerticalAlignementType.Etendu;
-        this.EpaisseurBord = UIElement.BaseEpaisseurBord;
+        this.#Font = UIElement.BaseFont;
+        this.#FontSize = UIElement.BaseFontTaille;
+        this.#FontColor = UIElement.BaseTexteCouleur;
+        this.#FontColorBase = UIElement.BaseCouleur;
+        this.#FontColorHover = UIElement.BaseHoverCouleur;
+        this.#FontColorSelect = UIElement.BaseSelectionCouleur;
+        this.#FontColorInactif = UIElement.BaseInactifCouleur;
+        this.#HorAlign = HorizontalAlignementType.Etendu;
+        this.#VerAlign = VerticalAlignementType.Etendu;
+        this.#BorderSize = UIElement.BaseEpaisseurBord;
         
 
         this.#X = X;
@@ -524,7 +535,7 @@ class UIElement
      */
     get isFocus()
     {
-        return UIElement.FocusObject == this
+        return UIElement.FocusObject === this
     }
     /**
      * Renvoie si la souris est actuellement au dessus de l'élément
@@ -583,6 +594,68 @@ class UIElement
             }
         }
     }
+
+    get FontTaille(){return this.#FontSize;}
+    set FontTaille(v)
+    {
+        this.#FontSize = v;
+        this.RefreshUI();
+    }
+    get Font(){return this.#Font;}
+    set Font(v)
+    {
+        this.#Font = v;
+        this.RefreshUI();
+    }
+
+    get FontCouleur() {return this.#FontColor;}
+    set FontCouleur(v){
+        this.#FontColor = v;
+        this.RefreshUI();
+    }
+
+    get BaseCouleur() {return this.#FontColorBase;}
+    set BaseCouleur(v){
+        this.#FontColorBase = v;
+        this.RefreshUI();
+    }
+
+    get HoverCouleur() {return this.#FontColorHover;}
+    set HoverCouleur(v){
+        this.#FontColorHover = v;
+        this.RefreshUI();
+    }
+
+    get InactifCouleur() {return this.#FontColorInactif;}
+    set InactifCouleur(v){
+        this.#FontColorInactif = v;
+        this.RefreshUI();
+    }
+
+    get SelectionCouleur() {return this.#FontColorSelect;}
+    set SelectionCouleur(v){
+        this.#FontColorSelect = v;
+        this.RefreshUI();
+    }
+
+    get HorizontalAlignement() {return this.#HorAlign;}
+    set HorizontalAlignement(v){
+        this.#HorAlign = v;
+        this.RefreshUI();
+    }
+
+    get VerticalAlignement() {return this.#VerAlign;}
+    set VerticalAlignement(v){
+        this.#VerAlign = v;
+        this.RefreshUI();
+    }
+
+    get EpaisseurBord() {return this.#BorderSize;}
+    set EpaisseurBord(v){
+        this.#BorderSize = v;
+        this.RefreshUI();
+    }
+    
 
     //#endregion
 
@@ -787,6 +860,22 @@ class UIElement
     //#endregion
 
 
+    
+    /**
+     * 
+     * @param {event} e 
+     */
+    Activation(e)
+    {
+        this.Couleur = this.BaseCouleur;
+        this.RefreshUI();
+    }
+    Desactivation(e)
+    {
+        this.Couleur = this.InactifCouleur;
+        this.RefreshUI();
+    }
+
     /**
      * Active cet objet
      */
@@ -948,6 +1037,7 @@ class UIElement
         this.Childrens.push(Element);
         this.#CanvasChange = true;
         this.#SortChildren()
+        return Element
     }
     /**
      * Supprimer un élément enfant
@@ -1005,16 +1095,25 @@ class UIElement
         }
     }
     /**
+     * Calcul le rectangle contenant l'objet actuel
+     * @returns {Rectangle} Rectangle contenant l'objet actuel
+     */
+    BoundingBox()
+    {
+        return Rectangle.FromPosition(this.X, this.Y,this.W,this.H);
+    }
+    /**
      * Calcul le rectangle contenant l'objet (et ces enfants si voulu)
      * @param {boolean} child_Recursif Prise en compte des enfants
      * @returns {Rectangle} Rectangle contenant l'objet et ses enfants si précisé
      */
     BoundingBoxChild(child_Recursif = false)
     {
+        let bb = this.BoundingBox();
         let x1 = 0;
         let y1 = 0;
-        let x2 = this.W;
-        let y2 = this.H;
+        let x2 = bb.w;
+        let y2 = bb.h;
         for (let c = 0; c < this.Childrens.length; c++) 
         {
             if(child_Recursif)
@@ -1028,10 +1127,11 @@ class UIElement
             else
             {
                 const element = this.Childrens[c];
-                x1 = Math.min(x1, element.X);
-                y1 = Math.min(y1, element.Y);
-                x2 = Math.max(x2, element.X + element.W);
-                y2 = Math.max(y2, element.Y + element.H);
+                bb = element.BoundingBox();
+                x1 = Math.min(x1, bb.x);
+                y1 = Math.min(y1, bb.y);
+                x2 = Math.max(x2, bb.x + bb.w);
+                y2 = Math.max(y2, bb.y + bb.h);
             }
         }
         return Rectangle.FromPosition(x1, y1, x2 - x1, y2 - y1);
@@ -1066,7 +1166,7 @@ class UIElement
      */
     Dessin(Context)
     {
-        if(!this.Visible || this.W == 0 || this.H == 0)
+        if(!this.Visible || this.W === 0 || this.H === 0)
             return;
         if (this.CanvasChanged)
         {

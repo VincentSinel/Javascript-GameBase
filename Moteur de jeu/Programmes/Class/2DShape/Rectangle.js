@@ -244,7 +244,7 @@ class Rectangle extends Shape
      */
     collide_Rectangle(rectangle)
     {
-        if (this.angle == 0 && rectangle.angle == 0)
+        if (this.angle === 0 && rectangle.angle === 0)
         {
             return this.#AABB(this,rectangle);
         }
@@ -263,7 +263,7 @@ class Rectangle extends Shape
     {
         if (this.collide(rectangle))
         {
-            if(rectangle.w == 0 || rectangle.h == 0)
+            if(rectangle.w === 0 || rectangle.h === 0)
                 return Vector.Zero;
             
             let v = new Vector(0,0);

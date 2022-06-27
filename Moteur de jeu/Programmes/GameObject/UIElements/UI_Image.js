@@ -50,6 +50,9 @@ class UI_Image extends UIElement
     set SourceRect(v)
     {
         this.#SourceArray = v
+        let diag = Math.sqrt(v[2] * v[2] + v[2] * v[2]) * 2;
+        this.W = diag;
+        this.H = diag;
         this.RefreshUI();
     }
     /**
@@ -129,7 +132,7 @@ class UI_Image extends UIElement
     {
         this.#Scale.x = v;
 
-        let diag = Math.sqrt(this.Image.width * this.Image.width + this.Image.height * this.Image.height) * 2 * Math.max(this.#Scale.x, this.#Scale.y)
+        let diag = Math.sqrt(this.SourceW * this.SourceW + this.SourceH * this.SourceH) * 2 * Math.max(this.#Scale.x, this.#Scale.y);
         this.W = diag;
         this.H = diag;
         this.RefreshUI()
@@ -146,13 +149,24 @@ class UI_Image extends UIElement
     {
         this.#Scale.y = v;
 
-        let diag = Math.sqrt(this.Image.width * this.Image.width + this.Image.height * this.Image.height) * 2 * Math.max(this.#Scale.x, this.#Scale.y)
+        let diag = Math.sqrt(this.SourceW * this.SourceW + this.SourceH * this.SourceH) * 2 * Math.max(this.#Scale.x, this.#Scale.y);
         this.W = diag;
         this.H = diag;
-        this.RefreshUI()
+        this.RefreshUI();
     }
 
     //#endregion
+
+
+    /**
+     * Calcul le rectangle contenant l'objet actuel
+     * @override
+     * @returns {Rectangle} Rectangle contenant l'objet actuel
+     */
+     BoundingBox()
+     {
+         return Rectangle.FromPosition(this.X, this.Y,this.SourceW,this.SourceH);
+     }
 
     /**
      * Lance une regénération du canvas de dessin
@@ -162,7 +176,7 @@ class UI_Image extends UIElement
     {
         this.DrawOffSetX = -this.W / 2;
         this.DrawOffSetY = -this.H / 2;
-        super.RefreshUI()
+        super.RefreshUI();
     }
     /**
      * Effectue le dessin de la couche arrière du UIElement

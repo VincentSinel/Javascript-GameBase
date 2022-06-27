@@ -4,6 +4,10 @@ class Scene1 extends Scene
     {
         super("Scene Test");
 
+        //Test.GameSpeed = "bonjour"
+
+        this.GameSpeed = 0.5
+
         let lutin = new Lutin(0,0, ["Images/Chat.png"]);
         this.Lutin3 = this.AddChildren(lutin);
         this.Lutin3.CentreRotation = new Vector(0.5,1);
@@ -25,6 +29,8 @@ class Scene1 extends Scene
 
         this.menu = new UI_Image("Images/Moto/Aiguille.png",200, 200, 10000);
         this.menu.CentreRotation = new Vector(7.5 / 68, 0.5);
+
+        this.textboxtest = new UI_TextBox(500,500,200,200,"","Tooltip")
 
         //new UI_Slider(200,200,1,200,30,0,100);
         //new UI_Button(400,400,2,200,200,"test");
@@ -81,20 +87,20 @@ class Scene1 extends Scene
             new Vector(Math.random() * 500,Math.random() * 500)
         ]
 
-        //this.lutins = [];
-        //for (let i = 0; i < 0; i++) 
-        //{
-        //    let x = 300//(Math.random() - 0.5) * 1000;
-        //    let y = 0//(Math.random() - 0.5) * 1000;
-        //    let d = 0//Math.random() * 360;
-        //    const lut = new LutinTest(x,y);
-        //    lut.Direction = d;
-        //    this.lutins.push(lut);
-        //    if (i > 0)
-        //        this.lutins[i-1].AddChildren(lut);
-        //    else
-        //        this.Lutin3.AddChildren(this.lutins[0]);
-        //}
+        this.lutins = [];
+        for (let i = 0; i < 10; i++) 
+        {
+           let x = 300//(Math.random() - 0.5) * 1000;
+           let y = 0//(Math.random() - 0.5) * 1000;
+           let d = 0//Math.random() * 360;
+           const lut = new LutinTest(x,y);
+           lut.Direction = d;
+           this.lutins.push(lut);
+           if (i > 0)
+               this.lutins[i-1].AddChildren(lut);
+           else
+               this.Lutin3.AddChildren(this.lutins[0]);
+        }
 
         //this.Lutin1 = this.AjoutEnfant(new LutinTest(200,200));
         //this.Lutin2 = this.AjoutEnfant(new LutinTest(-200,-200));
@@ -107,8 +113,8 @@ class Scene1 extends Scene
     {
         super.Calcul(Delta)
         this.menu.Angle += Math.PI / 180
-        this.menu.ScaleX =  1 + Math.cos(TotalFrame * Math.PI / 125) * 0.5;
-        this.menu.ScaleY =  1 + Math.cos(TotalFrame * Math.PI / 125) * 0.5;
+        this.menu.ScaleX =  1 + Math.cos(Game.TotalFrame * Math.PI / 125) * 0.5;
+        this.menu.ScaleY =  1 + Math.cos(Game.TotalFrame * Math.PI / 125) * 0.5;
         // if(Clavier.ToucheBasse("ArrowUp"))
         // {
         //     this.Lutin3.Y -= speed

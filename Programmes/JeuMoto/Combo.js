@@ -7,7 +7,7 @@ class Combo extends Drawable
         super(0,0,20000)
         this.Multiplicateur = 1;
         this.Score = 0;
-        this.Flamme = this.AddChildren(new Lutin_SC(270 - Ecran_Largeur / 2, 235,"Images/Moto/FlammeAnimation.png", [200,70]));
+        this.Flamme = this.AddChildren(new Lutin_SC(270 - Game.Ecran_Largeur / 2, 235,"Images/Moto/FlammeAnimation.png", [200,70]));
         this.Flamme.NextUpdate = 6;
         this.Flamme.Z = -2;
         this.TMultiplicateur = Textures.Charger("Images/Moto/Multiplicateur.png");
@@ -168,7 +168,7 @@ class Combo extends Drawable
             by = move * (Math.random() - 0.5) * 5;
         }
 
-        let x = Camera.AdapteX(this.Scene.Moto.X + 40) + Math.max(-size * t.length / 2, 40 - Ecran_Largeur / 2);
+        let x = Camera.AdapteX(this.Scene.Moto.X + 40) + Math.max(-size * t.length / 2, 40 - Game.Ecran_Largeur / 2);
         let y = Camera.AdapteY(this.Scene.Moto.Y + 25 + position)
         Context.globalAlpha = alpha;
 
@@ -192,7 +192,7 @@ class Combo extends Drawable
         Context.globalAlpha = alpha;
 
 
-        let x = Camera.AdapteX(Camera.X + Ecran_Largeur / 2 - 200 - position) - w/2;
+        let x = Camera.AdapteX(Camera.X + Game.Ecran_Largeur / 2 - 200 - position) - w/2;
         let y = 0
         for (let i = 0; i < txt.length; i++) {
             let id = Combo.Lettre.indexOf(txt[i]);
@@ -210,8 +210,8 @@ class Combo extends Drawable
         let size =  30;
         let t = this.ScoreGlobal.toString();
 
-        let x = -Ecran_Largeur / 2;
-        let y = -Ecran_Hauteur / 2;
+        let x = -Game.Ecran_Largeur / 2;
+        let y = -Game.Ecran_Hauteur / 2;
         Context.drawImage(this.TScore, 54 * 4, 54 * 4, 54, 54, //S
             x, y, size, size);
         x += size;
@@ -246,8 +246,8 @@ class Combo extends Drawable
         let w = this.TVie.width *size;
         let h = this.TVie.height * size;
 
-        let x = Camera.AdapteX(Camera.X + Ecran_Largeur / 2 - 5 - w);
-        let y = Camera.AdapteY(Camera.Y + Ecran_Hauteur / 2 - 5 - h);
+        let x = Camera.AdapteX(Camera.X + Game.Ecran_Largeur / 2 - 5 - w);
+        let y = Camera.AdapteY(Camera.Y + Game.Ecran_Hauteur / 2 - 5 - h);
         if (vie < 4)
         {
             for(let i = 0; i < vie; i++)

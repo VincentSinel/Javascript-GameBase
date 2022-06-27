@@ -1,28 +1,29 @@
-//============================================================================================
+//==========================================================================================================================================
 //  Gestion principal de la boucle de jeu.
 //  Ici ce trouve les parametre d'écran et de FPS.
-//============================================================================================
+//==========================================================================================================================================
 
 
-// Variable définissant la taille de la fenêtre du jeu
-const Ecran_Largeur = 16 * 64;
-const Ecran_Hauteur = 9 * 64;
-const Diagonal = Math.sqrt(Ecran_Largeur * Ecran_Largeur + Ecran_Hauteur * Ecran_Hauteur)
-var CouleurFond = "black";
-// Définition du nombre de FPS souhaité (Pour le calcul du temps nombre frame écoulé)
-const FPS = 60;
-const MAXFrameJump = 60;
-// Variable lié au canvas;
-var canvas, ctx;
-var TotalFrame = 0;
-var TotalTime = 0;
-var DepartTime = 0;
-// Information supplémentaire;
-var dpi = window.devicePixelRatio;
-var TempsPrecedent = Date.now();
-var fade = 1.0; var fading = 0;
-var SceneActuel;
-var Pause = false;
+// // Variable définissant la taille de la fenêtre du jeu
+// const Ecran_Largeur = 16 * 64;
+// const Ecran_Hauteur = 9 * 64;
+// const Diagonal = Math.sqrt(Ecran_Largeur * Ecran_Largeur + Ecran_Hauteur * Ecran_Hauteur)
+// var CouleurFond = "black";
+// // Définition du nombre de FPS souhaité (Pour le calcul du temps nombre frame écoulé)
+// const FPS = 60;
+// const MAXFrameJump = 60;
+// // Variable lié au canvas;
+// var canvas, ctx;
+// var TotalFrame = 0;
+// var TotalTime = 0;
+// var DepartTime = 0;
+// var GameSpeed = 1;
+// // Information supplémentaire;
+// var dpi = window.devicePixelRatio;
+// var TempsPrecedent = Date.now();
+// var fade = 1.0; var fading = 0;
+// var SceneActuel;
+// var Pause = false;
 
 /**
  * Class gérant le jeu
@@ -80,7 +81,7 @@ class Game
         // dt = 2 si le jeu tourne deux fois moins vite que le nombre de FPS convenue (30 FPS au lieu de 60 par exemple)
         // dt ne peut pas depasser la variable MAXFrameJump pour eviter les problèmes de colission (a ajuster et tester)
         let now = Date.now();
-        let dt = Math.min((now - TempsPrecedent) * FPS / 1000.0, MAXFrameJump);
+        let dt = Math.min((now - TempsPrecedent) * FPS / 1000.0, MAXFrameJump) * GameSpeed;
         TotalTime = (now - DepartTime) / 1000.0;
 
         // Action du DEBUGGEUR avant calcul général (Déplacement camera par exemple)
@@ -137,12 +138,12 @@ class Game
         window.requestAnimationFrame(Game.BouclePrincipale);
 
     }
-    /**============================================================================================
+    /**==========================================================================================================================================
      * Gestion du dégradé d'écran
-     *///==========================================================================================
+     *///=======================================================================================================================================
     static MiseAJourFade()
     {
-        if (fading == 1)
+        if (fading === 1)
         {
             if (fade < 1.0)
             {
@@ -153,7 +154,7 @@ class Game
                 fading = 0;
             }
         }
-        else if (fading == -1)
+        else if (fading === -1)
         {
             if (fade > 0.0)
             {
@@ -166,9 +167,9 @@ class Game
         }
     }
 
-    /**============================================================================================
+    /**==========================================================================================================================================
      * Création du canvas sur la page HTML
-     *///============================================================================================
+     *///==========================================================================================================================================
     static CreationCanvas()
     {
         // Création du canvas
@@ -207,9 +208,9 @@ class Game
         canvas.style.height = Ecran_Hauteur + 'px';
     }
 
-    /** ============================================================================================
+    /** ==========================================================================================================================================
      * Ajoute les différents test d'événement (Appuye d'une touche ou de la souris, Position de la souris)
-     *///===========================================================================================
+     *///========================================================================================================================================
     static InitEvenements(){
         var keydown = function (e) {
             Clavier.KeyDown(e);
@@ -229,7 +230,7 @@ class Game
 
         document.addEventListener('fullscreenchange', event => {  Camera.RecalculPleinEcran(); });
     }
-    //=====================================================
+    //===============================================================================
 
 }
 

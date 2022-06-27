@@ -11,14 +11,14 @@ class Textures
      */
      static Initialisation()
      {
-        LoadScreen.TextureMax = Librairie_Textures.length + 1;
+        LoadScreen.TextureMax = Librairie_Textures.length + 2;
 
         for (let im = 0; im < Librairie_Textures.length; im++) 
         {
             Textures.#AjoutBuffer(Librairie_Textures[im], Librairie_Textures[im])
         }
         Textures.#AjoutBuffer("System/Bulle", "Moteur de jeu/Programmes/GameObject/Lutin/Bulle.png");
-        
+        Textures.#AjoutBuffer("Missing", "Moteur de jeu/Missing_Texture.png");
      }
 
      /**
@@ -56,7 +56,11 @@ class Textures
         }
         else
         {
-            console.log("L'image " + Nom + " n'existe pas, Elle peut-être manquante de la librairie de texture.")
+         
+            Debug.Log("L'image " + Nom + " n'existe pas, Elle peut-être manquante de la librairie de texture.",2)
+            //console.log("L'image " + Nom + " n'existe pas, Elle peut-être manquante de la librairie de texture.")
+            //console.trace();
+            return Textures.#Buffer["Missing"];
         }
      }
 }

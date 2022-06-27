@@ -29,7 +29,7 @@ class UI_Panel extends UIElement
         let Fond1 = this.Couleur.RGBA2(120)//Color.CouleurByte(226,163,42,1);
 
 
-        var grd = ctx.createLinearGradient(0, 0, 0, this.H);
+        var grd = Context.createLinearGradient(0, 0, 0, this.H);
         grd.addColorStop(0, Fond1);
         grd.addColorStop(1, Fond2);
 

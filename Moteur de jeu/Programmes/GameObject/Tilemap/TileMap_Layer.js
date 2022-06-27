@@ -13,33 +13,33 @@ class TileMap_Layer extends Drawable
 
     #Parts;
     #HasAnimation;
+    #Name = "";
+    #Tilemap;
+    #Contenue;
 
     /**
      * Créer une nouvelle couche de tilemap
      * @param {string} Name Nom de la couche
      * @param {TileMap} Tilemap Tilemap Parent
      * @param {float} Z Position Z
-     * @param {int} [fill = -1] Tile de remplissage par default
+     * @param {int|TileMap_Layer} [fill = -1] Tile de remplissage par default
      */
     constructor(Name,Tilemap,Z = 0,fill = -1)
     {
         super(0,0,Z)
-        this.Name = Name;
-        this.Tilemap = Tilemap;
-
-        this.Frame = 0;
+        this.#Name = Name;
+        this.#Tilemap = Tilemap;
         this.#HasAnimation = false;
-
         this.#Parts = [];
 
         
         let needfill = false;
-        this.Contenue = [];
+        this.#Contenue = [];
         if (fill instanceof TileMap_Layer)
         {
-            if (fill.W == this.W && fill.H == this.H)
+            if (fill.W === this.W && fill.H === this.H)
             {
-                this.Contenue = fill.Contenue;
+                this.#Contenue = fill.Contenue;
             }
             else
             {
@@ -53,7 +53,7 @@ class TileMap_Layer extends Drawable
 
         if (needfill)
         {
-            if (fill !== parseInt(fill, 10))
+            if (fill != parseInt(fill, 10))
             {
                 fill = -1;
             }
@@ -61,7 +61,7 @@ class TileMap_Layer extends Drawable
             {     
                 for (let x = 0; x < this.W; x++) 
                 {       
-                    this.Contenue.push(fill)
+                    this.#Contenue.push(fill)
                 }
             }
         }
@@ -75,6 +75,41 @@ class TileMap_Layer extends Drawable
 
     //#region GETTER SETTER
 
+    /**
+     * Nom de la couche
+     * @type {string}
+     */
+    get Name()
+    {
+        return this.#Name;
+    }
+    /**
+     * Tilemap Parent
+     * @type {Tilemap}
+     */
+    get Tilemap()
+    {
+        return this.#Tilemap;
+    }
+    /**
+     * Contenue du tilemap (tableau de valeur)
+     * @type {Array<int>}
+     */
+    get Contenue()
+    {
+        return this.#Contenue;
+    }
+    set Contenue(v)
+    {
+        if (v instanceof Array)
+        {
+            this.#Contenue = v
+        }
+        else
+        {
+            Debug.LogErreurType("Contenue", "Array", v);
+        }
+    }
     /**
      * Largeur du tilemap
      * @type {int}
@@ -136,12 +171,8 @@ class TileMap_Layer extends Drawable
     }
     set CentreRotation(v)
     {
-        //Useless
+        Debug.Log("Tentative de modification du centre de rotation d'une couche de tilemap. Cela est impossible, utiliser le centre de rotation du tilemap associé.", 2)
     }
-    //set CentreRotation(value)
-    //{
-    //    super.CentreRotation = value;
-    //}
 
     //#endregion
 
@@ -156,11 +187,11 @@ class TileMap_Layer extends Drawable
         let data = ""
         for(let i = 1; i < this.Contenue.length; i++)
         {
-            if (this.Contenue[i] == v)
+            if (this.Contenue[i] === v)
                 l+= 1;
             else
             {
-                if (l == 1)
+                if (l === 1)
                     data += v.toString() + ",";
                 else
                     data += l.toString() + "x" + v.toString() + ",";
@@ -168,7 +199,7 @@ class TileMap_Layer extends Drawable
                 v = this.Contenue[i];
             }
         }
-        if (l == 1)
+        if (l === 1)
             data += v.toString();
         else
             data += l.toString() + "x" + v.toString();
@@ -368,28 +399,28 @@ class TileMap_Layer extends Drawable
     {
         let v = 0;
         if (x - 1 < 0 || y - 1 < 0 ||
-            this.Contenue[x - 1 + (y - 1) * this.W] == id)
+            this.Contenue[x - 1 + (y - 1) * this.W] === id)
             v += 32
         if (y - 1 < 0 ||
-            this.Contenue[x + 0 + (y - 1) * this.W] == id)
+            this.Contenue[x + 0 + (y - 1) * this.W] === id)
             v += 64
         if (x + 1 >= this.W ||y - 1 < 0 ||
-            this.Contenue[x + 1 + (y - 1) * this.W] == id)
+            this.Contenue[x + 1 + (y - 1) * this.W] === id)
             v += 128
         if (x - 1 < 0 ||
-            this.Contenue[x - 1 + (y + 0) * this.W] == id)
+            this.Contenue[x - 1 + (y + 0) * this.W] === id)
             v += 8
         if (x + 1 >= this.W  ||
-            this.Contenue[x + 1 + (y + 0) * this.W] == id)
+            this.Contenue[x + 1 + (y + 0) * this.W] === id)
             v += 16
         if (x - 1 < 0 || y + 1 >= this.H ||
-            this.Contenue[x - 1 + (y + 1) * this.W] == id)
+            this.Contenue[x - 1 + (y + 1) * this.W] === id)
             v += 1
         if (y + 1 >= this.H ||
-            this.Contenue[x + 0 + (y + 1) * this.W] == id)
+            this.Contenue[x + 0 + (y + 1) * this.W] === id)
             v += 2
         if (x + 1 >= this.W  || y + 1 >= this.H ||
-            this.Contenue[x + 1 + (y + 1) * this.W] == id)
+            this.Contenue[x + 1 + (y + 1) * this.W] === id)
             v += 4
         return v;
     }
@@ -400,14 +431,7 @@ class TileMap_Layer extends Drawable
      */
     Calcul(Delta)
     {
-        if (this.Animation)
-        {
-            while(this.NextUpdate < TotalTime)
-            {
-                this.Frame = (this.Frame + 1) % this.Frames;
-                this.NextUpdate += 1 / this.Vitesse;
-            }
-        }
+
     }
     /**
      * Effectue le dessin du layer
@@ -416,7 +440,7 @@ class TileMap_Layer extends Drawable
      */
     Dessin(Context)
     { 
-        if (this.Name == TileMap_Layer.CollisionMaskName)
+        if (this.Name === TileMap_Layer.CollisionMaskName)
         {
             if (this.Tilemap.Edit)
             {
@@ -449,7 +473,7 @@ class TileMap_Layer extends Drawable
                 }
                 
                 if (this.Tilemap.Edit &&
-                    this.Tilemap.Edit_SelectedLayer == this.Name)
+                    this.Tilemap.Edit_SelectedLayer === this.Name)
                 {
                     for (let i = 0; i < this.Edit_TileToDraw.length; i++) 
                     {
@@ -523,15 +547,15 @@ class TileMap_Layer extends Drawable
                     let ox = 0;
                     let oy = 0;
                     let w, h;
-                    if (px == sx)
+                    if (px === sx)
                         ox = rect.x - sx * size;
-                    if (py == sy)
+                    if (py === sy)
                         oy = rect.y - sy * size;
-                    if (px == ex - 1)
+                    if (px === ex - 1)
                         w = fx;
                     else
                         w = size - ox;
-                    if (py == ey - 1)
+                    if (py === ey - 1)
                         h = fy;
                     else
                         h = size - oy;
@@ -574,7 +598,7 @@ class TileMap_Layer extends Drawable
             }
 
             if (this.Tilemap.Edit &&
-                this.Tilemap.Edit_SelectedLayer == this.Name)
+                this.Tilemap.Edit_SelectedLayer === this.Name)
             {
                 Context.fillStyle = "Black";
                 for (let i = 0; i < this.Edit_TileToDraw.length; i++) 

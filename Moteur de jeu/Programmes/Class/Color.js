@@ -75,14 +75,14 @@ class Color
         M = Math.max(r,g,b);
         m = Math.min(r,g,b);
         d = M-m;
-        if( d==0 ) h=0;
-        else if( M==r ) h=((g-b)/d)%6;
-        else if( M==g ) h=(b-r)/d+2;
+        if( d===0 ) h=0;
+        else if( M===r ) h=((g-b)/d)%6;
+        else if( M===g ) h=(b-r)/d+2;
         else h=(r-g)/d+4;
         h*=60;
         if( h<0 ) h+=360;
         l = (M+m)/2;
-        if( d==0 )
+        if( d===0 )
             s = 0;
         else
             s = d/(1-Math.abs(2*l-1));
@@ -149,7 +149,7 @@ class Color
         return {R: r, G: g, B: b};
     }
 
-    //=====================================================
+    //===============================================================================
     /**
      * Renvoie un texte représentant une couleur à partir des 
      * canaux rouge (r), vert (v), bleu (b) et alpha (a) tous compris entre 0 et 1.
@@ -167,8 +167,8 @@ class Color
         b = Math.round(b * 255);
         return "rgba(" + r + "," + v + "," + b +"," + a + ")"
     }
-    //=====================================================
-    //=====================================================
+    //===============================================================================
+    //===============================================================================
     /**
      * Renvoie un texte représentant une couleur à partir des 
      * canaux rouge (r), vert (v), bleu (b) compris entre 0 et 255 et alpha (a) compris entre 0 et 1.
@@ -183,5 +183,5 @@ class Color
      {
          return "rgba(" + r + "," + v + "," + b +"," + a + ")"
      }
-     //=====================================================
+     //===============================================================================
 }

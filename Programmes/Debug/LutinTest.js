@@ -6,7 +6,7 @@ class LutinTest extends Lutin
 
         this.Z = -this.Y
         this.color = Color.Couleur(Math.random(), Math.random(), Math.random(), 0.2);
-        this.v = 0.1 + Math.random() * 0.5
+        this.v = 0.5 //+ Math.random() * 0.5
         //this.Teinte.A = 0.5;
         //this.Teinte.R = 0;
         //this.Teinte.G = Math.random() * 255;
@@ -17,7 +17,7 @@ class LutinTest extends Lutin
     {
         super.Calcul(Delta)
 
-        this.Direction += this.v * Delta;
+        this.Direction += this.v * Math.cos(this.TotalFrame / 90) * Delta;
 
         //Debug.AjoutRectangle(this.Rect, this.color)
         //Debug.AjoutRectangle(this.Rect.boundingbox, this.color);

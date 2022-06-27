@@ -30,7 +30,7 @@ class Tile_Animation extends Tile
     {
         super.Calcul(Delta)
 
-        while(this.NextUpdate < TotalTime)
+        while(this.NextUpdate < Game.TotalTime)
         {
             this.Frame = (this.Frame + 1) % this.Frames;
             this.NextUpdate += 1 / this.Vitesse;

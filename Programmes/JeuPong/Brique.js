@@ -14,7 +14,7 @@ class Brique extends Lutin
         // Le "super" de manière général permet d'appeler des élèments de la class parents
         super(X,Y, Costumes);
 
-        this.BasculerCostume(EntierAleat(5))
+        this.CostumeActuel = EntierAleat(5);
     }
 
 

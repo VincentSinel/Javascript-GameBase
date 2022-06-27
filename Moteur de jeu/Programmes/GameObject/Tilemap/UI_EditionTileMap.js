@@ -24,7 +24,7 @@ class UI_EditionTileMap extends UIElement
     constructor(Tilemap)
     {
         let w = 8 * Tilesets.TileSize + UIElement.BaseEpaisseurBord * 2 + UI_VerticalScrollBar.ScrollW;
-        super(0,0,0, Ecran_Largeur, Ecran_Hauteur);
+        super(0,0,0, Game.Ecran_Largeur, Game.Ecran_Hauteur);
 
 
         let _this = this;
@@ -167,7 +167,7 @@ class UI_EditionTileMap extends UIElement
      */
     Clavier_ToucheJusteBasse(e)
     {
-        if (e.Param.key == "p")
+        if (e.Param.key === "p")
         {
             this.Sauvegarder();
         }
@@ -258,7 +258,7 @@ class UI_EditionTileMap extends UIElement
     {
         if (Souris.CX <= this.MenuW)
         {
-            if(this.#DragStart && this.#DragStart.z == 0)
+            if(this.#DragStart && this.#DragStart.z === 0)
             {
                 let x = Math.floor((event.Param.x - this.CX) / Tilesets.TileSize);
                 let y = Math.floor((event.Param.y - this.CY + this.ScrollPosition) / Tilesets.TileSize);
@@ -291,7 +291,7 @@ class UI_EditionTileMap extends UIElement
     {
         if (Souris.CX <= this.MenuW)
         {
-            if(this.#DragStart && this.#DragStart.z == 0)
+            if(this.#DragStart && this.#DragStart.z === 0)
             {
                 let x = Math.floor((event.Param.x - this.CX) / Tilesets.TileSize);
                 let y = Math.floor((event.Param.y - this.CY + this.ScrollPosition) / Tilesets.TileSize);
@@ -344,14 +344,14 @@ class UI_EditionTileMap extends UIElement
     {
         if (Souris.CX <= this.MenuW)
         {
-            if(this.#DragStart && this.#DragStart.z == 1)
+            if(this.#DragStart && this.#DragStart.z === 1)
             {
                 this.ClearSelectedTile();
             }
         }
         else // Edition sur tilemap
         {
-            if(this.#DragStart && this.#DragStart.z == 2)
+            if(this.#DragStart && this.#DragStart.z === 2)
             {
                 let x = Math.min(this.CurrentLayer.W - 1, Math.max(0,this.PositionPreview.x));
                 let y = Math.min(this.CurrentLayer.H - 1, Math.max(0,this.PositionPreview.y));
@@ -379,14 +379,14 @@ class UI_EditionTileMap extends UIElement
     {
         if (Souris.CX <= this.MenuW)
         {
-            if(this.#DragStart && this.#DragStart.z == 1)
+            if(this.#DragStart && this.#DragStart.z === 1)
             {
                 this.ClearSelectedTile();
             }
         }
         else // Edition sur tilemap
         {
-            if(this.#DragStart && this.#DragStart.z == 2)
+            if(this.#DragStart && this.#DragStart.z === 2)
             {
                 let x = Math.min(this.CurrentLayer.W - 1, Math.max(0,this.PositionPreview.x));
                 let y = Math.min(this.CurrentLayer.H - 1, Math.max(0,this.PositionPreview.y));
@@ -493,7 +493,7 @@ class UI_EditionTileMap extends UIElement
      */
     ToggleCollisionView()
     {
-        if (this.SelectedLayer == 0)
+        if (this.SelectedLayer === 0)
             TileMap_Layer.CollisionDebug = true;
         else
             TileMap_Layer.CollisionDebug = false;
@@ -542,7 +542,7 @@ class UI_EditionTileMap extends UIElement
                     y = this.PositionPreview.y + j;
                     if (x >= 0 && y >= 0 && x < layer.W && y < layer.H)
                     {
-                        if (this.Edit_SelectedLayer == TileMap_Layer.CollisionMaskName)
+                        if (this.Edit_SelectedLayer === TileMap_Layer.CollisionMaskName)
                         {
                             layer.ChangerTile(x, y, Math.min(0,this.Edit_SelectedTile[i][j]));
                         }

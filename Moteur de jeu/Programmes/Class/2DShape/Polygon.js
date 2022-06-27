@@ -114,7 +114,7 @@ class Polygon extends Shape
          if (this.#refreshboundingbox)
          {
              let vert = this.getTransformedVerts();
-             if (vert.length == 0)
+             if (vert.length === 0)
                 return new Rectangle(this.origin, 0,0);
              let xmin = vert[0].x;
              let ymin = vert[0].y;
