@@ -19,10 +19,11 @@ var Scripts = [
     //"Jeu_Base.js",
     "Game.js",
 
-    "Programmes/GameObject/GameObject.js",
-    "Programmes/GameObject/RootObject.js",
-    "Programmes/GameObject/Drawable.js",
-    "Programmes/GameObject/Scene.js",
+    "Programmes/GameObject/Default/GameObject.js",
+    "Programmes/GameObject/Default/RootObject.js",
+    "Programmes/GameObject/Default/Drawable.js",
+    "Programmes/GameObject/Default/Scene.js",
+    "Programmes/GameObject/Default/NinePatch.js",
 
     "Programmes/GameObject/UIElements/UIElement.js",
     "Programmes/GameObject/UIElements/UI_Panel.js",
@@ -40,8 +41,7 @@ var Scripts = [
     "Programmes/GameObject/Tilemap/UI_EditionTileMap.js",
 
 
-    "Programmes/GameObject/NinePatch.js",
-    "Programmes/GameObject/Lutin/BulleDialogue.js",
+    "Programmes/GameObject/BulleDialogue/BulleDialogue.js",
     "Programmes/GameObject/Lutin/Lutin.js",
     "Programmes/GameObject/Lutin/Lutin_SC.js",
     "Programmes/GameObject/Lutin/Lutin_RPGMaker.js",

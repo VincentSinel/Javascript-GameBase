@@ -5,6 +5,9 @@
  */
 class BulleDialogue extends NinePatch
 {
+    static BaseFontSize = 20;
+    static MaxW = 300;
+
     #Texte
     #Font
     #FontSize
@@ -23,7 +26,7 @@ class BulleDialogue extends NinePatch
         this.TempCanvas.fillStyle = "black"
         this.#Texte = Texte;
         this.#Font = "Arial";
-        this.#FontSize = 12;
+        this.#FontSize = BulleDialogue.BaseFontSize;
         this.#Lines = [];
         this.Visible = false;
 
@@ -31,7 +34,7 @@ class BulleDialogue extends NinePatch
         this.AllowScaling = false;
         
         this.TempCanvas.font = this.FontSize + "px " + this.Font;
-        this.#CalculTailleBulle()
+        this.#CalculTailleBulle(BulleDialogue.MaxW)
     }
 
     //#region GETTER SETTER
@@ -55,7 +58,7 @@ class BulleDialogue extends NinePatch
     set Texte(v)
     {
         this.#Texte = v;
-        this.#CalculTailleBulle()
+        this.#CalculTailleBulle(BulleDialogue.MaxW)
     }
     /**
      * Font du texte
@@ -69,7 +72,7 @@ class BulleDialogue extends NinePatch
     {
         this.#Font = v;
         this.TempCanvas.font = this.FontSize + "px " + this.Font;
-        this.#CalculTailleBulle()
+        this.#CalculTailleBulle(BulleDialogue.MaxW)
     }
     /**
      * Taille du texte
@@ -83,7 +86,7 @@ class BulleDialogue extends NinePatch
     {
         this.#FontSize = v;
         this.TempCanvas.font = this.FontSize + "px " + this.Font;
-        this.#CalculTailleBulle()
+        this.#CalculTailleBulle(BulleDialogue.MaxW)
     }
     /**
      * Largeur de la texture
@@ -112,7 +115,7 @@ class BulleDialogue extends NinePatch
      * @param {CanvasRenderingContext2D} Context Context d'un canvas
      * @param {number} MaxW Largeur maximum de la bulle de dialogue
      */
-    #CalculTailleBulle(MaxW = 250)
+    #CalculTailleBulle(MaxW)
     {
         let Context = document.createElement("canvas").getContext("2d");
         Context.font = this.FontSize + "px " + this.Font;
@@ -186,6 +189,7 @@ class BulleDialogue extends NinePatch
     {
         super.ResizeDessin();
 
+        this.TempCanvas.font = this.FontSize + "px " + this.Font;
         if (this.Lines)
         {
             for (let line = 0; line < this.Lines.length; line++) {
