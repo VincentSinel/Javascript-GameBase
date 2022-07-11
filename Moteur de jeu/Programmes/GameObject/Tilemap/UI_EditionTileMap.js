@@ -1,12 +1,12 @@
 /**
  * Interface d'édition de tilemap
- * @extends UIElement
+ * @extends UI_Element
  * @class
  */
-class UI_EditionTileMap extends UIElement
+class UI_EditionTileMap extends UI_Element
 {
     static Instance;
-    static ListHeight = UIElement.BaseEpaisseurBord * 2 + 8 * 12;
+    static ListHeight = UI_Element.BaseEpaisseurBord * 2 + 8 * 12;
 
     #ScrollPosition;
     #SelectedTiles;
@@ -23,7 +23,7 @@ class UI_EditionTileMap extends UIElement
      */
     constructor(Tilemap)
     {
-        let w = 8 * Tilesets.TileSize + UIElement.BaseEpaisseurBord * 2 + UI_VerticalScrollBar.ScrollW;
+        let w = 8 * Tilesets.TileSize + UI_Element.BaseEpaisseurBord * 2 + UI_VerticalScrollBar.ScrollW;
         super(0,0,0, Game.Ecran_Largeur, Game.Ecran_Hauteur);
 
 
@@ -53,7 +53,7 @@ class UI_EditionTileMap extends UIElement
         let layers = Object.keys(this.T.Layers);
         for (let l = 0; l < layers.length; l++) {
             let layer = this.T.Layers[layers[l]];
-            let p = new UIElement(0,0,0,this.ListeLayer.CW,this.FontTaille + 4);
+            let p = new UI_Element(0,0,0,this.ListeLayer.CW,this.FontTaille + 4);
             p.Padding = [0,0,0,0];
             //p.SourisCapture = true;
             let a = new UI_CheckBox(this.ListeLayer.CW - 70, 0, 1, "visible", p)

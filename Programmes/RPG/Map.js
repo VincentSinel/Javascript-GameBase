@@ -8,14 +8,14 @@ class Map extends Scene
 
     Exit()
     {
-        this.RemoveChildren(Player);
+        this.RemoveChildren(Actor.Current);
     }
 
     Enter(X,Y)
     {
         super.Enter(X,Y)
-        Player.X = X;
-        Player.Y = Y;
-        this.AddChildren(Player);
+        Actor.Current.X = X;
+        Actor.Current.Y = Y;
+        this.AddChildren(Actor.Current);
     }
 }

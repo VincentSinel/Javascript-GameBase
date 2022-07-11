@@ -1,4 +1,4 @@
-class UI_Slider extends UIElement
+class UI_Slider extends UI_Element
 {
     static SliderW = 15;
 
@@ -17,7 +17,7 @@ class UI_Slider extends UIElement
         this.SourisCapture = true;
         this.Draggable = true;
 
-        this.Couleur = UIElement.BaseCouleur;
+        this.Couleur = UI_Element.BaseCouleur;
 
         this.#MinValue = Math.min(Min, Max);
         this.#MaxValue = Math.max(Min, Max);
@@ -140,7 +140,7 @@ class UI_Slider extends UIElement
         Context.fillStyle = Contour
         Context.strokeStyle = Contour
         let h = Math.max(3,this.H / 10);
-        this.roundRect(Context, UI_Slider.SliderW / 2, this.H / 2 - h / 2, this.W - UI_Slider.SliderW, h, 2, true, true)
+        Drawing.RoundRect(Context, UI_Slider.SliderW / 2, this.H / 2 - h / 2, this.W - UI_Slider.SliderW, h, 2, true, true)
 
         let b = h / 2;
         Context.fillStyle = grd;
@@ -154,7 +154,7 @@ class UI_Slider extends UIElement
         let p4 = new Vector(x,                        - b + this.H)
         let p5 = new Vector(b  + x - UI_Slider.SliderW / 2,- b + Math.max(0, this.H - UI_Slider.SliderW / 2))
 
-        this.roundedPoly(Context, [p1,p2,p3,p4,p5], 3, true, true)
+        Drawing.RoundedPoly(Context, [p1,p2,p3,p4,p5], 3, true, true)
 
         Context.shadowOffsetY = 0;
         Context.shadowBlur = 0;

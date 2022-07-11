@@ -3,7 +3,6 @@
 //============================================================================================
 // Ajouter ici les variables global à créer
 
-var Player
 
 //============================================================================================
 
@@ -16,7 +15,7 @@ function InitObjets()
     LoadTilemap();
     
     // Ajouter ici les objets à creer
-    //Player = new Joueur(0,0);
+    new Joueur(0,0);
 
     //Scene.ChangeScene(JeuPong, Game.Ecran_Largeur / 2 - JeuPong.BordL, -Game.Ecran_Hauteur / 2)
     //Scene.ChangeScene(JeuMoto,0,0)
@@ -25,13 +24,21 @@ function InitObjets()
     //Debug.Parametre.Camera = false;
     Debug.Parametre.Grille = false;
 
+
+    let win = new UI_Window(Game.Ecran_Largeur - 75,5, 1000000000,70,25);
+    let UI2 = new UI_Button();
+    UI2.H = UI_Element_Alignement.STRETCH;
+    UI2.SetTexte("Plein Ecran");
+    UI2.ClicAction = function(){ Camera.PleinEcran()};
+    win.AddChildren(UI2);
+    win.Show();
     
     //let UI = new UI_Toggle(Ecran_Largeur - 130,0, 1000000000,60,25, "Grille");
     //UI.ClicAction = function(){ Debug.Parametre.Grille = !Debug.Parametre.Grille }
     //UI.Toggle = Debug.Parametre.Grille;
 
-    let UI2 = new UI_Button(Game.Ecran_Largeur - 60, 0, 1000000000, 60, 25, "Plein Ecran")
-    UI2.ClicAction = function(){ Camera.PleinEcran()};
+    //let UI2 = new UI_Button(Game.Ecran_Largeur - 60, 0, 1000000000, 60, 25, "Plein Ecran")
+    //UI2.ClicAction = function(){ Camera.PleinEcran()};
 }
 
 /**

@@ -9,7 +9,7 @@ class UI_Toggle extends UI_Button
      * @param {Number} W Largeur du boutton
      * @param {Number} H Hauteur du boutton
      * @param {String} Texte Texte affiché sur le boutton
-     * @param {UIElement} Parent Objet Parent (facultatif)
+     * @param {UI_Element} Parent Objet Parent (facultatif)
      */
     constructor(X,Y,Z,W,H,Texte,Parent)
     {

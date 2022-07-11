@@ -19,7 +19,9 @@ class Game
     static #TotalTime = 0
     static #DepartTime = 0
     static #TempsPrecedent = Date.now();
-    static #Pause = false;
+    static #Pause_All = 0;
+    static #Pause_UI = 0;
+    static #Pause_Game = 0;
 
     static #GameSpeed = 1;
     static #CouleurFond = "black";
@@ -86,15 +88,54 @@ class Game
 
 
 
-    static get Pause()
+    static get Pause_All()
     {
-        return Game.#Pause
+        return Game.Pause_Game && Game.Pause_UI
     }
-    static set Pause(v)
+    static set Pause_All(v)
     {
         if (typeof(v) === "boolean")
         {
-            Game.#Pause = v
+            if (v)
+                Game.#Pause_All += 1;
+            else
+                Game.#Pause_All = Math.max(0, Game.#Pause_All - 1);
+        }
+        else
+        {
+            Debug.LogErreurType("Pause", "Boolean", v)
+        }
+    }
+    static get Pause_Game()
+    {
+        return (Game.#Pause_Game > 0) || (Game.#Pause_All > 0)
+    }
+    static set Pause_Game(v)
+    {
+        if (typeof(v) === "boolean")
+        {
+            if (v)
+                Game.#Pause_Game += 1;
+            else
+                Game.#Pause_Game = Math.max(0, Game.#Pause_Game - 1);
+        }
+        else
+        {
+            Debug.LogErreurType("Pause", "Boolean", v)
+        }
+    }
+    static get Pause_UI()
+    {
+        return (Game.#Pause_UI > 0) || (Game.#Pause_All > 0)
+    }
+    static set Pause_UI(v)
+    {
+        if (typeof(v) === "boolean")
+        {
+            if (v)
+                Game.#Pause_UI += 1;
+            else
+                Game.#Pause_UI = Math.max(0, Game.#Pause_UI - 1);
         }
         else
         {
@@ -243,7 +284,7 @@ class Game
     {
         Debug.EndMesure();
         Debug.StartMesure();
-        if (Game.Pause)
+        if (Game.Pause_All)
         {
             window.requestAnimationFrame(Game.BouclePrincipale);
             return;
@@ -270,10 +311,15 @@ class Game
         Tilesets.Update(dt);
         Scene.Update(dt);
         GameObject.Update(dt);
-        UIElement.Calcul(dt);
         // Lancement de la boucle de calcul;
-        if (Game.SceneActuel)
+        if (Game.SceneActuel && !Game.Pause_Game)
             Game.SceneActuel.Update(dt);
+        
+        if (!Game.Pause_UI)
+        {
+            UI_Window.Update(dt);
+            //UIElement.Calcul(dt);
+        }
 
         // Fix pour la résolution d'écran (voir plus bas)
         Game.fix_dpi();
@@ -288,8 +334,8 @@ class Game
 
         // Lancement de la boucle de dessin;
         Game.SceneActuel.Draw(Game.RealContext);
-        //Dessin(Game.#TempContext);
-        UIElement.Dessin(Game.RealContext);
+        UI_Window.Draw(Game.RealContext);
+        //UIElement.Dessin(Game.RealContext);
 
         // Mise a jour des modules tardif
         Clavier.Update();

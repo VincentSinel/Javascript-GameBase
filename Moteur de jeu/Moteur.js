@@ -25,26 +25,39 @@ var Scripts = [
     "Programmes/GameObject/Default/Scene.js",
     "Programmes/GameObject/Default/NinePatch.js",
 
-    "Programmes/GameObject/UIElements/UIElement.js",
-    "Programmes/GameObject/UIElements/UI_Panel.js",
-    "Programmes/GameObject/UIElements/UI_ScrollBar.js",
-    "Programmes/GameObject/UIElements/UI_Button.js",
-    "Programmes/GameObject/UIElements/UI_Label.js",
-    "Programmes/GameObject/UIElements/UI_ListView.js",
-    "Programmes/GameObject/UIElements/UI_CheckBox.js",
-    "Programmes/GameObject/UIElements/UI_Toggle.js",
-    "Programmes/GameObject/UIElements/UI_Slider.js",
-    "Programmes/GameObject/UIElements/UI_Image.js",
-    "Programmes/GameObject/UIElements/UI_TextBox.js",
+    "Programmes/Menu/UIElements/UI_Element.js",
+    "Programmes/Menu/UIElements/UI_Selectable.js",
+    "Programmes/Menu/UIElements/UI_Draggable.js",
+    "Programmes/Menu/UIElements/UI_ViewPort.js",
+    "Programmes/Menu/UIElements/UI_Stack.js",
+    "Programmes/Menu/UIElements/UI_Grid.js",
+    "Programmes/Menu/UIElements/UI_Panel.js",
+    "Programmes/Menu/UIElements/UI_ScrollBar.js",
+    "Programmes/Menu/UIElements/UI_ScrollView.js",
+    "Programmes/Menu/UIElements/UI_Button.js",
+    "Programmes/Menu/UIElements/UI_Label.js",
+    "Programmes/Menu/UIElements/UI_ListView.js",
+    "Programmes/Menu/UIElements/UI_CheckBox.js",
+    "Programmes/Menu/UIElements/UI_Toggle.js",
+    "Programmes/Menu/UIElements/UI_Slider.js",
+    "Programmes/Menu/UIElements/UI_Image.js",
+    "Programmes/Menu/UIElements/UI_TextBox.js",
+    "Programmes/Menu/UI_Root.js",
+    "Programmes/Menu/UI_Window_Style.js",
+    "Programmes/Menu/UI_Window.js",
 
 
     "Programmes/GameObject/Tilemap/UI_EditionTileMap.js",
 
 
     "Programmes/GameObject/BulleDialogue/BulleDialogue.js",
+
     "Programmes/GameObject/Lutin/Lutin.js",
     "Programmes/GameObject/Lutin/Lutin_SC.js",
     "Programmes/GameObject/Lutin/Lutin_RPGMaker.js",
+    "Programmes/GameObject/Lutin/PNJ.js",
+    "Programmes/GameObject/Lutin/Actor.js",
+
     "Programmes/GameObject/Tilemap/Tiles/Tile.js",
     "Programmes/GameObject/Tilemap/Tiles/Tile_Multi.js",
     "Programmes/GameObject/Tilemap/Tiles/Tile_Animation.js",
@@ -63,6 +76,7 @@ var Scripts = [
     "Programmes/Utilitaires/Sons.js",
     "Programmes/Utilitaires/LoadScreen.js",
     "Programmes/Utilitaires/Textures.js",
+    "Programmes/Utilitaires/Drawing.js",
 
 ]
 

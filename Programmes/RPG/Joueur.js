@@ -1,5 +1,6 @@
-class Joueur extends Lutin_RPGMaker
+class Joueur extends Actor
 {
+
     constructor(X,Y)
     {
         super(X,Y, "Images/Joueur/Perso.png", false,1);
@@ -7,6 +8,16 @@ class Joueur extends Lutin_RPGMaker
         this.Vitesse = 2;
 
         this.Inventaire = {};
+    }
+
+    get Y()
+    {
+        return super.Y;
+    }
+    set Y(v)
+    {
+        super.Y = v;
+        this.Z = v;
     }
 
     AjoutInventaire(Objet, Nbr)
@@ -95,7 +106,7 @@ class Joueur extends Lutin_RPGMaker
 
         Camera.X = this.X;
         Camera.Y = this.Y;
-        this.Z = this.Y;
+        //this.Z = this.Y;
     }
 
     TestContact(dir)
@@ -103,7 +114,8 @@ class Joueur extends Lutin_RPGMaker
         let rect = this.CollisionRect;
         //Debug.AjoutRectangle(rect,"Purple")
         rect.origin = rect.origin.add(dir);
-        for (let i = 0; i < this.Parent.Children.length; i++) {
+        for (let i = 0; i < this.Parent.Children.length; i++) 
+        {
             const element = this.Parent.Children[i];
             if (element != this)
             {
@@ -112,7 +124,7 @@ class Joueur extends Lutin_RPGMaker
                     return dir.add(v);  
             }
         }
-        return false
+        return false;
     }
 
 

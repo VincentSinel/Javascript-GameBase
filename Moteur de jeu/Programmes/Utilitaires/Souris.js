@@ -140,7 +140,7 @@ class Souris
             {
                 if (Souris.EtatBouton[i])
                 {
-                    UIElement.SHandle_Basse(i, Souris.CPosition);
+                    UI_Window.SHandle_Basse(i, Souris.CPosition);
                 }
             }
         }
@@ -149,7 +149,7 @@ class Souris
             Souris.CX = (e.offsetX - Game.OffSetX) / Game.Ratio * Game.DPI
             Souris.CY = (e.offsetY - Game.OffSetY) / Game.Ratio * Game.DPI
 
-            UIElement.SHandle_MouseMove(Souris.CPosition)
+            UI_Window.SHandle_MouseMove(Souris.CPosition)
         }
     }
     /**
@@ -163,7 +163,8 @@ class Souris
         if (Souris.DragState[id] === 0)
             Souris.JusteBas[id] = true;
         Souris.DragState[id] = 1;
-        UIElement.SHandle_Basse(id, Souris.CPosition);
+
+        UI_Window.SHandle_Basse(id, Souris.CPosition);
     }
     /**
      * Gestion d'un boutton de la souris relaché
@@ -174,10 +175,10 @@ class Souris
     {
         Souris.EtatBouton[id] = false;
         Souris.JusteHaut[id] = true;
-        UIElement.SHandle_Relache(id,Souris.CPosition);
+        UI_Window.SHandle_Relache(id,Souris.CPosition);
         if (Souris.DragState[id] === 1)
         {
-            UIElement.SHandle_Clique(id, Souris.CPosition)
+            UI_Window.SHandle_Clique(id, Souris.CPosition)
         }
         else
         {
@@ -211,7 +212,7 @@ class Souris
             }
         }
 
-        UIElement.SHandle_MouseMove(Souris.CPosition)
+        UI_Window.SHandle_MouseMove(Souris.CPosition)
     }
     /**
      * Gestion du debut d'un drag de la souris
@@ -221,7 +222,7 @@ class Souris
     static DragStr(id, e)
     {
         
-        UIElement.SHandle_DragStart(id, Souris.CPosition);
+        UI_Window.SHandle_DragStart(id, Souris.CPosition);
 
         Souris.DragStart[id] = Souris.CPosition;
         Souris.DragState[id] = 2;
@@ -236,7 +237,7 @@ class Souris
         if(Souris.DragState[e.button] > 1)
         {
             Souris.DraggingEnd[id] = Souris.CPosition;
-            UIElement.SHandle_DragEnd(id, Souris.CPosition);
+            UI_Window.SHandle_DragEnd(id, Souris.CPosition);
         }
         Souris.DragState[e.button] = 0;
     }
@@ -248,7 +249,7 @@ class Souris
     static Draging(id, e)
     {
         Souris.Dragging[id] = Souris.CPosition;
-        UIElement.SHandle_Dragging(id, Souris.CPosition);
+        UI_Window.SHandle_Dragging(id, Souris.CPosition);
     }
 
     /**
@@ -259,7 +260,7 @@ class Souris
     {
         Souris.ScrollX = Math.max(-1, Math.min(1, e.deltaX));
         Souris.ScrollY = Math.max(-1, Math.min(1, e.deltaY));
-        UIElement.SHandle_Scroll(Souris.CPosition, Souris.ScrollX, Souris.ScrollY);
+        UI_Window.SHandle_Scroll(Souris.CPosition, Souris.ScrollX, Souris.ScrollY);
     }
 
     

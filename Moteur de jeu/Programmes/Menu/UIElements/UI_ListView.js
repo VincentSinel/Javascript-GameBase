@@ -32,6 +32,7 @@ class UI_ListView extends UI_Panel
     Souris_Scroll(e)
     {
         this.ScrollBar.ScrollPosition += e.Param.dy * 30;
+        this.ScrollBar.ScrollPosition += e.Param.d * 30;
     }
 
     AjoutElement(Element)
@@ -125,7 +126,7 @@ class UI_ListView extends UI_Panel
 
 
 
-class ListeElement extends UIElement
+class ListeElement extends UI_Element
 {
     #Selected;
 
