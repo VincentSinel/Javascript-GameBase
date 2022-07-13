@@ -8,6 +8,7 @@ class UI_TextBox extends UI_Panel
         super(X,Y,Z,W,0,Parent)
         this.Texte = Texte;
         this.ToolTip = ToolTip;
+        this.Focusable = true;
         this.CursorPosition = Texte.length;
         this.SourisCapture = true;
         this.H = this.FontTaille + 6;

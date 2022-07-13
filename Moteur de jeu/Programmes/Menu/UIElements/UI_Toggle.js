@@ -4,16 +4,11 @@ class UI_Toggle extends UI_Button
     /**
      * Créer un boutton pour interface utilisateur.
      * Utiliser la variable Boutton.ClicAction pour définir l'action du boutton.
-     * @param {Number} X Position X relative à l'objet parent
-     * @param {Number} Y Position Y relative à l'objet parent
-     * @param {Number} W Largeur du boutton
-     * @param {Number} H Hauteur du boutton
-     * @param {String} Texte Texte affiché sur le boutton
-     * @param {UI_Element} Parent Objet Parent (facultatif)
+     * @param {UIParam} [Param=undefined] Parametre de l'UI
      */
-    constructor(X,Y,Z,W,H,Texte,Parent)
+    constructor(Param)
     {
-        super(X,Y,Z,W,H,Texte,Parent)
+        super(Param)
 
         this.#Toggle = false;
     }
@@ -25,7 +20,7 @@ class UI_Toggle extends UI_Button
     set Toggle(v)
     {
         this.#Toggle = v;
-        this.RefreshUI();
+        this.Refresh();
     }
 
     Souris_Clique(event)
@@ -37,12 +32,6 @@ class UI_Toggle extends UI_Button
 
     DessinBackUI(Context)
     {
-        let oldstate = this.Etat;
-        if (this.Toggle)
-        {this.Etat = "Hover_Click";}
-
-        super.DessinBackUI(Context);
-
-        this.Etat = oldstate;
+        super.DessinBackUI(Context, this.Toggle);
     }
 }

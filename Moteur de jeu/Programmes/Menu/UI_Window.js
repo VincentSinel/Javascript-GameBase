@@ -97,7 +97,8 @@ class UI_Window
         if (UI_Window.#TopWindow)
             UI_Window.#TopWindow.Handle_Clique(id, position);
         UI_Window.SHandle_MouseLeave(position);
-        if (UI_Window.#PreviousTopWindow && UI_Window.#TopWindow == undefined)
+        if (UI_Window.#PreviousTopWindow && 
+            UI_Window.#TopWindow != UI_Window.#PreviousTopWindow)
         {
             UI_Window.#PreviousTopWindow.Unfocus();
         }
@@ -650,7 +651,7 @@ class UI_Window
 
     Unfocus()
     {
-
+        this.#FocusElement.Unfocus();
     }
  
     //#endregion
@@ -735,7 +736,7 @@ class UI_Window
                 this.#Root.Draw(this.#winContext);
                 this.#NeedRedraw = false;
             }
-            Context.drawImage(this.#winContext.canvas,this.X, this.Y);
+            Context.drawImage(this.#winContext.canvas,Math.round(this.X), Math.round(this.Y));
         }
     }
     /**

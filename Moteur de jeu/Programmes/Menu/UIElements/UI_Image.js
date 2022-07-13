@@ -22,9 +22,8 @@ class UI_Image extends UI_Element
         this.#SourceArray = [0,0,this.Image.width, this.Image.height];
 
         this.#Scale = new Vector(1,1);
-        
+
         this.Angle = 0;
-        this.CentreRotation = new Vector(0,0);
     }
 
     //#region GETTER SETTER
@@ -90,7 +89,7 @@ class UI_Image extends UI_Element
         Context.translate(Context.canvas.width / 2, Context.canvas.height/ 2);  
         Context.rotate(-this.Angle);
         Context.scale(this.#Scale.x, this.#Scale.y);
-        Context.translate(- this.SourceW * this.CentreRotation.x, - this.SourceH * this.CentreRotation.y);  
+        Context.translate(- this.SourceW / 2, - this.SourceH / 2);  
 
         Context.drawImage(this.Image,
             this.SourceX,this.SourceY,this.SourceW,this.SourceH,

@@ -58,8 +58,8 @@ class UI_ViewPort extends UI_Element
          if (this.Childctx.canvas.width > 0 && this.Childctx.canvas.height > 0)
          {
             Context.drawImage(this.Childctx.canvas, 
-               this.Viewport.x, this.Viewport.y, this.Viewport.w, this.Viewport.h,
-               this.X + offsetX, this.Y + offsetY,
+                Math.round(this.Viewport.x), Math.round(this.Viewport.y), this.Viewport.w, this.Viewport.h,
+               Math.round(this.X + offsetX), Math.round(this.Y + offsetY),
                this.Viewport.w, this.Viewport.h);
          }
      }

@@ -12,7 +12,8 @@ class UI_Label extends UI_Element
     {
         super(Param)
 
-        this.Texte = Texte;
+        this.Texte = Texte.toString();
+        this.CreateCanvas();
     }
 
     get Texte()
@@ -23,12 +24,6 @@ class UI_Label extends UI_Element
     {
         this.#Texte = v;
         this.SetDirty();
-    }
-
-    RefreshUI()
-    {
-        this.CalculateTexteSize();
-        super.RefreshUI();
     }
     /**
      * Coeur de la mesure de l'objet. Cette fonction demande à l'objet la taille qu'il souhaite prendre

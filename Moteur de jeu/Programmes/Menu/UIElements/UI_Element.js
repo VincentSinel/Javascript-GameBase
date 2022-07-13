@@ -371,7 +371,6 @@ class UI_Element
                 Param.Parent.AddChildren(this);
         }
 
-        this.CreateCanvas();
         this.CreateEventArray();
     }
 
@@ -515,9 +514,9 @@ class UI_Element
         
         let offsetX = 0;
         if (this.HorizontalAlignement === HorizontalAlignementType.Center)
-            offsetX = Math.max(0,this.FinalMaxSize.x - this.FinalSize.x) / 2;
+            offsetX = Math.max(0,this.FinalMaxSize.x - this.FinalSize.x - this.X) / 2;
         else if (this.HorizontalAlignement === HorizontalAlignementType.Right)
-            offsetX = Math.max(0,this.FinalMaxSize.x - this.FinalSize.x);
+            offsetX = Math.max(0,this.FinalMaxSize.x - this.FinalSize.x - this.X);
 
         if (this.Parent)
             return this.X + this.Parent.CX(this) + offsetX;
@@ -532,9 +531,9 @@ class UI_Element
     {
         let offsetY = 0;
         if (this.VerticalAlignement === VerticalAlignementType.Center)
-            offsetY = Math.max(0,this.FinalMaxSize.y - this.FinalSize.y) / 2;
+            offsetY = Math.max(0,this.FinalMaxSize.y - this.FinalSize.y - this.Y) / 2;
         else if (this.VerticalAlignement === VerticalAlignementType.Down)
-            offsetY = Math.max(0,this.FinalMaxSize.y - this.FinalSize.y);
+            offsetY = Math.max(0,this.FinalMaxSize.y - this.FinalSize.y - this.Y);
 
         if (this.Parent)
             return this.Y + this.Parent.CY(this) + offsetY;
@@ -841,6 +840,8 @@ class UI_Element
     get Desiredsize() { return this.#desiredSize; }
     get FinalMaxSize() { return this.#FinalMaxSize ;}
 
+    get Focusable() { return this.#Focusable; }
+    set Focusable(v) { this.#Focusable = v; }
 
     //#endregion
 
@@ -1434,14 +1435,17 @@ class UI_Element
      */
     Focus()
     {
-        if (this.Actif)
+        if (this.Actif && this.Focusable)
         {
-            let event = new UIEvenement(UIEvenementType.Focus_Gain, this);
-            for (let ev = 0; ev < this.onFocus_Gain.length; ev++)
+            if (UI_Element.FocusObject !== this)
             {
-                this.onFocus_Gain[ev](event)
+                let event = new UIEvenement(UIEvenementType.Focus_Gain, this, UI_Element.FocusObject);
+                UI_Element.FocusObject = this;
+                for (let ev = 0; ev < this.onFocus_Gain.length; ev++)
+                {
+                    this.onFocus_Gain[ev](event)
+                }
             }
-            UI_Element.FocusObject = this;
         }
     }
     /**
@@ -1561,24 +1565,26 @@ class UI_Element
         this.DessinChildLocal(RecreateCanvas);
 
         if (this.HorizontalAlignement === HorizontalAlignementType.Center)
-            offsetX += Math.max(0,this.FinalMaxSize.x - this.FinalSize.x) / 2;
+            offsetX += Math.max(0,this.FinalMaxSize.x - this.FinalSize.x - this.X) / 2;
         else if (this.HorizontalAlignement === HorizontalAlignementType.Right)
-            offsetX += Math.max(0,this.FinalMaxSize.x - this.FinalSize.x);
+            offsetX += Math.max(0,this.FinalMaxSize.x - this.FinalSize.x - this.X);
         if (this.VerticalAlignement === VerticalAlignementType.Center)
-            offsetY += Math.max(0,this.FinalMaxSize.y - this.FinalSize.y) / 2;
+            offsetY += Math.max(0,this.FinalMaxSize.y - this.FinalSize.y - this.Y) / 2;
         else if (this.VerticalAlignement === VerticalAlignementType.Down)
-            offsetY += Math.max(0,this.FinalMaxSize.y - this.FinalSize.y);
+            offsetY += Math.max(0,this.FinalMaxSize.y - this.FinalSize.y - this.Y);
 
         if (this.Backctx.canvas.width > 0 && this.Backctx.canvas.height > 0)
-            Context.drawImage(this.Backctx.canvas, this.X + offsetX, this.Y + offsetY);
+            Context.drawImage(this.Backctx.canvas, 
+                Math.round(this.X + offsetX), Math.round(this.Y + offsetY));
 
         Context.save();
         Context.translate(this.Padding.left, this.Padding.up)
-        this.DessinChild(Context, offsetX, offsetY)
+        this.DessinChild(Context, Math.round(offsetX), Math.round(offsetY))
         Context.restore();
 
         if (this.Frontctx.canvas.width > 0 && this.Frontctx.canvas.height > 0)
-            Context.drawImage(this.Frontctx.canvas, this.X + offsetX, this.Y + offsetY);
+            Context.drawImage(this.Frontctx.canvas, 
+                Math.round(this.X + offsetX), Math.round(this.Y + offsetY));
     }
     /**
      * Effectue le dessin des enfants sur le canvas contenue local
@@ -1597,7 +1603,7 @@ class UI_Element
     DessinChild(Context, offsetX = 0, offsetY = 0)
     {
         if (this.Childctx.canvas.width > 0 && this.Childctx.canvas.height > 0)
-            Context.drawImage(this.Childctx.canvas, this.X + offsetX, this.Y + offsetY);
+            Context.drawImage(this.Childctx.canvas, Math.round(this.X + offsetX), Math.round(this.Y + offsetY));
     }
     /**
      * Effectue le dessin du contenue arrière de cette objet (vis à vis des enfants)

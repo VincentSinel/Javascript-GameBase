@@ -69,8 +69,8 @@ class UI_Stack extends UI_Element
         if (this.H >= 0)
             contentsize.y = Math.min(Math.max(this.H,this.MinH),this.MaxH) - this.Padding.up - this.Padding.down;
         
-            contentsize.x = this.W === UIElement_Alignement.AUTO ? Math.max(0,this.MinW - this.Padding.left - this.Padding.right) : contentsize.x;
-            contentsize.y = this.H === UIElement_Alignement.AUTO ? Math.max(0,this.MinH - this.Padding.up - this.Padding.down) : contentsize.y;
+            contentsize.x = this.W === UI_Element_Alignement.AUTO ? Math.max(0,this.MinW - this.Padding.left - this.Padding.right) : contentsize.x;
+            contentsize.y = this.H === UI_Element_Alignement.AUTO ? Math.max(0,this.MinH - this.Padding.up - this.Padding.down) : contentsize.y;
 
 
         //Calcul de la taille voulue des enfants
@@ -115,8 +115,8 @@ class UI_Stack extends UI_Element
             finalRect.y = Math.min(Math.max(this.H,this.MinH),this.MaxH);// - this.Padding.up - this.Padding.down;
         
         
-        let x = this.W === UIElement_Alignement.AUTO ? Math.min(finalRect.x, this.Desiredsize.x) : finalRect.x ;
-        let y = this.H === UIElement_Alignement.AUTO ? Math.min(finalRect.y, this.Desiredsize.y) : finalRect.y;
+        let x = this.W === UI_Element_Alignement.AUTO ? Math.min(finalRect.x, this.Desiredsize.x) : finalRect.x ;
+        let y = this.H === UI_Element_Alignement.AUTO ? Math.min(finalRect.y, this.Desiredsize.y) : finalRect.y;
 
         this.SetFinalSize(new Vector(x, y));
         this.Childrens.forEach(child => {
@@ -142,9 +142,9 @@ class UI_Stack extends UI_Element
         for (let e = 0; e < this.Childrens.length; e++) {
             this.Childrens[e].Draw(this.Childctx, RecreateCanvas, x, y);
             if (this.Orientation === UI_Stack_Orientation.Horizontal)
-                x += this.Childrens[e].FinalContentSize.x;
+                x += this.Childrens[e].FinalSize.x;
             if (this.Orientation === UI_Stack_Orientation.Vertical)
-                y += this.Childrens[e].FinalContentSize.y;
+                y += this.Childrens[e].FinalSize.y;
         }
     }
 

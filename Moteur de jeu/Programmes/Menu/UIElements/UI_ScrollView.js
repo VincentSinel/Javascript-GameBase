@@ -11,9 +11,9 @@ class UI_ScrollView extends UI_Element
     #View;
     
 
-    constructor()
+    constructor(Param)
     {
-        super()
+        super(Param)
 
         this.Capture_Scroll = true;
 
@@ -26,8 +26,6 @@ class UI_ScrollView extends UI_Element
         this.#Grid.AddRow(UI_Grid_Row.Auto())
 
         let _this = this;
-
-
         this.#HorizontalBar = new UI_HorizontalScrollBar();
         this.#HorizontalBar.Grid_Row = 1;
         this.#HorizontalBar.onScrollChange.push(function(a) { _this.MoveViewX(a) })
@@ -44,6 +42,7 @@ class UI_ScrollView extends UI_Element
         super.AddChildren(this.#Grid);
         
         this.onSouris_Scroll.push(function(e) { _this.Souris_Scroll(e)})
+        this.onScrollChange = [];
     }
 
     Souris_Scroll(e)
@@ -80,10 +79,18 @@ class UI_ScrollView extends UI_Element
     MoveViewX(x)
     {
         this.#View.ViewportX = x;
+        
+        this.onScrollChange.forEach(action => {
+            action(a);
+        });
     }
     MoveViewY(y)
     {
         this.#View.ViewportY = y;
+        
+        this.onScrollChange.forEach(action => {
+            action(a);
+        });
     }
 
     /**

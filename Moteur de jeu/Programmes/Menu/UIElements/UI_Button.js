@@ -31,7 +31,7 @@ class UI_Button extends UI_Selectable
             this.ClicAction(event);
     }
 
-    DessinBackUI(Context)
+    DessinBackUI(Context, forcedown = false)
     {
         if (this.Etat === UI_Selectable_Etat.DEFAULT ||
             this.Etat === UI_Selectable_Etat.CLIC)
@@ -50,7 +50,8 @@ class UI_Button extends UI_Selectable
         let offy = 0;
         let offh = Math.min(10,this.FinalSize.y * 0.2);
         if (this.Etat === UI_Selectable_Etat.HOVER_CLIC
-            || this.Etat === UI_Selectable_Etat.CLIC)
+            || this.Etat === UI_Selectable_Etat.CLIC
+            || forcedown)
         {
             offy = offh * 0.7;
             offh -= offy;
@@ -83,11 +84,6 @@ class UI_Button extends UI_Selectable
         Context.shadowOffsetY = 0;
         Context.shadowBlur = 0;
         Context.lineWidth = 1;
-
-        //Context.fillStyle = this.FontCouleur.RGBA()
-        //Context.font = this.FontTaille + "px " + this.Font;
-        //Context.textAlign = "center";
-        //Context.fillText(this.Texte, this.W / 2, offy + (this.H - offh - offy + this.FontTaille * 0.7) / 2);
 
         Context.restore();
     }

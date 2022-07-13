@@ -1,243 +1,282 @@
-class UI_ListView extends UI_Panel
+class UI_ListView extends UI_ScrollView
 {
-    #ScrollPosition;
+    #StackPanel;
+    #SelectedIndex = -1;
+    #HoverIndex = -1;
+    #BackTopCanvas;
 
-    constructor(X,Y,Z,W,H, Parent = undefined)
+    constructor(Param)
     {
-        super(X,Y,Z,W,H, Parent)
-        
-        this.SourisCapture = true;
-        this.ScrollCapture = true;
-        this.Elements = [];
-        this.ScrollBar = new UI_VerticalScrollBar(this.CW - UI_VerticalScrollBar.ScrollW, 0,this.CH, this);
+        super(Param)
+
+        this.ScrollHorizontal = false;
+        this.Capture_Souris = true
+
+        this.#StackPanel = new UI_Stack();
+        this.#StackPanel.W = UI_Element_Alignement.STRETCH;
+        this.#StackPanel.HorizontalAlignement = HorizontalAlignementType.Center;
+        this.#StackPanel.VerticalAlignement = VerticalAlignementType.Up;
+        this.#StackPanel.Padding.left = 3;
+        this.#StackPanel.Padding.right = 3;
+        super.AddChildren(this.#StackPanel);
 
         this.SelectedIndex = -1;
-        this.#ScrollPosition = 0;
-
+        this.onSelectionChanged = [];
         let _this = this;
-        this.onSouris_Scroll.push(function(e) { _this.Souris_Scroll(e)})
-        this.onSelectionChanged = undefined;
+        this.onSouris_Clique[Souris.ClicGauche].push(function(e) {_this.Souris_Clique(e)})
+        this.onSouris_AuDessus.push(function(e) {_this.Souris_Hover(e)})
     }
 
-    get ScrollPosition()
-    {
-        return this.#ScrollPosition;
-    }
-    set ScrollPosition(v)
-    {
-        this.#ScrollPosition = v;
-        this.RefreshUI();   
-    }
+    get Elements() { return this.#StackPanel.Childrens; }
+    set Elements(v) { this.#StackPanel.Childrens = v; this.SetDirty();}
 
-    Souris_Scroll(e)
-    {
-        this.ScrollBar.ScrollPosition += e.Param.dy * 30;
-        this.ScrollBar.ScrollPosition += e.Param.d * 30;
-    }
+    get SelectedIndex() { return this.#SelectedIndex;}
+    set SelectedIndex(v) { this.#Select(v);}
 
-    AjoutElement(Element)
+    AddChildren(Element)
     {
-        let y = this.TotalHeight;
-        let o;
-        if (typeof Element === 'string' || Element instanceof String)
-        {
-            let text = new UI_Label(0,0,1,this.CW - UI_VerticalScrollBar.ScrollW, this.FontTaille + 4, Element);
-            text.HorizontalAlignement = HorizontalAlignementType.Droite
-            text.VerticalAlignement = VerticalAlignementType.Etendu
-            o = new ListeElement(y,this.CW - UI_VerticalScrollBar.ScrollW, text, this)
-        }
-        else
-        {
-            o = new ListeElement(y,Element.CW, Element, this)
-        }
-        this.Elements.push(o)
-    }
-
-    Select(index)
-    {
-        let old_index = this.SelectedIndex
-        this.SelectedIndex = index;
-        this.Elements.forEach(element => {
-            element.Selected = false;
-        });
-        this.Elements[index].Selected = true;
-        if (this.onSelectionChanged && old_index != index)
-        {
-            this.onSelectionChanged(this);
-        }
-    }
-
-    get TotalHeight()
-    {
-        let h = 0;
-        this.Elements.forEach(element => {
-            h += element.H;
-        });
-        return h;
+        this.#StackPanel.AddChildren(Element);
     }
 
     RemoveChildren(element)
     {
-        super.RemoveChildren(element)
-        
-        let i = this.Elements.indexOf(element)
-        if (i > -1)
+        this.#StackPanel.RemoveChildren(element)
+    }
+
+    Souris_Clique(e)
+    {
+        for (let i = 0; i < this.#StackPanel.Childrens.length; i++) 
         {
-            let h = element.H;
-            this.Elements.splice(this.Elements.indexOf(element), 1);
-            for (let j = i; j < this.Elements.length; j++) 
+            if (this.#StackPanel.Childrens[i].PointIn(Souris.CPosition))
             {
-                this.Elements[j].Y -= h;
-                
+                this.SelectedIndex = i;
+                return;
             }
         }
-        
     }
 
-
-
-    UpdateYPosition()
+    Souris_Hover(e)
     {
-        if (this.Elements.length > 0)
+        for (let i = 0; i < this.#StackPanel.Childrens.length; i++) 
         {
-            this.Elements[0].Y = -this.ScrollBar.ScrollPosition;
-            for (let i = 1; i < this.Elements.length; i++) 
+            if (this.#StackPanel.Childrens[i].PointIn(Souris.CPosition))
             {
-                this.Elements[i].Y = this.Elements[i - 1].Y + this.Elements[i - 1].H;
-                
+                this.#HoverIndex = i;
+                this.Refresh();
+                return;
             }
-            this.ScrollBar.TotalH = this.TotalHeight;
-            this.ScrollBar.RefreshUI();
         }
     }
 
-
-    DessinBackUI(Context)
+    MoveViewX(x)
     {
-        super.DessinBackUI(Context)
+        super.MoveViewX(x);
+        this.Refresh();
+    }
+    MoveViewY(y)
+    {
+        super.MoveViewY(y);
+        this.Refresh();
     }
 
-    RefreshUI()
+    #Select(index)
     {
-        this.UpdateYPosition()
-        super.RefreshUI();
-    }
-}
-
-
-
-class ListeElement extends UI_Element
-{
-    #Selected;
-
-    constructor(Y,W, Element, Parent)
-    {
-        super(0, Y, 1, W, 1, Parent);
-
-        this.AddChildren(Element);
-        this.Contenue = Element;
-        this.SourisCapture = true;
-        this.Padding = [0,0,0,0]
-        this.CreateCanvas();
-
-        this.overlayColor = Color.Couleur(0,0,0,0);
-
-        let _this = this;
-        this.onSouris_Entre.push(function(e) {_this.Souris_Hover(e)})
-        this.onSouris_Quitte.push(function(e) {_this.Souris_Leave(e)})
-        this.onSouris_Clique[Souris.ClicGauche].push(function(e) {_this.Souris_Clique(e)})
-        this.onActivate.push(function(e) {_this.Activation(e)})
-        this.onDeActivate.push(function(e) {_this.Desactivation(e)})
-        this.onChildResize.push(function(e) {_this.ChildResize(e)})
-
-    }
-
-    get Selected()
-    {
-        return this.#Selected;
-    }
-    set Selected(v)
-    {
-        if(v != this.#Selected)
+        let old_index = this.#SelectedIndex
+        this.#SelectedIndex = index;
+        if (old_index != index)
         {
-            this.#Selected = v;
-            this.RefreshUI();
+            this.onSelectionChanged.forEach(element => {
+                element(this)
+            });
         }
-
+        this.Refresh();
     }
 
-    Activation(e)
-    {
-        this.overlayColor = Color.Couleur(0,0,0,0);
-        this.Selected = false;
-        this.RefreshUI();
-    }
-    Desactivation(e)
-    {
-        this.overlayColor = Color.Couleur(0,0,0,0);
-        this.Selected = false;
-        this.RefreshUI();
-    }
-    Souris_Clique(event)
-    {
-        this.Parent.Select(this.ID);
-    }
-    Souris_Hover(event)
-    {
-        this.overlayColor = Color.Couleur(0,0,1,0.1);
-        this.RefreshUI();
-    }
-    Souris_Leave(event)
-    {
-        this.overlayColor = Color.Couleur(0,0,0,0);
-        this.RefreshUI();
-    }
-
-    ChildResize(event)
-    {
-        this.CalculH()
-        this.Parent.UpdateYPosition()
-        this.RefreshUI();
-    }
-
-
-
-    get ID()
-    {
-        return this.Parent.Elements.indexOf(this);
-    }
     CreateCanvas()
     {
-        this.CalculH()
-        super.CreateCanvas()
-    }
+        super.CreateCanvas();
 
-    CalculH()
-    {
-        let b = this.BoundingBoxChild(true)
-        this.H = b.h + b.y;
+        this.#BackTopCanvas = document.createElement("canvas").getContext("2d");
+        this.#BackTopCanvas.canvas.width = this.Childrens[0].Childrens[0].FinalSize.x;
+        this.#BackTopCanvas.canvas.height = this.Childrens[0].Childrens[0].FinalSize.y;
     }
 
     DessinBackUI(Context)
     {
-        if(this.ID % 2 === 0)
+        this.#BackTopCanvas.clearRect(0,0,this.#BackTopCanvas.canvas.width,this.#BackTopCanvas.canvas.height);
+        
+
+        let y = -this.Scroll_VPosition;
+        for (let i = 0; i < this.#StackPanel.Childrens.length; i++) 
         {
-            Context.fillStyle = Color.Couleur(1,1,1,0.1)
-            Context.fillRect(0, 0, this.W, this.H);
+            if (i % 2 == 0)
+            {
+                this.#BackTopCanvas.fillStyle = Color.Couleur(1,1,1,0.1)
+                this.#BackTopCanvas.fillRect(0, y, this.#BackTopCanvas.canvas.width, this.#StackPanel.Childrens[i].FinalSize.y);
+            }
+            y += this.#StackPanel.Childrens[i].FinalSize.y;
         }
-    }
-    DessinFrontUI(Context)
-    {
-        if(this.Selected)
-        {
-            Context.fillStyle = this.SelectionCouleur.RGBA()
-            Context.strokeStyle = this.SelectionCouleur.RGB()
-            Context.lineWidth = 2;
-            Context.fillRect(0, 0, this.W, this.H);
-            Context.strokeRect(0, 0, this.W, this.H);
-        }
-        Context.fillStyle = this.overlayColor
-        Context.fillRect(0, 0, this.W, this.H);
+        Context.drawImage(this.#BackTopCanvas.canvas, 0, 0);
+
     }
 
+    DessinFrontUI(Context)
+    {
+        this.#BackTopCanvas.clearRect(0,0,this.#BackTopCanvas.canvas.width,this.#BackTopCanvas.canvas.height);
+        
+        let y1 = -this.Scroll_VPosition;
+        let y2 = -this.Scroll_VPosition;
+        for (let i = 0; i < Math.max(this.SelectedIndex, this.#HoverIndex); i++) 
+        {
+            if (i < this.SelectedIndex)
+                y1 += this.#StackPanel.Childrens[i].FinalSize.y;
+            if (i < this.#HoverIndex)
+                y2 += this.#StackPanel.Childrens[i].FinalSize.y;
+        }
+
+        if (this.SelectedIndex > -1)
+        {
+            let s = this.#StackPanel.Childrens[this.SelectedIndex].FinalSize.clone();
+            s.x += this.#StackPanel.Padding.left + this.#StackPanel.Padding.right;
+            s.y += this.#StackPanel.Padding.up + this.#StackPanel.Padding.down;
+
+            this.#BackTopCanvas.fillStyle = this.SelectionCouleur.RGBA()
+            this.#BackTopCanvas.strokeStyle = this.SelectionCouleur.RGB()
+            this.#BackTopCanvas.lineWidth = 2;
+            this.#BackTopCanvas.fillRect(0, y1, s.x, s.y);
+            this.#BackTopCanvas.strokeRect(0, y1, s.x, s.y);
+            
+            Context.drawImage(this.#BackTopCanvas.canvas, 0, 0);
+        }
+        if (this.#HoverIndex > -1)
+        {
+            let s = this.#StackPanel.Childrens[this.#HoverIndex].FinalSize.clone();
+            s.x += this.#StackPanel.Padding.left + this.#StackPanel.Padding.right;
+            s.y += this.#StackPanel.Padding.up + this.#StackPanel.Padding.down;
+
+            this.#BackTopCanvas.fillStyle = Color.Couleur(0,0,1,0.1)
+            this.#BackTopCanvas.fillRect(0, y2, s.x, s.y);
+            
+            Context.drawImage(this.#BackTopCanvas.canvas, 0, 0);
+        }
+    }
+
+
 }
+
+
+
+// class ListeElement extends UI_Element
+// {
+//     #Selected;
+
+//     constructor(Y,W, Element, Parent)
+//     {
+//         super(0, Y, 1, W, 1, Parent);
+
+//         this.AddChildren(Element);
+//         this.Contenue = Element;
+//         this.Padding = [0,0,0,0]
+//         this.CreateCanvas();
+
+//         this.overlayColor = Color.Couleur(0,0,0,0);
+
+//         let _this = this;
+//         this.onSouris_Entre.push(function(e) {_this.Souris_Hover(e)})
+//         this.onSouris_Quitte.push(function(e) {_this.Souris_Leave(e)})
+//         this.onSouris_Clique[Souris.ClicGauche].push(function(e) {_this.Souris_Clique(e)})
+//         this.onActivate.push(function(e) {_this.Activation(e)})
+//         this.onDeActivate.push(function(e) {_this.Desactivation(e)})
+//         this.onChildResize.push(function(e) {_this.ChildResize(e)})
+
+//     }
+
+//     get Selected()
+//     {
+//         return this.#Selected;
+//     }
+//     set Selected(v)
+//     {
+//         if(v != this.#Selected)
+//         {
+//             this.#Selected = v;
+//             this.RefreshUI();
+//         }
+
+//     }
+
+//     Activation(e)
+//     {
+//         this.overlayColor = Color.Couleur(0,0,0,0);
+//         this.Selected = false;
+//         this.RefreshUI();
+//     }
+//     Desactivation(e)
+//     {
+//         this.overlayColor = Color.Couleur(0,0,0,0);
+//         this.Selected = false;
+//         this.RefreshUI();
+//     }
+//     Souris_Clique(event)
+//     {
+//         this.Parent.Select(this.ID);
+//     }
+//     Souris_Hover(event)
+//     {
+//         this.overlayColor = Color.Couleur(0,0,1,0.1);
+//         this.RefreshUI();
+//     }
+//     Souris_Leave(event)
+//     {
+//         this.overlayColor = Color.Couleur(0,0,0,0);
+//         this.RefreshUI();
+//     }
+
+//     ChildResize(event)
+//     {
+//         this.CalculH()
+//         this.Parent.UpdateYPosition()
+//         this.RefreshUI();
+//     }
+
+
+
+//     get ID()
+//     {
+//         return this.Parent.Elements.indexOf(this);
+//     }
+//     CreateCanvas()
+//     {
+//         this.CalculH()
+//         super.CreateCanvas()
+//     }
+
+//     CalculH()
+//     {
+//         let b = this.BoundingBoxChild(true)
+//         this.H = b.h + b.y;
+//     }
+
+//     DessinBackUI(Context)
+//     {
+//         if(this.ID % 2 === 0)
+//         {
+//             Context.fillStyle = Color.Couleur(1,1,1,0.1)
+//             Context.fillRect(0, 0, this.W, this.H);
+//         }
+//     }
+//     DessinFrontUI(Context)
+//     {
+//         if(this.Selected)
+//         {
+//             Context.fillStyle = this.SelectionCouleur.RGBA()
+//             Context.strokeStyle = this.SelectionCouleur.RGB()
+//             Context.lineWidth = 2;
+//             Context.fillRect(0, 0, this.W, this.H);
+//             Context.strokeRect(0, 0, this.W, this.H);
+//         }
+//         Context.fillStyle = this.overlayColor
+//         Context.fillRect(0, 0, this.W, this.H);
+//     }
+
+// }

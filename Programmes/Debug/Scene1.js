@@ -206,7 +206,7 @@ class Scene1 extends Scene
         this.Win = new UI_Window(20,20,30,500,500);
         let panel = new UI_Panel();
         panel.H = UI_Element_Alignement.STRETCH;
-        let stack = new UI_ScrollView();
+        let stack = new UI_HoriSlider();
 
 
         //stack.W = UI_Element_Alignement.STRETCH;
@@ -223,23 +223,22 @@ class Scene1 extends Scene
         //panel.Margin.up = panel.EpaisseurBord * 2;
         //panel.Margin.down = panel.EpaisseurBord * 2;
 
-        for (let i = 0; i < 5; i++) {
-            let button = new UI_Image("Images/IconSet.png");
-            let id = Math.random() * 
-            button.SourceX
-            button.HorizontalAlignement = HorizontalAlignementType.Center;
-            button.VerticalAlignement = VerticalAlignementType.Center;
-            button.X = Math.random() * 500;
-            button.Y = Math.random() * 500;
-            button.W = 24// + Math.random() * 500;
-            button.H = 24// + Math.random() * 500;
-            //button.MinW = 30;
-            //button.MinH = 30;
-            //button.Grid_Column = i % a;
-            //button.Grid_Row = Math.floor(i / a);
-            button.SetTexte("" + i)
-            stack.AddChildren(button);
-        }
+        // for (let i = 0; i < 25; i++) {
+        //     let button = new UI_Label(i);
+        //     button.HorizontalAlignement = HorizontalAlignementType.Left;
+        //     button.VerticalAlignement = VerticalAlignementType.Center;
+        //     //button.X = Math.random() * 500;
+        //     //button.Y = Math.random() * 500;
+        //     button.H = 30;//UI_Element_Alignement.AUTO;
+        //     //button.W = 30 + Math.random() * 500;
+        //     //button.H = 30 + Math.random() * 500;
+        //     //button.MinW = 30;
+        //     //button.MinH = 30;
+        //     //button.Grid_Column = i % a;
+        //     //button.Grid_Row = Math.floor(i / a);
+        //     //button.SetTexte("" + i)
+        //     stack.AddChildren(button);
+        // }
         // let button1 = new UI_Button();
         // let button2 = new UI_Button();
         // button1.SetTexte("Boutton 1")
@@ -256,6 +255,33 @@ class Scene1 extends Scene
 
         this.Win.Show();
     }
+
+    SliderTest()
+    {
+
+    }
+
+    ListeTest()
+    {
+        this.Win = new UI_Window(20,20,30,500,500);
+        let panel = new UI_Panel();
+        panel.H = UI_Element_Alignement.STRETCH;
+
+        let list = new UI_ListView();
+        for (let i = 0; i < 25; i++) {
+            let label = new UI_Label(i);
+            label.HorizontalAlignement = HorizontalAlignementType.Left;
+            label.VerticalAlignement = VerticalAlignementType.Center;
+            label.H = 30;
+            list.AddChildren(label);
+        }
+        panel.AddChildren(list);
+
+        this.Win.AddChildren(panel);
+
+        this.Win.Show();
+    }
+
     MenuUpdate(Delta)
     {
         //this.Win.W = 300 + Math.cos(Game.TotalFrame / 100) * 100;
