@@ -6,6 +6,7 @@ class UI_CheckBox extends UI_Button
     constructor(Param)
     {
         super(Param)
+        this.Focusable = true;
         this.onCheck = [];
         this.CurrentMarkSize = UI_CheckBox.MarkSize;
         this.Padding.left = UI_CheckBox.MarkSize + 5;

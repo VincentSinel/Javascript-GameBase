@@ -22,8 +22,11 @@ class UI_Label extends UI_Element
     }
     set Texte(v)
     {
-        this.#Texte = v;
-        this.SetDirty();
+        if (this.Texte != v)
+        {
+            this.#Texte = v;
+            this.SetDirty();
+        }
     }
     /**
      * Coeur de la mesure de l'objet. Cette fonction demande à l'objet la taille qu'il souhaite prendre
@@ -120,7 +123,11 @@ class UI_Label extends UI_Element
      
     DessinBackUI(Context)
     {
-        Context.fillStyle = this.FontCouleur.RGBA();
+        if (this.Actif)
+            Context.fillStyle = this.FontCouleur.RGBA();
+        else
+            Context.fillStyle = this.InactifCouleur.RGBA();
+
         Context.font = this.FontTaille + "px " + this.Font;
 
         Context.textAlign = this.HorizontalAlignement;

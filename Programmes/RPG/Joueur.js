@@ -59,7 +59,7 @@ class Joueur extends Actor
 
         if(Clavier.ToucheJusteBasse("f"))
         {
-            this.MontrerInventaire()
+            //this.MontrerInventaire()
         }
 
 

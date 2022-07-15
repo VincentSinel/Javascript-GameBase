@@ -206,7 +206,7 @@ class Scene1 extends Scene
         this.Win = new UI_Window(20,20,30,500,500);
         let panel = new UI_Panel();
         panel.H = UI_Element_Alignement.STRETCH;
-        let stack = new UI_HoriSlider();
+        let stack = new UI_TextBox();
 
 
         //stack.W = UI_Element_Alignement.STRETCH;

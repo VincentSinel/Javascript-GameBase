@@ -1,0 +1,35 @@
+UI_Element
+Add Focus
+    ☐ Add Focus on Button
+    ☐ Add Focus on Liste
+    ☐ Add Focus on CheckBox
+    ☐ Add Focus on Slider
+    ☐ Add Focus on Toggle
+☐ Create TextBox @started(22-07-13 17:24)
+    ☐ Ajouter detection position dans un label à partir position souris.
+    ☐ Ajouter prise en compte \n dans un label.
+☐ Create IntegerUpDown
+☐ Create ComboBox
+☐ Create Animation
+☐ Reajuste Tilemap Editor
+
+Module
+☐ Separer les fichier RPG maker du reste
+
+Documentation
+☐ Faire les commentaires de tous les fichies UIElements
+
+Exemple
+☐ Créer un petit rpg simple avec menu
+
+Sons
+☐ Résoudre les problèmes de lectures des sons
+☐ Améliorer la prise en compte spatial du son
+
+Sauvegarde local
+☐ Ajouter un outils de sauvegarde local (cookie)
+
+Feature
+☐ Créer un systeme de particule
+☐ Ajouter effets de mouvement camera
+☐ Créer des menus mobiles lié au monde de jeu

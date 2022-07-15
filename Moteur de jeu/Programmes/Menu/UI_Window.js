@@ -257,7 +257,6 @@ class UI_Window
     #TopElement;
     #PressingElement;
     #DraggableElement;
-    #FocusElement;
     
 
     constructor(X,Y,Z,W,H,PauseUntilClosed = false)
@@ -449,6 +448,7 @@ class UI_Window
     get Title() { return this.#Title; }
     set Title(v) { this.#Title = v; }
     get DraggableElement() { return this.#DraggableElement; }
+    get FocusObject() { return this.Root.FocusObject; }
 
     //#endregion
 
@@ -494,6 +494,8 @@ class UI_Window
         if (this.#TopElement && this.#PreviousTopElement === this.#TopElement &&
             (this.#DraggableElement === undefined || this.#DraggableElement === this.#TopElement))
             this.#TopElement.Handle_Clique(id, position);
+        else
+            this.Unfocus();
         if (this.#PreviousTopElement && 
             this.#PreviousTopElement !== this.#TopElement)
             this.#PreviousTopElement.Handle_MouseLeave(position);
@@ -630,7 +632,10 @@ class UI_Window
      */
     Handle_KeyJustDown(e)
     {
-        
+        if (this.FocusObject)
+        {
+            this.FocusObject.Handle_KeyJustDown(e);
+        }
     }
     /**
      * Gestion du maintient d'une touche de clavier
@@ -638,7 +643,10 @@ class UI_Window
      */
     Handle_KeyDown(e)
     {
-        
+        if (this.FocusObject)
+        {
+            this.FocusObject.Handle_KeyDown(e);
+        }
     }
     /**
      * Gestion du relachement d'une touche de clavier
@@ -646,12 +654,18 @@ class UI_Window
      */
     Handle_KeyJustUp(e)
     {
-        
+        if (this.FocusObject)
+        {
+            this.FocusObject.Handle_KeyJustUp(e);
+        }
     }
-
+    /**
+     * Unfocus la fenêtre
+     */
     Unfocus()
     {
-        this.#FocusElement.Unfocus();
+        if (this.FocusObject)
+            this.FocusObject.Unfocus();
     }
  
     //#endregion

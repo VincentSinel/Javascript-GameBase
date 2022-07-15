@@ -10,6 +10,7 @@ class UI_Toggle extends UI_Button
     {
         super(Param)
 
+        this.Focusable = true;
         this.#Toggle = false;
     }
 

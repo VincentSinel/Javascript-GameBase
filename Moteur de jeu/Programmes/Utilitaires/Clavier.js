@@ -61,12 +61,10 @@ class Clavier
             this.JustPressed.push(e.key);
             this.Pressed.push(e.key);
             
-            if (UI_Window.TopElement)
-                UI_Window.TopElement.Handle_KeyJustDown(e);
+            UI_Window.SHandle_KeyJustDown(e);
         }
         
-        if (UI_Window.TopElement)
-            UI_Window.TopElement.Handle_KeyDown(e);
+        UI_Window.SHandle_KeyDown(e);
     }
     /**
      * S'éxecute lors du relachement d'une touche
@@ -80,8 +78,7 @@ class Clavier
         }
         this.JustReleased.push(e.key);
         
-        if (UI_Window.TopElement)
-            UI_Window.TopElement.Handle_KeyJustUp(e);
+        UI_Window.SHandle_KeyJustUp(e);
     }
     /**
      * Mise a jour des touches préssé

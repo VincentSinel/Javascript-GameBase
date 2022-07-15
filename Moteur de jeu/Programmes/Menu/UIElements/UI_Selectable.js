@@ -23,6 +23,10 @@ class UI_Selectable extends UI_Element
     Souris_Clique(event)
     {
         this.Etat = UI_Selectable_Etat.HOVER;
+        if (this.Focusable)
+        {
+            this.Focus();
+        }
     }
     Souris_Down(event)
     {

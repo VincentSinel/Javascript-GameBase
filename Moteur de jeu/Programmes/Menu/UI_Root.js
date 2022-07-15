@@ -1,6 +1,7 @@
 class UI_Root extends UI_Element
 {
     #Window = undefined;
+    #FocusObject = undefined;
 
     constructor(WindowParent)
     {
@@ -11,7 +12,6 @@ class UI_Root extends UI_Element
     }
 
     //#region GETTER SETTER
-
     
     /**
      * Largeur de l'objet
@@ -49,69 +49,61 @@ class UI_Root extends UI_Element
      * @override
      * @type {float}
      */
-    get GX()
-    {
-        return this.Window.X;
-    }
+    get GX() { return this.Window.X; }
     /**
      * Calcul la position Y de cette objet vis à vis de son parent
      * @override
      * @type {float}
      */
-    get GY()
-    {
-        return this.Window.Y;
-    }
+    get GY() { return this.Window.Y; }
     /**
      * Calcul la position Z de cette objet vis à vis de son parent
      * @override
      * @type {float}
      */
-    get GZ()
-    {
-        return this.Window.Z;
-    }
-
+    get GZ() { return this.Window.Z; }
     /**
      * Renvoie la Fenetre parente
      */
-    get Window()
-    {
-        return this.#Window;
-    }
+    get Window() { return this.#Window; }
     /**
      * Renvoie la Largeur disponible pour le dessin
      * @type {Array<UI_Element>}
      */
-    get CW()
-    {
-        return this.Window.W - this.Window.Padding.left - this.Window.Padding.right;
-    }
+    get CW() { return this.Window.W - this.Window.Padding.left - this.Window.Padding.right; }
     /**
      * Renvoie la hauteur disponible pour le dessin
      * @type {Array<UI_Element>}
      */
-    get CH()
+    get CH() { return this.Window.H - this.Window.Padding.up - this.Window.Padding.down; }
+    /**
+     * Donne cet élément
+     * @override
+     */
+    get Root() { return this; }
+    /**
+     * Renvoie le padding de la fenêtre
+     */
+    get Padding() { return this.Window.Padding; }
+    /**
+     * Object ayant le focus
+     */
+    get FocusObject() { return this.#FocusObject; }
+    set FocusObject(value)
     {
-        return this.Window.H - this.Window.Padding.up - this.Window.Padding.down;
-    }
-
-    get Root()
-    {
-        return this;
-    }
-
-    get Padding()
-    {
-        return this.Window.Padding;
-    }
-
-    SetDirty()
-    {
-        super.SetDirty(true);
+        this.#FocusObject = value;
     }
 
     //#endregion
+
+
+    /**
+     * Demande un recalcul du contenue
+     */
+     SetDirty()
+     {
+         super.SetDirty(true);
+     }
 
     /**
      * Mise a jour des UIElement

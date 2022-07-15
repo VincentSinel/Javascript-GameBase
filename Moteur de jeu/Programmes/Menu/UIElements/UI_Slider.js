@@ -15,6 +15,7 @@ class UI_HoriSlider extends UI_Draggable
     {
         super(Param)
 
+        this.Focusable = true;
         this.W = UI_Element_Alignement.STRETCH;
         this.H = UI_HoriSlider.BaseH;
         this.VerticalAlignement = HorizontalAlignementType.Center;
@@ -44,6 +45,7 @@ class UI_HoriSlider extends UI_Draggable
 
     Souris_Clique(event)
     {
+        super.Souris_Clique(event);
         let pos = event.Param;
         this.Valeur = this.ValeurMin + (pos.x - this.GX - UI_HoriSlider.SliderW / 2) / (this.FinalSize.x - UI_HoriSlider.SliderW) * (this.ValeurMax - this.ValeurMin)
     }

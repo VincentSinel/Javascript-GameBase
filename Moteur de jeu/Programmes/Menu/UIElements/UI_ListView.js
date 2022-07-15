@@ -10,7 +10,8 @@ class UI_ListView extends UI_ScrollView
         super(Param)
 
         this.ScrollHorizontal = false;
-        this.Capture_Souris = true
+        this.Capture_Souris = true;
+        this.Focusable = true;
 
         this.#StackPanel = new UI_Stack();
         this.#StackPanel.W = UI_Element_Alignement.STRETCH;
@@ -53,6 +54,7 @@ class UI_ListView extends UI_ScrollView
                 return;
             }
         }
+        this.Focus();
     }
 
     Souris_Hover(e)

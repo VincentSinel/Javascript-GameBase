@@ -9,6 +9,7 @@ class UI_Button extends UI_Selectable
     {
         super(Param)
         
+        this.Focusable = true;
         this.Texte = undefined;
         //this.Couleur = this.BaseCouleur;
         this.ClicAction = function() {console.log("Button clic action not set");};

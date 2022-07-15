@@ -4,297 +4,6 @@
  */
 class UI_Element
 {
-    //#region STATIC Element
-
-    static #FocusObject = undefined;
-
-    //#region STATIC GETTER SETTER
-
-    /**
-     * Renvoie l'object ayant le focus
-     */
-    static get FocusObject()
-    {
-        return UI_Element.#FocusObject;
-    }
-    /**
-     * Définit l'object ayant le focus
-     */
-    static set FocusObject(value)
-    {
-        if (UI_Element.#FocusObject)
-        {
-            UI_Element.#FocusObject.Unfocus();
-        }
-        UI_Element.#FocusObject = value;
-    }
-
-    //#endregion
-
-    //#region DELETE ?
-
-    //#region STATIC Event Handler
-
-    /**
-     * Gestionnaire de déplacement de la souris pour les UI_Element
-     * @param {Vector} position Position de la souris
-     */
-    // static SHandle_MouseMove(position)
-    // {
-    //     let oldelement = UI_Element.#topElement;
-    //     UI_Element.#GetTopElement(position);
-    //     if (UI_Element.#topElement)
-    //         UI_Element.#topElement.Handle_MouseMove(position);
-    //     if(oldelement && oldelement != UI_Element.#topElement && oldelement.Actif)
-    //     {
-    //         oldelement.Handle_MouseLeave();
-    //     }
-    // }
-    /**
-     * Gestionnaire du clique de la souris pour les UI_Element
-     * @param {Int} id Index du boutton de la souris préssé
-     * @param {Vector} position Position de la souris
-     */
-    // static SHandle_Clique(id, position)
-    // {
-    //     UI_Element.#GetTopElement(position);
-    //     if (UI_Element.#topElement)
-    //         UI_Element.#topElement.Handle_Clique(id, position);
-    // }
-    /**
-     * Gestionnaire des touches enfoncé de la souris pour les UI_Element
-     * @param {Int} id Index du boutton de la souris préssé
-     * @param {Vector} position Position de la souris
-     */
-    // static SHandle_Basse(id, position)
-    // {
-    //     UI_Element.#GetTopElement(position);
-    //     if (UI_Element.#topElement)
-    //         UI_Element.#topElement.Handle_Basse(id, position);
-    // }
-    /**
-     * Gestionnaire des touches relaché de la souris pour les UI_Element
-     * @param {Int} id Index du boutton de la souris préssé
-     * @param {Vector} position Position de la souris
-     */
-    // static SHandle_Relache(id, position)
-    // {
-    //     UI_Element.#GetTopElement(position);
-    //     if (UI_Element.#topElement)
-    //         UI_Element.#topElement.Handle_Relache(id, position);
-    // }
-    /**
-     * Gestionnaire du début de drag de la souris pour les UI_Element
-     * @param {Int} id Index du boutton de la souris préssé
-     * @param {Vector} position Position de la souris
-     */
-    // static SHandle_DragStart(id, position)
-    // {
-    //     UI_Element.#GetTopElement(position);
-    //     if (UI_Element.#topElement)
-    //     {
-    //         UI_Element.#DraggingElement = UI_Element.#topElement;
-    //         if(UI_Element.#DraggingElement.Draggable)
-    //         {
-    //             UI_Element.#DraggingElement.Handle_DragStart(id, position);
-    //         }
-    //     }
-    // }
-    /**
-     * Gestionnaire de la fin de drag de la souris pour les UI_Element
-     * @param {Int} id Index du boutton de la souris préssé
-     * @param {Vector} position Position de la souris
-     */
-    // static SHandle_DragEnd(id, position)
-    // {
-    //     UI_Element.#GetTopElement(position);
-    //     if (UI_Element.#DraggingElement)
-    //     {
-    //         if(UI_Element.#DraggingElement.Draggable)
-    //             UI_Element.#DraggingElement.Handle_DragEnd(id, position);
-    //         else if(UI_Element.#DraggingElement === UI_Element.#topElement)
-    //             UI_Element.#DraggingElement.Handle_Clique(id, position);
-    //         UI_Element.#DraggingElement = undefined;
-    //     }
-    // }
-    /**
-     * Gestionnaire du drag de la souris pour les UI_Element
-     * @param {Int} id Index du boutton de la souris préssé
-     * @param {Vector} position Position de la souris
-     */
-    // static SHandle_Dragging(id, position)
-    // {
-    //     let oldelement = UI_Element.#topElement;
-    //     UI_Element.#GetTopElement(position);
-    //     if (UI_Element.#DraggingElement && UI_Element.#DraggingElement.Draggable)
-    //     {
-    //         UI_Element.#DraggingElement.Handle_Dragging(id, position);
-    //     }
-    //     if(oldelement && oldelement != UI_Element.#topElement)
-    //     {
-    //         oldelement.Handle_MouseLeave();
-    //     }
-    // }
-    /**
-     * Gestionnaire du scroll de la souris pour les UI_Element
-     * @param {Vector} position Position de la souris
-     */
-    // static SHandle_Scroll(position, deltaX, deltaY)
-    // {
-    //     if(UI_Element.#topElement &&  UI_Element.#topElement.Actif)
-    //     {
-    //         UI_Element.#topElement.Handle_MouseLeave();
-    //     }
-
-    //     UI_Element.#GetScrollTopElement(position);
-        
-    //     if (UI_Element.#topScrollElement)
-    //     {
-    //         UI_Element.#topScrollElement.Handle_Scroll(position, deltaX, deltaY);
-    //     }
-    // }
-    /**
-     * Gestionnaire des touches appuyés du clavier
-     * @param {KeyboardEvent} keyboardEvent Evénement clavier associé
-     */
-    // static SHandle_KeyJustDown(keyboardEvent)
-    // {
-    //     if (UI_Element.#FocusObject)
-    //     {
-    //         UI_Element.#FocusObject.Handle_KeyJustDown(keyboardEvent);
-    //     }
-    // }
-    /**
-     * Gestionnaire des touches enfoncés du clavier
-     * @param {KeyboardEvent} keyboardEvent Evénement clavier associé
-     */
-    // static SHandle_KeyDown(keyboardEvent)
-    // {
-    //     if (UI_Element.#FocusObject)
-    //     {
-    //         UI_Element.#FocusObject.Handle_KeyDown(keyboardEvent);
-    //     }
-    // }
-    /**
-     * Gestionnaire des touches relachés du clavier
-     * @param {KeyboardEvent} keyboardEvent Evénement clavier associé
-     */
-    // static SHandle_KeyJustUp(keyboardEvent)
-    // {
-    //     if (UI_Element.#FocusObject)
-    //     {
-    //         UI_Element.#FocusObject.Handle_KeyJustUp(keyboardEvent);
-    //     }
-    // }
-
-    //#endregion
-
-
-    /**
-     * Ajoute un Menu à la liste des menus globaux. La mise a jour et le dessin sont alors automatiquement géré.
-     * @param {UI_Element} menu Menu a ajouter.
-     */
-    // static AddMenu(menu)
-    // {
-    //     UI_Element.#Menus.push(menu);
-
-    //     // For performance reasons, we will first map to a temp array, sort and map the temp array to the objects array.
-    //     var map = UI_Element.#Menus.map(function (el, index) {
-    //         return { index : index, value : el.GZ };
-    //     });
-
-    //     // Now we need to sort the array by z index.
-    //     map.sort(function (a, b) {
-    //         return a.value - b.value;
-    //     });
-
-    //     let objects = UI_Element.#Menus;
-    //     // We finaly rebuilt our sorted objects array.
-    //     UI_Element.#Menus = map.map(function (el) {
-    //         return objects[el.index];
-    //     });
-    // }
-     /**
-      * Supprime un menu de la liste des menus globaux.
-      * @param {UI_Element} menu Menu à supprimer.
-      */
-    // static RemoveMenu(menu)
-    // {
-    //     UI_Element.#Menus.splice(UI_Element.#Menus.indexOf(menu), 1);
-    // }
-     /**
-     * Cherche l'objet le plus haut à une position donnée
-     * @param {Vector} pos Position à tester
-     * @returns UI_Element le plus haut à cette position
-     */
-    // static #GetTopElement(pos)
-    // {
-    //     UI_Element.#topElement = undefined;
-    //     for (let ui = UI_Element.#Menus.length - 1; ui >= 0; ui--) 
-    //     {
-    //         let el = UI_Element.#Menus[ui];
-    //         if (el.Actif)
-    //         {
-    //             if (el.PointIn(pos))
-    //             {
-    //                 let t = el.GetTopElement(pos);
-    //                 if (t != undefined)
-    //                 {
-    //                     UI_Element.#topElement = t;
-    //                     return;
-    //                 }
-
-    //             }
-    //         }
-    //     }
-    // }
-    /**
-     * Cherche l'objet le plus haut à une position donnée
-     * @param {Vector} pos Position à tester
-     * @returns UI_Element le plus haut à cette position
-     */
-    // static #GetScrollTopElement(pos)
-    // {
-    //     UI_Element.#topScrollElement = undefined;
-    //     for (let ui = UI_Element.#Menus.length - 1; ui >= 0; ui--) 
-    //     {
-    //         let el = UI_Element.#Menus[ui];
-    //         if (el.ScrollIn(pos))
-    //         {
-    //             if (el.Actif)
-    //             {
-    //                     UI_Element.#topScrollElement = el.GetScrollTopElement(pos);
-    //             }
-    //             return;
-    //         }
-            
-    //     }
-    // }
-    /**
-     * Mise a jour global des UI_Element
-     * @param {float} Delta Nombre de frame écoulé depuis le dernier rafraichissement d'écran
-     */
-    // static Calcul(Delta)
-    // {
-    //     UI_Element.#Menus.forEach(menu => {
-    //         menu.Calcul(Delta)
-    //     });
-    // }
-    /**
-     * Lance le dessin de tout les UI_Element
-     * @param {canvasContext2D} Context Context de dessin
-     */
-    // static Dessin(Context)
-    // {
-    //     for (let o = 0; o < UI_Element.#Menus.length; o++) {
-    //         UI_Element.#Menus[o].Dessin(Context)
-    //     }
-    // }
-
-    //#endregion
-
-    //#endregion
-
 
     //#CanvasChange = true;
     #SourisOldIn = false;
@@ -317,6 +26,7 @@ class UI_Element
     #Capture_Scroll = false;
     #Capture_Drag = false;
     #Capture_Drop = false;
+    #Capture_Clavier = false;
     #Grid_Row = 0;
     #Grid_Column = 0;
     #Grid_RowsSpan = 1;
@@ -462,7 +172,6 @@ class UI_Element
      */
     get MaxH() { return this.#MaxH }
     set MaxH(v) { if (v < 0) v = 0;  this.#MaxH = v;  this.SetDirty(); }
-
     /**
      * @typedef {Object} MarginData
      * @property {float} left Décalage gauche
@@ -470,7 +179,6 @@ class UI_Element
      * @property {float} up Décalage haut
      * @property {float} down Décalage bas
      */
-
     /**
      * Définit la marge de cette élément
      * @type {MarginData}
@@ -501,10 +209,7 @@ class UI_Element
     /**
      * Renvoie la liste des enfants de cet objet
      */
-    get Childrens()
-    {
-        return this.#Childrens;
-    }
+    get Childrens() { return this.#Childrens; }
     /**
      * Calcul la position X de cette objet vis à vis de son parent
      * @type {float}
@@ -555,34 +260,22 @@ class UI_Element
      * Calcul la largeur disponible pour un enfant
      * @type {float}
      */
-    get CW()
-    {
-        return this.FinalContentSize.x;
-    }
+    get CW() { return this.FinalContentSize.x; }
     /**
      * Calcul la hauteur disponible pour un enfant
      * @type {float}
      */
-    get CH()
-    {
-        return this.FinalContentSize.y;
-    }
+    get CH() { return this.FinalContentSize.y; }
     /**
      * Renvoie la taille autorisé de l'objet
      * @type {Vector}
      */
-    get FinalSize()
-    {
-        return this.#FinalSize;
-    }
+    get FinalSize() { return this.#FinalSize; }
     /**
      * Renvoie la taille autorisé du contenu
      * @type {Vector}
      */
-    get FinalContentSize()
-    {
-        return this.#FinalContentSize;
-    }
+    get FinalContentSize() { return this.#FinalContentSize; }
     /**
      * Renvoie la racine de cette objet dans une fenêtre
      * @type {UI_Root}
@@ -609,35 +302,21 @@ class UI_Element
      * Renvoie si l'élément à besoin d'étre recréer visuellement
      * @type {boolean}
      */
-    get NeedRedraw()
-    {
-        return this.#NeedRedraw;
-    }
+    get NeedRedraw() { return this.#NeedRedraw; }
     /**
      * Renvoie si l'élément est animé
      * @type {boolean}
      */
-    get Animate()
-    {
-        return this.#Animate;
-    }
-    set Animate(v)
-    {
-        this.#Animate = v;
-    }
-
-
+    get Animate() { return this.#Animate; }
+    set Animate(v) { this.#Animate = v; }
     /**
      * Renvoie si l'élément doit être arrangé.
      * @type {boolean}
      */
-    get Dirty()
-    {
-        return this.#Dirty;
-    }
+    get Dirty() { return this.#Dirty; }
     /**
      * Renvoie si l'élément est actuellement visible.
-     * type {UI_Element_Visibilty}
+     * @type {UI_Element_Visibilty}
      */
     get Visible()
     {
@@ -662,10 +341,7 @@ class UI_Element
      * Renvoie si l'élément a actuellement le focus
      * @type {boolean}
      */
-    get isFocus()
-    {
-        return UI_Element.FocusObject === this
-    }
+    get isFocus() { return this.Root ? this.Root.FocusObject === this : false; }
     /**
      * Renvoie si la souris est actuellement au dessus de l'élément
      * @type {boolean}
@@ -686,7 +362,7 @@ class UI_Element
     {
         if(this.Parent)
         {
-            return this.#Actif || this.Parent.Actif
+            return this.#Actif && this.Parent.Actif
         }
         return this.#Actif;
     }
@@ -737,6 +413,12 @@ class UI_Element
     get Capture_Drop() { return this.#Capture_Drop; }
     set Capture_Drop(v) { this.#Capture_Drop = v; }
     /**
+     * Définit si l'objet autorise le drop d'objet
+     * @type {boolean}
+     */
+    get Capture_Clavier() { return this.#Capture_Clavier; }
+    set Capture_Clavier(v) { this.#Capture_Clavier = v; }
+    /**
      * Définit la ligne dans une grille
      * @type {int}
      */
@@ -765,79 +447,70 @@ class UI_Element
      * @type {float}
      */
     get FontTaille(){return this.#FontSize;}
-    set FontTaille(v)
-    {
-        this.#FontSize = v;
-        this.Refresh();
-    }
+    set FontTaille(v) { this.#FontSize = v; this.Refresh(); }
     /**
      * Définit la police d'écriture
      * @type {string}
      */
     get Font(){return this.#Font;}
-    set Font(v)
-    {
-        this.#Font = v;
-        this.Refresh();
-    }
-
+    set Font(v) { this.#Font = v; this.Refresh(); }
+    /**
+     * Couleur font
+     */
     get FontCouleur() {return this.#FontColor;}
-    set FontCouleur(v){
-        this.#FontColor = v;
-        this.Refresh();
-    }
-
+    set FontCouleur(v){ this.#FontColor = v; this.Refresh(); }
+    /**
+     * Couleur de base
+     */
     get BaseCouleur() {return this.#FontColorBase;}
-    set BaseCouleur(v){
-        this.#FontColorBase = v;
-        this.Refresh();
-    }
-
+    set BaseCouleur(v){ this.#FontColorBase = v; this.Refresh(); }
+    /**
+     * Couleur Hover
+     */
     get HoverCouleur() {return this.#FontColorHover;}
-    set HoverCouleur(v){
-        this.#FontColorHover = v;
-        this.Refresh();
-    }
-
+    set HoverCouleur(v){ this.#FontColorHover = v; this.Refresh(); }
+    /**
+     * Couleur inactif
+     */
     get InactifCouleur() {return this.#FontColorInactif;}
-    set InactifCouleur(v){
-        this.#FontColorInactif = v;
-        this.Refresh();
-    }
-
+    set InactifCouleur(v){ this.#FontColorInactif = v; this.Refresh(); }
+    /**
+     * Couleur de selection
+     */
     get SelectionCouleur() {return this.#FontColorSelect;}
-    set SelectionCouleur(v){
-        this.#FontColorSelect = v;
-        this.Refresh();
-    }
-
+    set SelectionCouleur(v){ this.#FontColorSelect = v; this.Refresh(); }
+    /**
+     * Couleur actuel
+     */
     get CurrentColor() {return this.#CurrentColor;}
-    set CurrentColor(v){
-        this.#CurrentColor = v;
-        this.Refresh();
-    }
-
+    set CurrentColor(v){ this.#CurrentColor = v; this.Refresh(); }
+    /** 
+     * Alignement horizontal de l'objet 
+     */
     get HorizontalAlignement() {return this.#HorAlign;}
-    set HorizontalAlignement(v){
-        this.#HorAlign = v;
-        this.Refresh();
-    }
-
+    set HorizontalAlignement(v){ this.#HorAlign = v; this.Refresh(); }
+    /**
+     * Alignement vertical de l'objet
+     */
     get VerticalAlignement() {return this.#VerAlign;}
-    set VerticalAlignement(v){
-        this.#VerAlign = v;
-        this.Refresh();
-    }
-
+    set VerticalAlignement(v){ this.#VerAlign = v; this.Refresh(); }
+    /**
+     * Epaisseur bord
+     */
     get EpaisseurBord() {return this.#BorderSize;}
-    set EpaisseurBord(v){
-        this.#BorderSize = v;
-        this.Refresh();
-    }
-
+    set EpaisseurBord(v){ this.#BorderSize = v; this.Refresh(); }
+    /**
+     * Taille précédente
+     */
     get PrevSize() { return this.#prevSize; }
     set PrevSize(v) { this.#prevSize = v; }
+    /**
+     * Taille voulue
+     */
     get Desiredsize() { return this.#desiredSize; }
+    /**
+     * Taille maximal alloué
+     */
     get FinalMaxSize() { return this.#FinalMaxSize ;}
 
     get Focusable() { return this.#Focusable; }
@@ -1236,7 +909,7 @@ class UI_Element
         return false;
     }
     /**
-     * Renvoie l'objet cliquable le plus haut à l'emplacement donnée
+     * Renvoie l'objet le plus haut à l'emplacement donnée
      * @param {Vector} pos Position à tester
      * @returns {UI_Element} Objet le plus haut
      */
@@ -1256,7 +929,11 @@ class UI_Element
         }
         return undefined;
     }
-
+    /**
+     * Renvoie l'objet cliquable le plus haut à l'emplacement donnée
+     * @param {Vector} pos Position à tester
+     * @returns {UI_Element} Objet le plus haut
+     */
     GetTopElement_CaptureSouris(pos)
     {
         if (this.PointIn(pos) && this.Actif)
@@ -1277,6 +954,11 @@ class UI_Element
         }
         return undefined;
     }
+    /**
+     * Renvoie l'objet draggable le plus haut à l'emplacement donnée
+     * @param {Vector} pos Position à tester
+     * @returns {UI_Element} Objet le plus haut
+     */
     GetTopElement_CaptureDrag(pos)
     {
         if (this.PointIn(pos) && this.Actif)
@@ -1294,6 +976,11 @@ class UI_Element
         }
         return undefined;
     }
+    /**
+     * Renvoie l'objet acceptant les drops le plus haut à l'emplacement donnée
+     * @param {Vector} pos Position à tester
+     * @returns {UI_Element} Objet le plus haut
+     */
     GetTopElement_CaptureDrop(pos)
     {
         if (this.PointIn(pos) && this.Actif)
@@ -1311,6 +998,11 @@ class UI_Element
         }
         return undefined;
     }
+    /**
+     * Renvoie l'objet scrollable le plus haut à l'emplacement donnée
+     * @param {Vector} pos Position à tester
+     * @returns {UI_Element} Objet le plus haut
+     */
     GetTopElement_CaptureScroll(pos)
     {
         if (this.PointIn(pos) && this.Actif)
@@ -1324,6 +1016,28 @@ class UI_Element
                     return e;
             }
             if (this.Capture_Scroll)
+                return this;
+        }
+        return undefined;
+    }
+    /**
+     * Renvoie l'objet scrollable le plus haut à l'emplacement donnée
+     * @param {Vector} pos Position à tester
+     * @returns {UI_Element} Objet le plus haut
+     */
+    GetTopElement_CaptureClavier(pos)
+    {
+        if (this.PointIn(pos) && this.Actif)
+        {
+            for (let ui = this.Childrens.length - 1; ui >= 0; ui--) 
+            {
+                const el = this.Childrens[ui];
+
+                let e = el.GetTopElement_CaptureClavier(pos);
+                if (e != undefined)
+                    return e;
+            }
+            if (this.Capture_Clavier)
                 return this;
         }
         return undefined;
@@ -1435,12 +1149,12 @@ class UI_Element
      */
     Focus()
     {
-        if (this.Actif && this.Focusable)
+        if (this.Actif && this.Focusable && this.Root)
         {
-            if (UI_Element.FocusObject !== this)
+            if (this.Root.FocusObject !== this)
             {
-                let event = new UIEvenement(UIEvenementType.Focus_Gain, this, UI_Element.FocusObject);
-                UI_Element.FocusObject = this;
+                let event = new UIEvenement(UIEvenementType.Focus_Gain, this, this.Root.FocusObject);
+                this.Root.FocusObject = this;
                 for (let ev = 0; ev < this.onFocus_Gain.length; ev++)
                 {
                     this.onFocus_Gain[ev](event)
@@ -1453,14 +1167,14 @@ class UI_Element
      */
     Unfocus()
     {
-        if (this.isFocus)
+        if (this.isFocus && this.Root)
         {
             let event = new UIEvenement(UIEvenementType.Focus_Perte, this);
             for (let ev = 0; ev < this.onFocus_Perte.length; ev++)
             {
                 this.onFocus_Perte[ev](event)
             }
-            UI_Element.#FocusObject = undefined;
+            this.Root.FocusObject = undefined;
         }
     }
     /**

@@ -33,5 +33,9 @@ class UI_Draggable extends UI_Selectable
     {
         this.#dragging = false;
         this.#dragmove = this.#dragstart.to(event.Param);
+        if (this.Focusable)
+        {
+            this.Focus();
+        }
     }
 }
