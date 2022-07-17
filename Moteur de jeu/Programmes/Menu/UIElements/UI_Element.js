@@ -68,6 +68,7 @@ class UI_Element
 
     /**
      * Créer un UI_Element. Classe mère des objets de création d'interface utilisateur.
+     * @constructor
      * @param {UIParam} [Param=undefined] Parametre de l'UI
      */
     constructor(Param)
@@ -855,11 +856,18 @@ class UI_Element
         this.Refresh();
         this.#Dirty = false;
     }
-
+    /** 
+     * Décompose la définition de la taille final
+     * @param {Vector} value Taille final de l'élément
+     */
     Set_FinalSize(value)
     {
         this.#FinalSize = value;
     }
+    /** 
+     * Décompose la définition de la taille final du contenue
+     * @param {Vector} value Taille final du contenue de l'élément
+     */
     Set_FinalContentSize(value)
     {
         this.#FinalContentSize = value;
@@ -1423,13 +1431,19 @@ class UIEvenementType {
       this.Name = name
     }
 }
-
+/**
+ * Class définisant les type d'alignement disponible
+ * @enum
+ */
 class UI_Element_Alignement
 {
     static STRETCH = "stretch";
     static AUTO = "auto";
 }
-
+/**
+ * Class définisant la visibilité d'un UI_Element
+ * @enum
+ */
 class UI_Element_Visibilty
 {
     static Visible = "visible"

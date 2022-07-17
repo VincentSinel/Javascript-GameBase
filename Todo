@@ -19,7 +19,29 @@ Module
 ☐ Separer les fichier RPG maker du reste
 
 Documentation
-☐ Faire les commentaires de tous les fichies UIElements
+☐ Faire les commentaires de tous les fichiers UIElements
+    ☐ UI_Window
+    ☐ UI_Window_Style
+    ✔ UI_Element @done(22-07-18 00:03)
+    ☐ UI_Root
+    ☐ UI_Button
+    ☐ UI_CheckBox
+    ☐ UI_Draggable
+    ☐ UI_Grid
+    ☐ UI_Image
+    ☐ UI_Label
+    ☐ UI_ListView
+    ☐ UI_Panel
+    ☐ UI_Rectangle
+    ☐ UI_ScrollBar
+    ☐ UI_ScrollView
+    ☐ UI_Selectable
+    ☐ UI_Slider
+    ☐ UI_Stack
+    ☐ UI_TextBox
+    ☐ UI_Toggle
+    ☐ UI_ViewPort
+☐ Vérifier les autres fichiers
 
 Exemple
 ☐ Créer un petit rpg simple avec menu
