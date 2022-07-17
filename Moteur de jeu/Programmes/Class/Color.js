@@ -54,11 +54,23 @@ class Color
      */
     RGBA2(p)
     {
+        let rgb = this.ChangeLight(p);
+        return "rgba(" + rgb.R + "," + rgb.G + "," + rgb.B +"," + rgb.A + ")"
+    }
+
+    /**
+     * Créer une couleur analogue avec un taux de luinosité différent
+     * @param {float} p Pourcentage de luminosité
+     * @returns {Couleur} Couleur modifié
+     */
+    ChangeLight(p)
+    {
         let hsl = Color.RGB_HSL(this.R, this.G, this.B);
         hsl.L = Color.clamp(hsl.L * p / 100.0, 0, 100);
         let rgb = Color.HSL_RGB(hsl.H, hsl.S, hsl.L);
-        return "rgba(" + rgb.R + "," + rgb.G + "," + rgb.B +"," + this.A + ")"
+        return new Color(rgb.R, rgb.G, rgb.B, this.A);
     }
+
     /**
      * Converti une couleur RGB en HSL
      * @param {int} r Taux de rouge entre 0 et 255

@@ -21,6 +21,7 @@ class Tile_Auto extends Tile
             Tile_Auto.#Frame = (Tile_Auto.#Frame + 1) % 4;
             Tile_Auto.Frame = Tile_Auto.#Frame - Math.floor(Tile_Auto.#Frame / 3) * 2;
             Tile_Auto.#NextUpdate += 1 / Tile_Auto.Vitesse;
+            Tilesets.AnimationUpdated = true;
         }
     }
 

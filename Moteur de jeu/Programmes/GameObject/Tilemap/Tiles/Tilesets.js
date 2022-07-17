@@ -10,6 +10,7 @@ class Tilesets
     static #TilesLength = 0;
     static #TilesNumber = [];
     static #LoadedTilesetsName = [];
+    static AnimationUpdated = true;
 
     /**
      * Nombre total de tile
@@ -99,7 +100,7 @@ class Tilesets
     static TileFromIndex(id)
     {
         if (id < 0 || id >= Tilesets.#TilesNumber.length )
-            return false//Tilesets.LoadedTilesets[0];
+            return false
         return Tilesets.LoadedTilesets[Tilesets.#TilesNumber[id]];
     }
     /**
@@ -108,6 +109,7 @@ class Tilesets
      */
     static Update(Delta)
     {
+        Tilesets.AnimationUpdated = false;
         Tile_Auto.Calcul(Delta);
         for (let t = 0; t < Tilesets.LoadedTilesets.length; t++) 
         {

@@ -1,8 +1,8 @@
 class UI_Panel extends UI_Element
 {
-    constructor(X = 0,Y = 0,Z = 0, Parent = undefined)
+    constructor(Param)
     {
-        super(X,Y,Z,Parent)
+        super(Param)
         
         this.Padding = this.EpaisseurBord;
         this.H = UI_Element_Alignement.STRETCH;

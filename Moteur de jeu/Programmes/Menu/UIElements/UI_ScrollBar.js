@@ -34,6 +34,7 @@ class UI_VerticalScrollBar extends UI_Draggable
 
     Souris_Clique(event)
     {
+        super.Souris_Clique(event);
         let cy = this.GY + this.ScrollPosition / this.TotalSize * this.FinalSize.y;
         let ch = this.FinalSize.y / this.TotalSize * this.FinalSize.y;
         let pos = event.Param;

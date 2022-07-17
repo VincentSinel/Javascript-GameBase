@@ -46,11 +46,11 @@ class UI_CheckBox extends UI_Button
         if (!this.Actif)
             this.CurrentColor = this.InactifCouleur;
 
-        let Contour = this.CurrentColor.RGBA2(46)//Color.CouleurByte(97,62,24,1);
-        let Fond2 = this.CurrentColor.RGBA()//Color.CouleurByte(229,177,77,1);
-        let Fond1 = this.CurrentColor.RGBA2(120)//Color.CouleurByte(226,163,42,1);
+        let Contour = this.CurrentColor.RGBA2(46)
+        let Fond2 = this.CurrentColor.RGBA()
+        let Fond1 = this.CurrentColor.RGBA2(120)
 
-        let t = this.CurrentMarkSize // Math.min(this.FinalSize.y, this.FinalSize.x)
+        let t = this.CurrentMarkSize 
 
         var grd = Context.createLinearGradient(0, 0, 0, t);
         grd.addColorStop(0, Fond1);
@@ -62,10 +62,6 @@ class UI_CheckBox extends UI_Button
         Context.fillStyle = grd
         Context.lineWidth = b * 2;
 
-        //Context.fillRect(0,0,this.FinalSize.x, this.FinalSize.y);
-        //Context.shadowOffsetY = 5;
-        //Context.shadowBlur = 10;
-        //Context.shadowColor = "black";
         Drawing.RoundRect(Context, b, (this.FinalSize.y - t + b * 2) / 2, t - b * 2, t - b * 2, 2, true, true)
 
         Context.shadowOffsetY = 0;
@@ -88,12 +84,6 @@ class UI_CheckBox extends UI_Button
             Context.closePath();
             Context.fill();
         }
-        
-
-        // Context.font = this.FontTaille + "px " + this.Font;
-        // Context.fillStyle = this.FontCouleur.RGBA()
-        // Context.textBaseline = 'middle'; 
-        // Context.fillText(this.Texte, 2 + this.FinalSize.y, (this.FontTaille + 3) / 2)
     }
 
 

@@ -8,7 +8,7 @@ class UI_Draggable extends UI_Selectable
     {
         super(Param);
 
-        this.Capture_Drag  =true;
+        this.Capture_Drag = true;
 
         let _this = this;
         this.onSouris_DragStart[Souris.ClicGauche].push(function(e) {_this.Souris_DragStart(e)})

@@ -13,7 +13,7 @@ class UI_Selectable extends UI_Element
         this.onSouris_Clique[Souris.ClicGauche].push(function(e) {_this.Souris_Clique(e)})
         this.onSouris_Basse[Souris.ClicGauche].push(function(e) {_this.Souris_Down(e)})
         this.onSouris_Relache[Souris.ClicGauche].push(function(e) {_this.Souris_Release(e)})
-        this.onSouris_Entre.push(function(e) {_this.Souris_Hover(e)})
+        this.onSouris_Entre.push(function(e) {_this.Souris_Enter(e)})
         this.onSouris_Quitte.push(function(e) {_this.Souris_Leave(e)})
     }
 
@@ -40,7 +40,7 @@ class UI_Selectable extends UI_Element
         else
             this.Etat = UI_Selectable_Etat.DEFAULT;
     }
-    Souris_Hover(event)
+    Souris_Enter(event)
     {
         if (this.Etat === UI_Selectable_Etat.CLIC)
             this.Etat = UI_Selectable_Etat.HOVER_CLIC;

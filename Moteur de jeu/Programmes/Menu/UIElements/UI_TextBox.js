@@ -1,18 +1,19 @@
 class UI_TextBox extends UI_Selectable
 {
-    static Alphabets = " abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    static Alphabets_Extends = UI_TextBox.Alphabets + "éàèùâêîôûäëïöüÿãñõç";
+    static Alphabets = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    static Alphabets_Extends = UI_TextBox.Alphabets + "éàèùìòâêîôûäëïöüÿãñõç";
     static Numeric = "0123456789";
     static Numeric_Extends = UI_TextBox.Numeric + ".,-+/*"
-    static Special = "@#{}[]&|-_()'°=?;:§!%$£¤€\\\n\t"
+    static Special = " @#{}[]&|-_()'°=?;:§!%$£¤€\\\n\t"
     static All = UI_TextBox.Alphabets_Extends + UI_TextBox.Numeric_Extends + UI_TextBox.Special;
 
-    #AllowedCharacter = UI_TextBox.Alphabets_Extends + UI_TextBox.Numeric_Extends;
-    #TexteTemps;
+    #AllowedCharacter = UI_TextBox.All //UI_TextBox.Alphabets_Extends + UI_TextBox.Numeric_Extends;
     #Label;
     #Texte = "";
     #Tooltip = "Tooltip non définit";
     #CursorPosition = 0;
+    #ToucheBasseCount = {};
+    #offsettime = 0;
     constructor(Param)
     {
         super(Param)
@@ -24,15 +25,21 @@ class UI_TextBox extends UI_Selectable
         this.Padding.right = 6;
         this.Padding.up = 4;
         this.Padding.down = 4;
-        this.MultiLine = true;
         this.#Label = new UI_Label(this.#Tooltip);
         this.#Label.Actif = false;
         this.#Label.HorizontalAlignement = HorizontalAlignementType.Left
         this.AddChildren(this.#Label);
 
+        this.onTextChanged = [];
+        this.onEnterAction = [];
+
         let _this = this;
         this.onClavier_ToucheJusteBasse.push(function(e) {_this.Clavier_ToucheJusteBasse(e)})
+        this.onClavier_ToucheJusteHaute.push(function(e) {_this.Clavier_ToucheJusteHaute(e)})
+        this.onClavier_ToucheBasse.push(function(e) {_this.Clavier_ToucheBasse(e)})
     }
+
+    //#region GETTER SETTER
 
     get Tooltip() { return this.#Tooltip; }
     set Tooltip(v) 
@@ -47,6 +54,7 @@ class UI_TextBox extends UI_Selectable
 
     get Texte() { return this.#Texte; }
     set Texte(v) { 
+        let oldt = this.#Texte
         this.#Texte = v;
         if (this.CursorPosition > this.#Texte.length)
             this.CursorPosition = this.#Texte.length;
@@ -54,12 +62,49 @@ class UI_TextBox extends UI_Selectable
         {
             this.#Label.Actif = false;
             this.#Label.Texte = this.#Tooltip;
-            console.log(this.#Label.Actif)
         }
         else
         {
             this.#Label.Actif = true;
             this.#Label.Texte = this.#Texte; 
+        }
+        if (oldt != this.#Texte)
+        {
+            this.onTextChanged.forEach(func => {
+                func(oldt, this.#Texte);
+            });
+        }
+    }
+
+    get AllowedCharacter() { return this.#AllowedCharacter; }
+    set AllowedCharacter(v) { this.#AllowedCharacter = v; }
+
+    get MultiLine() { return this.#Label.MultiLine; }
+    set MultiLine(v) { this.#Label.MultiLine = v; this.SetDirty(); }
+
+    //#endregion
+
+    Clavier_ToucheBasse(event)
+    {
+        if (this.#ToucheBasseCount[event.Param.key])
+        {
+            this.#ToucheBasseCount[event.Param.key] += 1;
+            if (this.#ToucheBasseCount[event.Param.key] > 10)
+            {
+                this.Clavier_ToucheJusteBasse(event)
+            }
+        }
+        else
+        {
+            this.#ToucheBasseCount[event.Param.key] = 1;
+        }
+    }
+
+    Clavier_ToucheJusteHaute(event)
+    {
+        if (this.#ToucheBasseCount[event.Param.key])
+        {
+            delete this.#ToucheBasseCount[event.Param.key]
         }
     }
 
@@ -68,8 +113,8 @@ class UI_TextBox extends UI_Selectable
         switch(event.Param.key)
         {
             case ("Backspace") :
-                this.Texte = this.Texte.substring(0, this.CursorPosition - 1) + this.#Texte.substring(this.CursorPosition);
                 this.CursorPosition -= 1;
+                this.Texte = this.Texte.substring(0, this.CursorPosition) + this.#Texte.substring(this.CursorPosition + 1);
                 break;
             case ("Delete"):
                 this.Texte = this.Texte.substring(0, this.CursorPosition) + this.#Texte.substring(this.CursorPosition + 1);
@@ -81,7 +126,18 @@ class UI_TextBox extends UI_Selectable
                 this.CursorPosition -= 1;
                 break;
             case ("Enter"):
-                if (this.MultiLine) this.Texte += "\n";
+                if (this.MultiLine) 
+                {
+                    this.Texte = this.#Texte.substring(0, this.CursorPosition) + "\n" + this.#Texte.substring(this.CursorPosition);
+                    this.CursorPosition += 1;
+                }
+                else
+                {
+                    this.Unfocus();
+                    this.onEnterAction.forEach(func => {
+                        func(this.#Texte);
+                    });
+                }
                 break;
             default :
                 if (this.#AllowedCharacter.includes(event.Param.key))
@@ -89,19 +145,22 @@ class UI_TextBox extends UI_Selectable
                     this.Texte = this.#Texte.substring(0, this.CursorPosition) + event.Param.key + this.#Texte.substring(this.CursorPosition)
                     this.CursorPosition += 1;
                 }
-                console.log(event.Param.key);
+                //console.log(event.Param.key);
                 break;
         }
-        
+        this.#offsettime = Game.TotalFrame;
     }
     
 
     Calcul(Delta)
     {
         super.Calcul(Delta);
-        if (Game.TotalFrame % 60 < 30 || !this.isFocus)
+        if ((Game.TotalFrame + 30 - this.#offsettime ) % 60 < 30 || !this.isFocus)
         {
-            this.#Label.Texte = this.#Texte;
+            if (this.#Texte.length === 0)
+                this.#Label.Texte = this.#Tooltip;
+            else
+                this.#Label.Texte = this.#Texte;
         }
         else
         {
@@ -111,7 +170,10 @@ class UI_TextBox extends UI_Selectable
 
     SetCursorText()
     {
-        this.#Label.Texte = this.#Texte.substring(0, this.CursorPosition) + "|" + this.#Texte.substring(this.CursorPosition);
+        if (this.#Texte.length === 0)
+            this.#Label.Texte = "|" + this.#Tooltip;
+        else
+            this.#Label.Texte = this.#Texte.substring(0, this.CursorPosition) + "|" + this.#Texte.substring(this.CursorPosition);
     }
 
     DessinBackUI(Context)

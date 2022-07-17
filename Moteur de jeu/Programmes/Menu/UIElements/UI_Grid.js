@@ -195,10 +195,12 @@ class UI_Grid extends UI_Element
                         {
                             if (child.Grid_RowsSpan === 1)
                             {
+                                //console.log(child, child.Desiredsize.y)
                                 size = Math.max(size, child.Desiredsize.y);
                             }
                         }
                     });
+                    //console.log(size)
                     row.DesiredPixelsize = size;
 
                     ExpandY -= size;
@@ -284,6 +286,7 @@ class UI_Grid extends UI_Element
     DessinFrontUI(Context)
     {
         return;
+        // For debugging
         let x = 0;
         let y = 0;
         Context.strokeStyle = "Red";

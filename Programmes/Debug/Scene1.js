@@ -20,10 +20,10 @@ class Scene1 extends Scene
 
         //Test.GameSpeed = "bonjour"
 
-        this.MenuTest();
+        //this.MenuTest();
 
         this.GameSpeed = 0.5;
-        Debug.Parametre.Camera = false;
+        //Debug.Parametre.Camera = false;
 
         //let lutin = new Lutin(0,0, ["Images/Chat.png"]);
         //this.Lutin3 = this.AddChildren(lutin);
@@ -45,7 +45,7 @@ class Scene1 extends Scene
         this.Tilemap = this.AddChildren(tilemap);
         this.Tilemap.AddLayer("Couche1", -100000000,32);
         //this.Tilemap.Charger("Terrain1");
-        //this.Tilemap.Edition();
+        this.Tilemap.Edition();
 
         //this.menu = new UI_Image("Images/Moto/Aiguille.png",200, 200, 10000);
         //this.menu.CentreRotation = new Vector(7.5 / 68, 0.5);
@@ -202,11 +202,11 @@ class Scene1 extends Scene
 
     MenuTest()
     {
-        let a = 5
-        this.Win = new UI_Window(20,20,30,500,500);
-        let panel = new UI_Panel();
-        panel.H = UI_Element_Alignement.STRETCH;
-        let stack = new UI_TextBox();
+        // let a = 5
+        // this.Win = new UI_Window(20,20,30,500,500);
+        // let panel = new UI_Panel();
+        // panel.H = UI_Element_Alignement.STRETCH;
+        // let stack = new UI_TextBox();
 
 
         //stack.W = UI_Element_Alignement.STRETCH;
@@ -249,11 +249,11 @@ class Scene1 extends Scene
         //panel2.Margin.down = 5;
         // stack.AddChildren(button1);
         // stack.AddChildren(button2);
-        panel.AddChildren(stack);
+        // panel.AddChildren(stack);
 
-        this.Win.AddChildren(panel);
+        // this.Win.AddChildren(panel);
 
-        this.Win.Show();
+        //this.Win.Show();
     }
 
     SliderTest()

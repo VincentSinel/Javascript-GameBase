@@ -12,6 +12,7 @@ class UI_Label extends UI_Element
     {
         super(Param)
 
+        this.MultiLine = false;
         this.Texte = Texte.toString();
         this.CreateCanvas();
     }
@@ -40,6 +41,7 @@ class UI_Label extends UI_Element
         let childsize = super.MeasureCore(availableSize, skip);
         let texteSize = this.CalculateTexteSize(availableSize.x);
 
+
         // Renvoie la taille maximal voulue
         return new Vector(
             Math.max(childsize.x, texteSize.x, this.MinW),
@@ -58,12 +60,24 @@ class UI_Label extends UI_Element
 
     CalculateTexteSize(maxW)
     {
-        this.Backctx.font = this.FontTaille + "px " + this.Font;
-        if (this.Backctx.measureText(this.#Texte).width > maxW)
+        let fs = Vector.Zero;
+        this.#Lines = [];
+        let lines = this.#Texte.split("\n");
+        for (let i = 0; i < lines.length; i++) 
         {
-            let line = [];
+            this.#CalculateTexteSizeWithoutLinebreak(lines[i], this.MultiLine ? Math.max(maxW, this.MaxW) : Infinity);
+        }
+        let h = (this.FontTaille + 2) * this.#Lines.length + 2;
+        return new Vector(maxW, h);
+    }
+
+    #CalculateTexteSizeWithoutLinebreak(texte, maxW)
+    {
+        this.Backctx.font = this.FontTaille + "px " + this.Font;
+        if (this.Backctx.measureText(texte).width > maxW)
+        {
             let actualline = "";
-            let mots = this.#Texte.split(" ");
+            let mots = texte.split(" ");
     
             for (let m = 0; m < mots.length; m++) {
                 let mot = mots[m];
@@ -72,7 +86,7 @@ class UI_Label extends UI_Element
                 {
                     if (this.Backctx.measureText(actualline + " " + mot).width > maxW)
                     {
-                        line.push(actualline);
+                        this.#Lines.push(actualline);
                         actualline = "";
                     }
                     else
@@ -90,7 +104,7 @@ class UI_Label extends UI_Element
                             let lettre = mot[l];
                             if (this.Backctx.measureText(actualline + lettre).width > maxW)
                             {
-                                line.push(actualline);
+                                this.#Lines.push(actualline);
                                 actualline = lettre;
                             }
                             else
@@ -108,17 +122,13 @@ class UI_Label extends UI_Element
             }
             if (actualline != "")
             {
-                line.push(actualline);
+                this.#Lines.push(actualline);
             }
-
-            this.#Lines = line
         }
         else
         {
-            this.#Lines = [this.Texte];
+            this.#Lines.push(texte)
         }
-        let h = (this.FontTaille + 2) * this.#Lines.length + 2;
-        return new Vector(maxW, h);
     }
      
     DessinBackUI(Context)

@@ -4,6 +4,7 @@ class UI_ListView extends UI_ScrollView
     #SelectedIndex = -1;
     #HoverIndex = -1;
     #BackTopCanvas;
+    #ItemParRow = 1;
 
     constructor(Param)
     {
@@ -105,61 +106,67 @@ class UI_ListView extends UI_ScrollView
 
     DessinBackUI(Context)
     {
-        this.#BackTopCanvas.clearRect(0,0,this.#BackTopCanvas.canvas.width,this.#BackTopCanvas.canvas.height);
-        
-
-        let y = -this.Scroll_VPosition;
-        for (let i = 0; i < this.#StackPanel.Childrens.length; i++) 
+        if (this.#BackTopCanvas.canvas.width > 0 && this.#BackTopCanvas.canvas.height > 0)
         {
-            if (i % 2 == 0)
+            this.#BackTopCanvas.clearRect(0,0,this.#BackTopCanvas.canvas.width,this.#BackTopCanvas.canvas.height);
+            
+    
+            let y = -this.Scroll_VPosition;
+            for (let i = 0; i < this.#StackPanel.Childrens.length; i++) 
             {
-                this.#BackTopCanvas.fillStyle = Color.Couleur(1,1,1,0.1)
-                this.#BackTopCanvas.fillRect(0, y, this.#BackTopCanvas.canvas.width, this.#StackPanel.Childrens[i].FinalSize.y);
+                if (i % 2 == 0)
+                {
+                    this.#BackTopCanvas.fillStyle = Color.Couleur(1,1,1,0.1)
+                    this.#BackTopCanvas.fillRect(0, y, this.#BackTopCanvas.canvas.width, this.#StackPanel.Childrens[i].FinalSize.y);
+                }
+                y += this.#StackPanel.Childrens[i].FinalSize.y;
             }
-            y += this.#StackPanel.Childrens[i].FinalSize.y;
+            Context.drawImage(this.#BackTopCanvas.canvas, 0, 0);
         }
-        Context.drawImage(this.#BackTopCanvas.canvas, 0, 0);
 
     }
 
     DessinFrontUI(Context)
     {
-        this.#BackTopCanvas.clearRect(0,0,this.#BackTopCanvas.canvas.width,this.#BackTopCanvas.canvas.height);
-        
-        let y1 = -this.Scroll_VPosition;
-        let y2 = -this.Scroll_VPosition;
-        for (let i = 0; i < Math.max(this.SelectedIndex, this.#HoverIndex); i++) 
+        if (this.#BackTopCanvas.canvas.width > 0 && this.#BackTopCanvas.canvas.height > 0)
         {
-            if (i < this.SelectedIndex)
-                y1 += this.#StackPanel.Childrens[i].FinalSize.y;
-            if (i < this.#HoverIndex)
-                y2 += this.#StackPanel.Childrens[i].FinalSize.y;
-        }
-
-        if (this.SelectedIndex > -1)
-        {
-            let s = this.#StackPanel.Childrens[this.SelectedIndex].FinalSize.clone();
-            s.x += this.#StackPanel.Padding.left + this.#StackPanel.Padding.right;
-            s.y += this.#StackPanel.Padding.up + this.#StackPanel.Padding.down;
-
-            this.#BackTopCanvas.fillStyle = this.SelectionCouleur.RGBA()
-            this.#BackTopCanvas.strokeStyle = this.SelectionCouleur.RGB()
-            this.#BackTopCanvas.lineWidth = 2;
-            this.#BackTopCanvas.fillRect(0, y1, s.x, s.y);
-            this.#BackTopCanvas.strokeRect(0, y1, s.x, s.y);
+            this.#BackTopCanvas.clearRect(0,0,this.#BackTopCanvas.canvas.width,this.#BackTopCanvas.canvas.height);
             
-            Context.drawImage(this.#BackTopCanvas.canvas, 0, 0);
-        }
-        if (this.#HoverIndex > -1)
-        {
-            let s = this.#StackPanel.Childrens[this.#HoverIndex].FinalSize.clone();
-            s.x += this.#StackPanel.Padding.left + this.#StackPanel.Padding.right;
-            s.y += this.#StackPanel.Padding.up + this.#StackPanel.Padding.down;
+            let y1 = -this.Scroll_VPosition;
+            let y2 = -this.Scroll_VPosition;
+            for (let i = 0; i < Math.max(this.SelectedIndex, this.#HoverIndex); i++) 
+            {
+                if (i < this.SelectedIndex)
+                    y1 += this.#StackPanel.Childrens[i].FinalSize.y;
+                if (i < this.#HoverIndex)
+                    y2 += this.#StackPanel.Childrens[i].FinalSize.y;
+            }
 
-            this.#BackTopCanvas.fillStyle = Color.Couleur(0,0,1,0.1)
-            this.#BackTopCanvas.fillRect(0, y2, s.x, s.y);
-            
-            Context.drawImage(this.#BackTopCanvas.canvas, 0, 0);
+            if (this.SelectedIndex > -1)
+            {
+                let s = this.#StackPanel.Childrens[this.SelectedIndex].FinalSize.clone();
+                s.x += this.#StackPanel.Padding.left + this.#StackPanel.Padding.right;
+                s.y += this.#StackPanel.Padding.up + this.#StackPanel.Padding.down;
+
+                this.#BackTopCanvas.fillStyle = this.SelectionCouleur.RGBA()
+                this.#BackTopCanvas.strokeStyle = this.SelectionCouleur.RGB()
+                this.#BackTopCanvas.lineWidth = 2;
+                this.#BackTopCanvas.fillRect(0, y1, s.x, s.y);
+                this.#BackTopCanvas.strokeRect(0, y1, s.x, s.y);
+                
+                Context.drawImage(this.#BackTopCanvas.canvas, 0, 0);
+            }
+            if (this.#HoverIndex > -1)
+            {
+                let s = this.#StackPanel.Childrens[this.#HoverIndex].FinalSize.clone();
+                s.x += this.#StackPanel.Padding.left + this.#StackPanel.Padding.right;
+                s.y += this.#StackPanel.Padding.up + this.#StackPanel.Padding.down;
+
+                this.#BackTopCanvas.fillStyle = Color.Couleur(0,0,1,0.1)
+                this.#BackTopCanvas.fillRect(0, y2, s.x, s.y);
+                
+                Context.drawImage(this.#BackTopCanvas.canvas, 0, 0);
+            }
         }
     }
 

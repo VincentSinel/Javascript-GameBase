@@ -713,6 +713,10 @@ class UI_Window
         this.#NeedRedraw = true;
         this.Root.SetDirty();
     }
+    ForceRedraw()
+    {
+        this.#NeedRedraw = true;
+    }
     
     /**
      * Ajoute un élément enfant à cette élément

@@ -41,6 +41,7 @@ var Scripts = [
     "Programmes/Menu/UIElements/UI_Toggle.js",
     "Programmes/Menu/UIElements/UI_Slider.js",
     "Programmes/Menu/UIElements/UI_Image.js",
+    "Programmes/Menu/UIElements/UI_Rectangle.js",
     "Programmes/Menu/UIElements/UI_TextBox.js",
     "Programmes/Menu/UI_Root.js",
     "Programmes/Menu/UI_Window_Style.js",

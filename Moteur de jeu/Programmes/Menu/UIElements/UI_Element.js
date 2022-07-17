@@ -744,6 +744,7 @@ class UI_Element
         //if (VMath.Equals(availableSize, this.#desiredSize)){ return availableSize; }
         this.#measureSize = availableSize;
         this.#desiredSize = this.MeasureCore(availableSize,VMath.Equals(availableSize, this.#desiredSize));
+        //console.log(this.constructor.name, this.#desiredSize.y)
         return this.#desiredSize;
     }
     /**

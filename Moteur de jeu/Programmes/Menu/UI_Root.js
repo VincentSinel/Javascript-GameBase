@@ -100,10 +100,10 @@ class UI_Root extends UI_Element
     /**
      * Demande un recalcul du contenue
      */
-     SetDirty()
-     {
-         super.SetDirty(true);
-     }
+    SetDirty()
+    {
+        super.SetDirty(true);
+    }
 
     /**
      * Mise a jour des UIElement

@@ -10,6 +10,7 @@ class TileMap_Layer extends Drawable
     static CollisionMaskName = "collision"
     static CollisionDebug = false;
     static CollisionDebugColor = "#FF0000AA";
+    static CollisionDebugColorRemove = "#00FF00AA";
 
     #Parts;
     #HasAnimation;
@@ -490,7 +491,7 @@ class TileMap_Layer extends Drawable
                                 }
                                 else
                                 {
-                                    Context.fillStyle = "Black";
+                                    Context.fillStyle = TileMap_Layer.CollisionDebugColorRemove;
                                     Context.fillRect(x * Tilesets.TileSize, y * Tilesets.TileSize, Tilesets.TileSize, Tilesets.TileSize)
                                 }
 

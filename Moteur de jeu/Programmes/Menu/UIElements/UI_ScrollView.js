@@ -138,10 +138,10 @@ class UI_ScrollView extends UI_Element
      * @param {CanvasRenderingContext2D} Context Context de dessin
      * @param {boolean} RecreateCanvas Définit si le canvas doit être recrée
      */
-    Dessin(Context, RecreateCanvas, offsetX = 0, offsetY = 0)
-    {
-        super.Dessin(Context, RecreateCanvas, offsetX = 0, offsetY = 0)
-    }
+    // Dessin(Context, RecreateCanvas, offsetX = 0, offsetY = 0)
+    // {
+    //     super.Dessin(Context, RecreateCanvas, offsetX, offsetY)
+    // }
 
     DessinFrontUI(Context)
     {

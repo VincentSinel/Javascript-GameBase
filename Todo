@@ -1,17 +1,19 @@
 UI_Element
 Add Focus
-    ☐ Add Focus on Button
-    ☐ Add Focus on Liste
-    ☐ Add Focus on CheckBox
-    ☐ Add Focus on Slider
-    ☐ Add Focus on Toggle
-☐ Create TextBox @started(22-07-13 17:24)
+    ✔ Add Focus on Button @done(22-07-15 20:32)
+    ✔ Add Focus on Liste @done(22-07-15 20:32)
+    ✔ Add Focus on CheckBox @done(22-07-15 20:32)
+    ✔ Add Focus on Slider @done(22-07-15 20:32)
+    ✔ Add Focus on Toggle @done(22-07-15 20:32)
+✔ Create TextBox @done(22-07-15 20:32)
     ☐ Ajouter detection position dans un label à partir position souris.
-    ☐ Ajouter prise en compte \n dans un label.
+    ✔ Ajouter prise en compte \n dans un label. @done(22-07-17 16:45)
+    ☐ Correction touche AltGr prise en compte une fois uniquement
+    ☐ Ajouter scroll view for long text ?
 ☐ Create IntegerUpDown
 ☐ Create ComboBox
 ☐ Create Animation
-☐ Reajuste Tilemap Editor
+✔ Reajuste Tilemap Editor @done(22-07-17 23:57)
 
 Module
 ☐ Separer les fichier RPG maker du reste
@@ -33,3 +35,7 @@ Feature
 ☐ Créer un systeme de particule
 ☐ Ajouter effets de mouvement camera
 ☐ Créer des menus mobiles lié au monde de jeu
+
+
+BUG
+☐ Lors d'un drag gauche et droit en même temps sur le menu edition tilemap le drag plante parfois

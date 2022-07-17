@@ -34,6 +34,7 @@ class Tile_Animation extends Tile
         {
             this.Frame = (this.Frame + 1) % this.Frames;
             this.NextUpdate += 1 / this.Vitesse;
+            Tilesets.AnimationUpdated = true;
         }
     }
     /**

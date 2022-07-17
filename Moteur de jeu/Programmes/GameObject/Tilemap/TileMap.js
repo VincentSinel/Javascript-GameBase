@@ -41,6 +41,7 @@ class TileMap extends Drawable
     {
         super(X, Y, 0)
         
+        this.Name = "Map 1";
         this.#W = W;
         this.#H = H;
 
@@ -287,6 +288,7 @@ class TileMap extends Drawable
      */
     Charger(Nom)
     {
+        this.Name = Nom;
         let data = Datas.DataTileMap(Nom)
         if (data)
         {
